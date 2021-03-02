@@ -2,11 +2,14 @@ package com.ppap.sktel.phoneInfo.Dao;
 
 import com.ppap.sktel.phoneInfo.PhoneInfo;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
-
 @Component(value="phoneInfoDao")
 public class PhoneInfoDao implements IPhoneInfoDao {
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
     @Override
     public void phoneInfoInsert() {
