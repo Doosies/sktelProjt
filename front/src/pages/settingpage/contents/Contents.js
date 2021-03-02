@@ -44,7 +44,7 @@ const ContentsTopButtons = styled.div`
     right:0;
 
     font-size:15px;
-    font-weight:500;
+    font-weight:500; 
 `;
 
 const ContentsBottom = styled.div`
