@@ -8,7 +8,7 @@ const StyledSettingPage = styled.div`
 function SettingPage(){
     return(
         <StyledSettingPage>
-            testpage!
+            여기는 셋팅 페이지
         </StyledSettingPage>
     );
 }
