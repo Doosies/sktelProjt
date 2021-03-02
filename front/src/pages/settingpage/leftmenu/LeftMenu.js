@@ -1,15 +1,19 @@
 import React from 'react';
 import styled from 'styled-components';
+import LeftMainMenu from './LeftMainMenu';
 
 const StyledLeftMenu = styled.div`
-    /* width:100vw; */
-    /* background-color: yellow; */
+    width:240px;
+    
+    display:flex;
+    justify-content:center;
+    align-items:center;
 `;
 
 function LeftMenu(){
     return(
         <StyledLeftMenu className="leftmenu">
-            레프트메뉴
+            <LeftMainMenu/>
         </StyledLeftMenu>
     );
 }
