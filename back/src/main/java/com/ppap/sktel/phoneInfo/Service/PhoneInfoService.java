@@ -6,7 +6,6 @@ import com.ppap.sktel.phoneInfo.PhoneInfo;
 import com.ppap.sktel.phoneInfo.Dao.PhoneInfoDao;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 

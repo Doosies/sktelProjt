@@ -9,6 +9,7 @@ const StyledButton = styled.div`
     
     ${props => css`
         width: ${props.width};
+        height: ${props.height};
         color: ${props.color};
         font-size: ${props.font_size};
         font-weight:${props.font_weight};
@@ -19,9 +20,9 @@ const StyledButton = styled.div`
     }
 `;
 
-function Button({ onClick, width, color, font_size, font_weight, border, children, ...rest }){
+function Button({ onClick, width, height, color, font_size, font_weight, border, children, ...rest }){
     return(
-        <StyledButton onClick={onClick} width={width} color={color} font_size={font_size} font_weight={font_weight} border={border} {...rest}>
+        <StyledButton onClick={onClick} width={width} height={height} color={color} font_size={font_size} font_weight={font_weight} border={border} {...rest}>
             {children}
         </StyledButton>
     );

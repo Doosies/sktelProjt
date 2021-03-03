@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import CButton from '../../../components/Button';
 
 const StyledMenu1 = styled.div`
+    width:initial;
     height:60px;
     background-color: rgba(0, 0, 0, 0.6);
     display:flex;
@@ -13,7 +14,7 @@ const TopMenuLeft = styled.div`
     height:inherit;
 `;
 const TopSubRight = styled.div`
-    width:350px;
+    /* width:350px; */
     height:inherit;
     display:flex;
     position:absolute;

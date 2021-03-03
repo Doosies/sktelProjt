@@ -1,14 +1,11 @@
 package com.ppap.sktel.phoneInfo;
 
-
-
 import java.sql.Date;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter @Setter
-// @RequiredArgsConstructor
 public class PhoneInfo{
 	private int id;
     private String model_name;
@@ -16,9 +13,9 @@ public class PhoneInfo{
     private String shipping_price;
     private String maker;
     private Date created;
-    private int battery;
-    private double screen_size;
-    private int storage;
+    private String battery;
+    private String screen_size;
+    private String storage;
 
 
 	public PhoneInfo(
@@ -28,9 +25,9 @@ public class PhoneInfo{
         String shipping_price,
         String maker,
         Date created,
-        int battery,
-        double screen_size,
-        int storage)
+        String battery,
+        String screen_size,
+        String storage)
     {
         this.id=id;
         this.model_name=model_name;

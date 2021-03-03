@@ -3,7 +3,8 @@ import styled from 'styled-components';
 import LeftMainMenu from './LeftMainMenu';
 
 const StyledLeftMenu = styled.div`
-    width:240px;
+    width:100%;
+    height:100%;
     
     display:flex;
     justify-content:center;

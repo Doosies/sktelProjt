@@ -5,15 +5,15 @@ const StyledLeftMainMenu = styled.div`
     width:100%;
     /* box-sizing:border-box; */
 
-    padding-left: 30px;
-    padding-right: 30px;
+    padding-left: 20px;
+    padding-right: 20px;
     padding-top: 30px;
     padding-bottom: 30px;
     
     top:0;
 `;
 
-const LeftBox = styled.div`
+const Box = styled.div`
     width:100%;
     box-sizing:border-box;
 
@@ -28,7 +28,7 @@ const LeftBox = styled.div`
 const Depth1 = styled.div`
     width:100%;
 
-    font-size:16px;
+    font-size:14px;
     font-weight:bold;
 
     ${({ top })=>
@@ -42,9 +42,9 @@ const Depth1 = styled.div`
 
 const Depth2 = styled.div`
     width:100%;
-    padding-left:14px;
+    padding-left:7px;
     padding-top:6px;
-    font-size:15px;
+    font-size:13px;
     font-weight:500;
 
     ${({ top })=>
@@ -66,7 +66,7 @@ const Line = styled.div`
 function LeftMainMenu(){
     return(
         <StyledLeftMainMenu className="leftmainmenu">
-            <LeftBox>
+            <Box>
                 <Depth1 top>핸드폰정보 수정</Depth1>
                 <Line/>
                 <Depth1>요금제 수정
@@ -80,7 +80,7 @@ function LeftMainMenu(){
                     <Depth2>KT 요금제</Depth2>
                     <Depth2>LG 요금제</Depth2>
                 </Depth1>
-            </LeftBox>
+            </Box>
         </StyledLeftMainMenu>
     );
 }

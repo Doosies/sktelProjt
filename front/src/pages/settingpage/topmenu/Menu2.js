@@ -4,7 +4,6 @@ import CButton from '../../../components/Button';
 
 const StyledMenu2 = styled.div`
     height:40px;
-    border-bottom: solid 1px #707070;
     display:flex;
 `;
 
