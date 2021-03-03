@@ -35,12 +35,15 @@ public class PhoneInfoDao implements IPhoneInfoDao {
 
     @Override
     public List<PhoneInfo> phoneInfoSelect() {
-        return jdbcTemplate.query("select * from phn_info_tb", 
+        // SELECT FORMAT(market_price , 0), FORMAT(sale_price , 0) FROM `morning_table` WHERE 1
+
+
+        return jdbcTemplate.query("SELECT id, model_name, machine_name, FORMAT(shipping_price, 0)as shipping_price, maker, created, battery, screen_size, storage FROM phn_info_tb;", 
             (rs, rowNum) -> new PhoneInfo(
                 rs.getInt("id"),
                 rs.getString("model_name"),
                 rs.getString("machine_name"),
-                rs.getInt("shipping_price"),
+                rs.getString(3),// FORMAT( data, 0)
                 rs.getString("maker"),
                 // new java.util.Date(rs.getDate("created").getTime()),
                 rs.getDate("created"),

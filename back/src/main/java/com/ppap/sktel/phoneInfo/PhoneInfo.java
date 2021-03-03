@@ -13,7 +13,7 @@ public class PhoneInfo{
 	private int id;
     private String model_name;
     private String machine_name;
-    private int shipping_price;
+    private String shipping_price;
     private String maker;
     private Date created;
     private int battery;
@@ -25,7 +25,7 @@ public class PhoneInfo{
         int id,
         String model_name,
         String machine_name,
-        int shipping_price,
+        String shipping_price,
         String maker,
         Date created,
         int battery,

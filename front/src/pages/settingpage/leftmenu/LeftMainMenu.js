@@ -9,6 +9,8 @@ const StyledLeftMainMenu = styled.div`
     padding-right: 30px;
     padding-top: 30px;
     padding-bottom: 30px;
+    
+    top:0;
 `;
 
 const LeftBox = styled.div`
