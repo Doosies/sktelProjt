@@ -1,2 +1,2 @@
-export {default as Main} from './MainPage';
-export {default as Setting} from './SettingPage';
+export {default as Main} from './mainpage/MainPage';
+export {default as Setting} from './settingpage/SettingPage';
