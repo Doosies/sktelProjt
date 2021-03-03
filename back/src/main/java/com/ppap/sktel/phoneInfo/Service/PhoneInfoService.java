@@ -1,14 +1,24 @@
 package com.ppap.sktel.phoneInfo.Service;
 
+import java.util.List;
+
 import com.ppap.sktel.phoneInfo.PhoneInfo;
 import com.ppap.sktel.phoneInfo.Dao.PhoneInfoDao;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
+
+@Service
 public class PhoneInfoService implements IPhoneInfoService {
 
     @Autowired
-    PhoneInfoDao PhoneInfoDao;
+    private PhoneInfoDao phoneInfoDao;
+
+    public PhoneInfoService(){
+        
+    }
 
     @Override
     public void infoAdd(PhoneInfo phoneInfo) {
@@ -17,9 +27,8 @@ public class PhoneInfoService implements IPhoneInfoService {
     }
 
     @Override
-    public PhoneInfo getAllInfo(int id) {
-        // TODO 폰 정보 싹다 긁어옴
-        return null;
+    public List<PhoneInfo> getAllInfo() {
+        return phoneInfoDao.phoneInfoSelect();
     }
 
     @Override
