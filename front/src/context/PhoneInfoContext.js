@@ -52,38 +52,39 @@ function PhoneInfoReducer(state, action){
     }
 }
 
-const PhoneInfoStateContext = createContext(null);
-const PhoneInfoDispatchContext = createContext(null);
+const StateContext = createContext(null);
+// const PhoneInfoStateContext = createContext(null);
+// const PhoneInfoDispatchContext = createContext(null);
 
 //export
 function PhoneInfoProvider({children}){
     const [state, dispatch] = useReducer(PhoneInfoReducer, initialPhoneInfoState);
     return(
-        <PhoneInfoStateContext.Provider value={state}>
-            <PhoneInfoDispatchContext.Provider value={dispatch}>
+        <StateContext.Provider value={{state, dispatch}}>
+            {/* <PhoneInfoDispatchContext.Provider value={dispatch}> */}
                 {children}
-            </PhoneInfoDispatchContext.Provider>
-        </PhoneInfoStateContext.Provider>
+            {/* </PhoneInfoDispatchContext.Provider> */}
+        </StateContext.Provider>
     );
     
 }
 
-function usePhoneInfoState(){
-    const state = useContext(PhoneInfoStateContext);
-    if( !state ) throw new Error('provider 확인바람');
-    return state;
+function usePhoneInfoContext(){
+    const context = useContext(StateContext);
+    if( !context ) throw new Error('usePhoneInfoContext provider 확인바람');
+    return context;
 }
 
-function usePhoneInfoDispatch(){
-    const dispatch = useContext(PhoneInfoDispatchContext);
-    if( !dispatch ) throw new Error('provider 확인바람');
-    return dispatch;
-}
+// function usePhoneInfoDispatch(){
+//     const dispatch = useContext(PhoneInfoDispatchContext);
+//     if( !dispatch ) throw new Error('usePhoneInfoDispatch provider 확인바람');
+//     return dispatch;
+// }
 
 //export
-function usePhoneInfo(){
-    return [usePhoneInfoState(), usePhoneInfoDispatch()];
-}
+// function usePhoneInfo(){
+//     return [usePhoneInfoState(), usePhoneInfoDispatch()];
+// }
 //export
 async function getPhoneInfos(dispatch){
     dispatch({type:'GET_PHN_INFO'});
@@ -95,4 +96,4 @@ async function getPhoneInfos(dispatch){
     }
 }
 
-export {PhoneInfoProvider, usePhoneInfo, getPhoneInfos};
+export {PhoneInfoProvider,usePhoneInfoContext, getPhoneInfos};

@@ -3,7 +3,7 @@ import { createContext, useContext, useReducer } from "react"
 
 const initialPhoneChange = {
     insertList:[],
-    deleteList:[],
+    deleteList:[1,2,3],
     updateList:[
         {
             colId:'',
@@ -19,14 +19,18 @@ const initialPhoneChange = {
 
 function PhoneChangeReducer(state, action){
     switch(action.type){
-        case 'ADD_DELETE_LIST':
-            return {
-                state.deleteList.concat(action.id)
-            };
+        case 'ADD_DELETE_LIST':{
+            const list = state.deleteList;
+            const id = action.id;
+            if( list.indexOf(id) !== -1)
+                return {deleteList:list.concat(id)};
+            break;
+        }
         default:
             throw new Error(`액션을 찾을 수 없음${action.type}`);
     }
 }
+
 
 const PhoneChangeStateContext = createContext(null);
 const PhoneChangeDispatchContext = createContext(null);
@@ -45,13 +49,13 @@ function PhoneChangeProvider({children}){
 
 function usePhoneChangeState(){
     const state = useContext(PhoneChangeStateContext);
-    if( !state ) throw new Error('provider 확인바람');
+    if( !state ) throw new Error('usePhoneChangeState provider 확인바람');
     return state;
 }
 
 function usePhoneChangeDispatch(){
     const dispatch = useContext(PhoneChangeDispatchContext);
-    if( !dispatch ) throw new Error('provider 확인바람');
+    if( !dispatch ) throw new Error('usePhoneChangeDispatch provider 확인바람');
     return dispatch;
 }
 
@@ -61,7 +65,7 @@ function usePhoneChange(){
 }
 
 function addDeleteList(dispatch, id){
-    dispatch({type:'ADD_DELETE_LIST'})
+    dispatch({type:'ADD_DELETE_LIST', id})
 }
 
-export {PhoneChangeProvider, usePhoneChange};
+export {PhoneChangeProvider, usePhoneChange, addDeleteList};

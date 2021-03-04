@@ -1,8 +1,8 @@
 import React, {useEffect} from 'react';
 import styled, { css } from 'styled-components';
 import Button from '../../../../components/Button';
-import { usePhoneChange } from '../../../../context/PhoneChangeContext';
-import { getPhoneInfos, usePhoneInfo } from '../../../../context/PhoneInfoContext';
+import { addDeleteList, usePhoneChange } from '../../../../context/PhoneChangeContext';
+import { getPhoneInfos, usePhoneInfoContext } from '../../../../context/PhoneInfoContext';
 
 
 const StyledTable = styled.div`
@@ -73,9 +73,11 @@ const columnProperties = [
 function Tables(){
     // const state = usePhoneInfoState();
     // const dispatch = usePhoneInfoDispatch();
-    const [phoneState, phoneDispatch] = usePhoneInfo();
+    const {state:phoneState, dispatch:phoneDispatch}= usePhoneInfoContext();
     const [changeState, changeDispatch] = usePhoneChange();
+    
     const {data:phoneInfos, loading, error} = phoneState.readPhoneInfos;
+    const {deleteList} = changeState;
 
 
 
@@ -93,8 +95,11 @@ function Tables(){
         // 존재하지 않으면 삭제 리스트에 추가함.
         // if( deleteList.indexOf(id) === -1)
         //     setDeleteList([...deleteList, id]);
+        addDeleteList(changeDispatch,id);
+        console.log(changeState);
+
     }
-    console.log("렌더링됨");
+    // console.log("렌더링됨");
     if(loading) return <div> 데이터를 로딩중 입니다.</div>;
     if( !phoneInfos ) return <div>데이터 로딩 실패</div>;
     if(error) return <div>에러 발생</div>;
