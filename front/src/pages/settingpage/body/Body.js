@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { SettingContentsProvider } from '../../../context/SettingContentsContext';
 import Contents from './contents/Contents';
 import LeftMenu from './leftmenu/LeftMenu';
 
@@ -23,7 +24,9 @@ function Body(){
         <StyledBody>
             <LeftMenu/>
             <Line/>
-            <Contents/>
+            <SettingContentsProvider>
+                <Contents/>
+            </SettingContentsProvider>
         </StyledBody>
     );
 }

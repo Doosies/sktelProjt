@@ -51,6 +51,7 @@ const ContentsBottom = styled.div`
     display:flex;
     padding-top:7px;
 `;
+
 function Contents(){
     return(
         <StyledContents className="contents">
@@ -59,10 +60,10 @@ function Contents(){
                     <ContentsTopName>핸드폰 정보 수정</ContentsTopName>
                 </ContentsTop>
                 <ContentsBottom>
-                    <Tables/>
+                    <Tables key="tableskey"/>
                     <ContentsTopButtons>
-                        <CButton onClick={()=>{alert("데이터 추가")}} width="110px"font_size="16px" font_weight="bold" border>데이터 추가</CButton>
-                        <CButton onClick={()=>{alert("수정 완료")}} width="110px"font_size="16px" font_weight="bold" border>수정 완료</CButton>
+                        <CButton onClick={()=>{alert("데이터 추가")}} width="60px"font_size="13px" font_weight="bold" border>추가</CButton>
+                        <CButton onClick={()=>{alert("수정 완료")}} width="60px"font_size="13px" font_weight="bold" border>적용</CButton>
                     </ContentsTopButtons>
                 </ContentsBottom>
             </ContentsBox>

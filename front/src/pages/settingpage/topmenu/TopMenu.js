@@ -5,7 +5,7 @@ import Menu2 from './Menu2';
 
 const StyledTopMenu = styled.div`
     width:100%;
-    position:relative;
+    /* position:relative; */
     /* height:100px; */
 `;
 

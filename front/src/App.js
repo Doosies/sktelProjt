@@ -4,6 +4,7 @@ import {BrowserRouter, Route} from 'react-router-dom';
 import {Main, Setting} from './pages/pages';
 import styled, { createGlobalStyle } from 'styled-components';
 import Footer from './Footer';
+import Test from './test/Test';
 
 const StyledApp = styled.div`
 `;
@@ -18,7 +19,7 @@ const GlobalStyle = createGlobalStyle`
         margin:0;
 
         @media (min-width: 1920px) {
-            width:1920px;
+            width:100%;
         }
         @media (min-width: 1680px) and (max-width:1919px){
             width:1680px;
@@ -44,6 +45,7 @@ function App(){
             <BrowserRouter>
                 <Route path="/" component={Main} exact/>
                 <Route path="/setting" component = {Setting}/>
+                <Route path="/test" component = {Test}/>
             </BrowserRouter>
             <Footer/>
         </StyledApp>

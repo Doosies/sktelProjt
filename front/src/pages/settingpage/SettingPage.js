@@ -1,8 +1,6 @@
 import React, {} from 'react';
 import styled from 'styled-components';
 import Body from './body/Body';
-import Contents from './body/contents/Contents';
-import LeftMenu from './body/leftmenu/LeftMenu';
 
 import TopMenu from './topmenu/TopMenu';
 
