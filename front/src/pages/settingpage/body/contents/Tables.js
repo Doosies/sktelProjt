@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import styled, { css } from 'styled-components';
 import Button from '../../../../components/Button';
-import { addDeleteList, usePhoneChange } from '../../../../context/PhoneChangeContext';
+import { addDeleteList, usePhoneChangeContext } from '../../../../context/PhoneChangeContext';
 import { getPhoneInfos, usePhoneInfoContext } from '../../../../context/PhoneInfoContext';
 
 
@@ -74,7 +74,7 @@ function Tables(){
     // const state = usePhoneInfoState();
     // const dispatch = usePhoneInfoDispatch();
     const {state:phoneState, dispatch:phoneDispatch}= usePhoneInfoContext();
-    const [changeState, changeDispatch] = usePhoneChange();
+    const {state:changeState, dispatch:changeDispatch} = usePhoneChangeContext();
     
     const {data:phoneInfos, loading, error} = phoneState.readPhoneInfos;
     const {deleteList} = changeState;

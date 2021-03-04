@@ -31,41 +31,41 @@ function PhoneChangeReducer(state, action){
     }
 }
 
-
-const PhoneChangeStateContext = createContext(null);
-const PhoneChangeDispatchContext = createContext(null);
+const PhoneChangeContext = createContext(null);
+// const PhoneChangeStateContext = createContext(null);
+// const PhoneChangeDispatchContext = createContext(null);
 
 //export
 function PhoneChangeProvider({children}){
     const [state, dispatch] = useReducer(PhoneChangeReducer, initialPhoneChange);
     return(
-        <PhoneChangeStateContext.Provider value={state}>
-            <PhoneChangeDispatchContext.Provider value={dispatch}>
+        <PhoneChangeContext.Provider value={{state, dispatch}}>
+            {/* <PhoneChangeDispatchContext.Provider value={dispatch}> */}
                 {children}
-            </PhoneChangeDispatchContext.Provider>
-        </PhoneChangeStateContext.Provider>
+            {/* </PhoneChangeDispatchContext.Provider> */}
+        </PhoneChangeContext.Provider>
     );
 }
 
-function usePhoneChangeState(){
-    const state = useContext(PhoneChangeStateContext);
-    if( !state ) throw new Error('usePhoneChangeState provider 확인바람');
-    return state;
+function usePhoneChangeContext(){
+    const context = useContext(PhoneChangeContext);
+    if( !context ) throw new Error('usePhoneChangeState provider 확인바람');
+        return context;
 }
 
-function usePhoneChangeDispatch(){
-    const dispatch = useContext(PhoneChangeDispatchContext);
-    if( !dispatch ) throw new Error('usePhoneChangeDispatch provider 확인바람');
-    return dispatch;
-}
+// function usePhoneChangeDispatch(){
+//     const dispatch = useContext(PhoneChangeDispatchContext);
+//     if( !dispatch ) throw new Error('usePhoneChangeDispatch provider 확인바람');
+//     return dispatch;
+// }
 
 //export
-function usePhoneChange(){
-    return [usePhoneChangeState(), usePhoneChangeDispatch()];
-}
+// function usePhoneChange(){
+//     return [usePhoneChangeState(), usePhoneChangeDispatch()];
+// }
 
 function addDeleteList(dispatch, id){
     dispatch({type:'ADD_DELETE_LIST', id})
 }
 
-export {PhoneChangeProvider, usePhoneChange, addDeleteList};
+export {PhoneChangeProvider, usePhoneChangeContext, addDeleteList};
