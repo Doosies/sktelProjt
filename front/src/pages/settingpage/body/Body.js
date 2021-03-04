@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import { SettingContentsProvider } from '../../../context/SettingContentsContext';
+import { PhoneChangeProvider } from '../../../context/PhoneChangeContext';
+import { PhoneInfoProvider } from '../../../context/PhoneInfoContext';
 import Contents from './contents/Contents';
 import LeftMenu from './leftmenu/LeftMenu';
 
@@ -24,9 +25,11 @@ function Body(){
         <StyledBody>
             <LeftMenu/>
             <Line/>
-            <SettingContentsProvider>
-                <Contents/>
-            </SettingContentsProvider>
+            <PhoneInfoProvider>
+                <PhoneChangeProvider>
+                    <Contents/>
+                </PhoneChangeProvider>
+            </PhoneInfoProvider>
         </StyledBody>
     );
 }

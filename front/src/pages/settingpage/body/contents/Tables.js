@@ -1,7 +1,9 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import styled, { css } from 'styled-components';
 import Button from '../../../../components/Button';
-import { getPhoneInfos, useSettingsContentsDispatch, useSettingsContentsState } from '../../../../context/SettingContentsContext';
+import { usePhoneChange } from '../../../../context/PhoneChangeContext';
+import { getPhoneInfos, usePhoneInfo } from '../../../../context/PhoneInfoContext';
+
 
 const StyledTable = styled.div`
     width:auto;
@@ -38,13 +40,15 @@ const Column = styled.div`
     `}
 `;
 
-const BlinkArea = styled.div`
-    width:42px;
-`;
+// const BlinkArea = styled.div`
+//     width:42px;
+// `;
 
 const DeleteButton = styled(Button)`
     background-color: #ff7787;
     margin-right:5px;
+    color:white;
+    width:40px;
     
 
     ${({noButton}) => noButton && css`
@@ -67,36 +71,32 @@ const columnProperties = [
 ];
 
 function Tables(){
-    const state = useSettingsContentsState();
-    const dispatch = useSettingsContentsDispatch();
-
-    const {data:readPhoneInfos, loading, error} = state.readPhoneInfos;
-
-
-    // const [phoneInfo,setPhoneInfo] = useState([]);
-    const [deleteList,setDeleteList] = useState([]);
+    // const state = usePhoneInfoState();
+    // const dispatch = usePhoneInfoDispatch();
+    const [phoneState, phoneDispatch] = usePhoneInfo();
+    const [changeState, changeDispatch] = usePhoneChange();
+    const {data:phoneInfos, loading, error} = phoneState.readPhoneInfos;
 
 
-    const fetchInfos = () =>{
-        getPhoneInfos(dispatch);
-    }
+
     useEffect( ()=>{
+        const fetchInfos = () =>{
+            getPhoneInfos(phoneDispatch);
+        }
         fetchInfos();
     //eslint-disable-next-line
     },[]);
 
 
-    // const onClickDelete = (id) =>{
-    //     // -1이면 배열안에 존재하지 않음
-    //     // 존재하지 않으면 삭제 리스트에 추가함.
-    //     if( deleteList.indexOf(id) === -1)
-    //         setDeleteList([...deleteList, id]);
-    // }
-    // const onClickApply = () => {
-    //     alert("테스트 버튼 클릭!");
-    // }
+    const handleClickDelete = (id) =>{
+        // -1이면 배열안에 존재하지 않음
+        // 존재하지 않으면 삭제 리스트에 추가함.
+        // if( deleteList.indexOf(id) === -1)
+        //     setDeleteList([...deleteList, id]);
+    }
+    console.log("렌더링됨");
     if(loading) return <div> 데이터를 로딩중 입니다.</div>;
-    if( !readPhoneInfos ) return <div>데이터 로딩 실패</div>;
+    if( !phoneInfos ) return <div>데이터 로딩 실패</div>;
     if(error) return <div>에러 발생</div>;
 
     return(
@@ -104,18 +104,21 @@ function Tables(){
             {/* 상단 ROW(제목) */}
             <Row key="row_top">
                 {columnProperties.map(property=>
-                    <Column key={`col_top${property.valname}`} width={property.width} textalign="center" top>{property.name}</Column>
+                    <Column key={`col_top${property.valname}`} width={property.width} textalign="center" top>
+                        {property.name}
+                    </Column>
                 )}
             </Row>
             {/* 하단 Row(내용) */}
-            {readPhoneInfos.map(row =>
+            {phoneInfos.map(row =>
                 <Row key={`row_${row.id}`}>
-                    <DeleteButton/>
+                    <DeleteButton onClick={()=>{ handleClickDelete(row.id); }}> {`삭제`} </DeleteButton>
                     {columnProperties.map(property=>
-                        <Column key={`col_${row.id}_${property.valname}`} width={property.width} textalign={property.textalign}> {row[ property.valname ]} </Column>
+                        <Column key={`col_${row.id}_${property.valname}`} width={property.width} textalign={property.textalign}> 
+                            {row[ property.valname ]} 
+                        </Column>
                     )}
                 </Row>
-
             )}
         </StyledTable>
     );

@@ -1,28 +1,8 @@
 import axios from 'axios';
 import React, { createContext, useContext, useReducer } from 'react';
 
-const initial = {
-    loading:false,
-    data:null,
-    error:null,
-}
 const initialPhoneInfoState =  {
-    insertPhoneInfos : {
-        loading:false,
-        data:null,
-        error:null,
-    },
     readPhoneInfos : {
-        loading:false,
-        data:null,
-        error:null,
-    },
-    updatePhoneInfos : {
-        loading:false,
-        data:null,
-        error:null,
-    },
-    deletePhoneInfos : {
         loading:false,
         data:null,
         error:null,
@@ -45,7 +25,8 @@ const error = err =>({
     error : err,
 });
 
-function SettingContentsReducer(state, action){
+
+function PhoneInfoReducer(state, action){
     switch(action.type){
         case 'GET_PHN_INFO':
             return{
@@ -62,39 +43,49 @@ function SettingContentsReducer(state, action){
                 ...state,
                 readPhoneInfos:error(action.error),
             };
+        // case 'ADD_DELETE_LIST':
+        //     return{
+        //         deleteList: state.deleteList.concat(action.id)
+        //     };
         default:
             throw new Error(`알수없는 action ${action.type}`);
     }
 }
 
-const SettingContentsStateContext = createContext(null);
-const SettingContentsDispatchContext = createContext(null);
+const PhoneInfoStateContext = createContext(null);
+const PhoneInfoDispatchContext = createContext(null);
 
-export function SettingContentsProvider({children}){
-    const [state, dispatch] = useReducer(SettingContentsReducer, initialPhoneInfoState);
+//export
+function PhoneInfoProvider({children}){
+    const [state, dispatch] = useReducer(PhoneInfoReducer, initialPhoneInfoState);
     return(
-        <SettingContentsStateContext.Provider value={state}>
-            <SettingContentsDispatchContext.Provider value={dispatch}>
+        <PhoneInfoStateContext.Provider value={state}>
+            <PhoneInfoDispatchContext.Provider value={dispatch}>
                 {children}
-            </SettingContentsDispatchContext.Provider>
-        </SettingContentsStateContext.Provider>
+            </PhoneInfoDispatchContext.Provider>
+        </PhoneInfoStateContext.Provider>
     );
     
 }
 
-export function useSettingsContentsState(){
-    const state = useContext(SettingContentsStateContext);
+function usePhoneInfoState(){
+    const state = useContext(PhoneInfoStateContext);
     if( !state ) throw new Error('provider 확인바람');
     return state;
 }
 
-export function useSettingsContentsDispatch(){
-    const dispatch = useContext(SettingContentsDispatchContext);
+function usePhoneInfoDispatch(){
+    const dispatch = useContext(PhoneInfoDispatchContext);
     if( !dispatch ) throw new Error('provider 확인바람');
     return dispatch;
 }
 
-export async function getPhoneInfos(dispatch){
+//export
+function usePhoneInfo(){
+    return [usePhoneInfoState(), usePhoneInfoDispatch()];
+}
+//export
+async function getPhoneInfos(dispatch){
     dispatch({type:'GET_PHN_INFO'});
     try{
         const res = await axios.get('api/phoneinfo');
@@ -103,3 +94,5 @@ export async function getPhoneInfos(dispatch){
         dispatch({type:'GET_PHN_INFO_ERROR', error:e});
     }
 }
+
+export {PhoneInfoProvider, usePhoneInfo, getPhoneInfos};
