@@ -5,6 +5,12 @@ import {Main, Setting} from './pages/pages';
 import styled, { createGlobalStyle } from 'styled-components';
 import Footer from './Footer';
 import Test from './test/Test';
+import { createStore } from 'redux';
+import rootReducer from './modules';
+import { Provider } from 'react-redux';
+import {composeWithDevTools} from 'redux-devtools-extension'
+
+const store = createStore(rootReducer, composeWithDevTools());
 
 const StyledApp = styled.div`
 `;
@@ -40,15 +46,17 @@ const GlobalStyle = createGlobalStyle`
 function App(){
 
     return(
-        <StyledApp>
-            <GlobalStyle/>
-            <BrowserRouter>
-                <Route path="/" component={Main} exact/>
-                <Route path="/setting" component = {Setting}/>
-                <Route path="/test" component = {Test}/>
-            </BrowserRouter>
-            <Footer/>
-        </StyledApp>
+        <Provider store={store}>
+            <StyledApp>
+                <GlobalStyle/>
+                <BrowserRouter>
+                    <Route path="/" component={Main} exact/>
+                    <Route path="/setting" component = {Setting}/>
+                    <Route path="/test" component = {Test}/>
+                </BrowserRouter>
+                <Footer/>
+            </StyledApp>
+        </Provider>
     );
 }
 export default App

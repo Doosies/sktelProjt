@@ -1,17 +1,29 @@
 import axios from 'axios';
 import React, { createContext, useContext, useReducer } from 'react';
+import produce from 'immer';
 
 const initialPhoneInfoState =  {
-    readPhoneInfos : {
+    lastId:null,
+    readPhoneInfoData : {
         loading:false,
-        data:null,
+        data:[{
+            id:'', 
+            model_name:'', 
+            machine_name:'', 
+            shipping_price:'',
+            maker:'',
+            created:'', 
+            battery:'', 
+            screen_size:'',
+            storage:'',
+        }],
         error:null,
     },
 }
 
 const loadingState = {
     loading:true,
-    data:null,
+    data:[],
     error:null
 }
 const success = data =>({
@@ -21,28 +33,51 @@ const success = data =>({
 });
 const error = err =>({
     loading: false,
-    data:null,
+    data:[],
     error : err,
 });
 
 
 function PhoneInfoReducer(state, action){
+    console.log(state);
     switch(action.type){
         case 'GET_PHN_INFO':
+            // return produce(state, draft=>{
+            //     dfaft.readPhoneInfoData.
+            // })
             return{
                 ...state,
-                readPhoneInfos:loadingState,
+                readPhoneInfoData:loadingState,
             };
         case 'GET_PHN_INFO_SUCCESS':
             return{
                 ...state,
-                readPhoneInfos:success(action.data),
+                lastId:action.lastId,
+                readPhoneInfoData:success(action.data),
             };
         case 'GET_PHN_INFO_ERROR':
             return{
                 ...state,
-                readPhoneInfos:error(action.error),
+                readPhoneInfoData:error(action.error),
             };
+        case 'DELETE_INFO':
+            return produce(state, draft=>{
+                const rows = draft.readPhoneInfoData.data;
+                const idx = rows.findIndex( row => row.id === action.id);
+                rows.splice(idx,1);
+            });
+        case 'ADD_INFO':
+            return produce(state, draft=>{
+                draft.lastId ++;
+                draft.readPhoneInfoData.data.push({id:state.lastId+1});
+            });
+        case 'CHANGE_INFO':
+            return produce(state, draft=>{
+                const row = draft.readPhoneInfoData.data.find( row => row.id ===action.id);
+                row[action.colName] = action.value;
+            });
+            // }
+        
         // case 'ADD_DELETE_LIST':
         //     return{
         //         deleteList: state.deleteList.concat(action.id)
@@ -53,17 +88,13 @@ function PhoneInfoReducer(state, action){
 }
 
 const StateContext = createContext(null);
-// const PhoneInfoStateContext = createContext(null);
-// const PhoneInfoDispatchContext = createContext(null);
 
 //export
 function PhoneInfoProvider({children}){
     const [state, dispatch] = useReducer(PhoneInfoReducer, initialPhoneInfoState);
     return(
         <StateContext.Provider value={{state, dispatch}}>
-            {/* <PhoneInfoDispatchContext.Provider value={dispatch}> */}
                 {children}
-            {/* </PhoneInfoDispatchContext.Provider> */}
         </StateContext.Provider>
     );
     
@@ -75,25 +106,19 @@ function usePhoneInfoContext(){
     return context;
 }
 
-// function usePhoneInfoDispatch(){
-//     const dispatch = useContext(PhoneInfoDispatchContext);
-//     if( !dispatch ) throw new Error('usePhoneInfoDispatch provider 확인바람');
-//     return dispatch;
-// }
-
-//export
-// function usePhoneInfo(){
-//     return [usePhoneInfoState(), usePhoneInfoDispatch()];
-// }
-//export
-async function getPhoneInfos(dispatch){
+async function getPhoneInfoData(dispatch){
     dispatch({type:'GET_PHN_INFO'});
     try{
         const res = await axios.get('api/phoneinfo');
-        dispatch({type:'GET_PHN_INFO_SUCCESS', data:res.data});
+        const lastId = res.data[res.data.length-1].id;
+        dispatch({type:'GET_PHN_INFO_SUCCESS', data:res.data, lastId:lastId});
     }catch(e){
         dispatch({type:'GET_PHN_INFO_ERROR', error:e});
     }
 }
 
-export {PhoneInfoProvider,usePhoneInfoContext, getPhoneInfos};
+function addPhoneInfo(dispatch){
+    dispatch({type:'ADD_INFO'});
+}
+
+export {PhoneInfoProvider,usePhoneInfoContext, getPhoneInfoData, addPhoneInfo};

@@ -2,8 +2,9 @@ import { createContext, useContext, useReducer } from "react"
 
 
 const initialPhoneChange = {
+    // lastId:null,
     insertList:[],
-    deleteList:[1,2,3],
+    deleteList:[],
     updateList:[
         {
             colId:'',
@@ -17,32 +18,38 @@ const initialPhoneChange = {
     ]
 }
 
+
 function PhoneChangeReducer(state, action){
     switch(action.type){
-        case 'ADD_DELETE_LIST':{
-            const list = state.deleteList;
-            const id = action.id;
-            if( list.indexOf(id) !== -1)
-                return {deleteList:list.concat(id)};
-            break;
-        }
+        case 'ADD_DELETE_LIST':
+            return{
+                ...state,
+                deleteList:state.deleteList.concat(action.id)
+            };
+        case 'ADD_INSERT_LIST':
+            return{
+                ...state,
+                insertList:state.insertList.concat(action.id),
+            };
+            // const list = state.deleteList;
+            // const id = action.id;
+            // if( list.indexOf(id) !== -1)
+            //     return {deleteList:list.concat(id)};
+            // break;
+        
         default:
             throw new Error(`액션을 찾을 수 없음${action.type}`);
     }
 }
 
 const PhoneChangeContext = createContext(null);
-// const PhoneChangeStateContext = createContext(null);
-// const PhoneChangeDispatchContext = createContext(null);
 
 //export
 function PhoneChangeProvider({children}){
     const [state, dispatch] = useReducer(PhoneChangeReducer, initialPhoneChange);
     return(
         <PhoneChangeContext.Provider value={{state, dispatch}}>
-            {/* <PhoneChangeDispatchContext.Provider value={dispatch}> */}
-                {children}
-            {/* </PhoneChangeDispatchContext.Provider> */}
+            {children}
         </PhoneChangeContext.Provider>
     );
 }
@@ -53,16 +60,6 @@ function usePhoneChangeContext(){
         return context;
 }
 
-// function usePhoneChangeDispatch(){
-//     const dispatch = useContext(PhoneChangeDispatchContext);
-//     if( !dispatch ) throw new Error('usePhoneChangeDispatch provider 확인바람');
-//     return dispatch;
-// }
-
-//export
-// function usePhoneChange(){
-//     return [usePhoneChangeState(), usePhoneChangeDispatch()];
-// }
 
 function addDeleteList(dispatch, id){
     dispatch({type:'ADD_DELETE_LIST', id})

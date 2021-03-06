@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useCallback} from 'react';
 import styled from 'styled-components';
 import CButton from '../../../../components/Button';
+// import { usePhoneChangeContext } from '../../../../context/PhoneChangeContext';
+import { addPhoneInfo, usePhoneInfoContext } from '../../../../context/PhoneInfoContext';
 import Tables from './Tables';
 
 const StyledContents = styled.div`
@@ -53,6 +55,22 @@ const ContentsBottom = styled.div`
 `;
 
 function Contents(){
+    const {dispatch:phoneDispatch}= usePhoneInfoContext();
+
+    // const {state:phoneState, dispatch:phoneDispatch}= usePhoneInfoContext();
+    // const {state:changeState, dispatch:changeDispatch}= usePhoneChangeContext();
+    // const {lastId} = phoneState;
+
+    // const nextId = useRef(0);
+    console.log("contents 컴포넌트 렌더");
+
+    const handleAdd = useCallback( ()=>{
+        addPhoneInfo(phoneDispatch);
+    },[phoneDispatch]);
+
+    const handleApply = () =>{
+    }
+    
     return(
         <StyledContents className="contents">
             <ContentsBox>
@@ -60,15 +78,15 @@ function Contents(){
                     <ContentsTopName>핸드폰 정보 수정</ContentsTopName>
                 </ContentsTop>
                 <ContentsBottom>
-                    <Tables key="tableskey"/>
                     <ContentsTopButtons>
-                        <CButton onClick={()=>{alert("데이터 추가")}} width="60px"font_size="13px" font_weight="bold" border>추가</CButton>
-                        <CButton onClick={()=>{alert("수정 완료")}} width="60px"font_size="13px" font_weight="bold" border>적용</CButton>
+                        <CButton onClick={ handleAdd } width="60px"font_size="13px" font_weight="bold" border>추가</CButton>
+                        <CButton onClick={ handleApply } width="60px"font_size="13px" font_weight="bold" border>적용</CButton>
                     </ContentsTopButtons>
+                    <Tables key="tableskey"/>
                 </ContentsBottom>
             </ContentsBox>
         </StyledContents>
     );
 }
 
-export default Contents
+export default React.memo(Contents);

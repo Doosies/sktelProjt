@@ -1,9 +1,22 @@
-import React, {useEffect} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import styled, { css } from 'styled-components';
 import Button from '../../../../components/Button';
-import { addDeleteList, usePhoneChangeContext } from '../../../../context/PhoneChangeContext';
-import { getPhoneInfos, usePhoneInfoContext } from '../../../../context/PhoneInfoContext';
+import { useDispatch, useSelector } from "react-redux";
+import { phoneDataError, phoneDataLoading, phoneDataSuccess } from '../../../../modules/phoneData';
+import { getAllPhoneInfo } from '../../../../utils/api';
+import Column from './Column';
+import Input from './Input';
 
+const columnProperties = [
+    {name:"기기명", width:"200px", colname:"model_name", textalign:"left"},
+    {name:"모델명", width:"180px", colname:"machine_name", textalign:"left"},
+    {name:"출고가", width:"70px", colname:"shipping_price", textalign:"right"},
+    {name:"브랜드", width:"100px", colname:"maker", textalign:"center"},
+    {name:"출시일", width:"100px", colname:"created", textalign:"center"},
+    {name:"배터리 용량", width:"80px", colname:"battery", textalign:"right"},
+    {name:"스크린 사이즈", width:"100px", colname:"screen_size", textalign:"right"},
+    {name:"저장 용량", width:"100px", colname:"storage", textalign:"right"},
+];
 
 const StyledTable = styled.div`
     width:auto;
@@ -15,42 +28,12 @@ const Row = styled.div`
     align-items:center;
 `;
 
-const Column = styled.div`
-    border-bottom: solid 1px;
-    padding-top:10px;
-    padding-bottom:10px;
-    padding-left:5px;
-    padding-right:5px;
-    font-size:12px;
-    height:20px;
-
-    width: 100px;
-    ${props=>css` 
-        width: ${props.width}; 
-        text-align:${props.textalign};
-    `}
-
-    /* 제일 상단에 있는 column일 경우 */
-    ${({ top }) => top && 
-        css `
-            padding-top:15px;
-            padding-bottom:15px;
-            font-size:15px;
-            font-weight:bold;
-    `}
-`;
-
-// const BlinkArea = styled.div`
-//     width:42px;
-// `;
-
 const DeleteButton = styled(Button)`
     background-color: #ff7787;
     margin-right:5px;
     color:white;
     width:40px;
     
-
     ${({noButton}) => noButton && css`
         background-color:white;
         color:white;
@@ -59,68 +42,76 @@ const DeleteButton = styled(Button)`
 `;
 
 
-const columnProperties = [
-    {name:"기기명", width:"200px", valname:"model_name", textalign:"left"},
-    {name:"모델명", width:"180px", valname:"machine_name", textalign:"left"},
-    {name:"출고가", width:"90px", valname:"shipping_price", textalign:"right"},
-    {name:"브랜드", width:"130px", valname:"maker", textalign:"center"},
-    {name:"출시일", width:"130px", valname:"created", textalign:"center"},
-    {name:"배터리 용량", width:"100px", valname:"battery", textalign:"right"},
-    {name:"스크린 사이즈", width:"100px", valname:"screen_size", textalign:"right"},
-    {name:"저장 용량", width:"100px", valname:"storage", textalign:"right"},
-];
+
 
 function Tables(){
-    // const state = usePhoneInfoState();
-    // const dispatch = usePhoneInfoDispatch();
-    const {state:phoneState, dispatch:phoneDispatch}= usePhoneInfoContext();
-    const {state:changeState, dispatch:changeDispatch} = usePhoneChangeContext();
+    console.log("테이블 렌더링");
+
+    const {lastId, rows, error,loading} = useSelector( state =>({
+        lastId: state.phoneData.data.lastId,
+        rows: state.phoneData.data.rows,
+        loading:state.phoneData.state.loading,
+        error:state.phoneData.state.error,
+    }));
+
+    const dispatch = useDispatch();
+    const nowLoading = () => dispatch(phoneDataLoading());
+    const nowSuccess = (data) =>dispatch(phoneDataSuccess(data));
+    const nowError = (error) => dispatch(phoneDataError(error));
+    // console.log("현재 스테이트->",state);
     
-    const {data:phoneInfos, loading, error} = phoneState.readPhoneInfos;
-    const {deleteList} = changeState;
+    // const getData = useCallback( 
+    // },[nowError, nowLoading, nowSuccess]);
 
-
-
-    useEffect( ()=>{
-        const fetchInfos = () =>{
-            getPhoneInfos(phoneDispatch);
+    
+    useEffect(() =>{
+        const fetchData = async()=>{
+            nowLoading();
+            try{
+                const response = await getAllPhoneInfo();
+                nowSuccess(response);
+            }catch(e){
+                nowError(e);
+            }
         }
-        fetchInfos();
-    //eslint-disable-next-line
+        fetchData();
+
     },[]);
-
-
-    const handleClickDelete = (id) =>{
-        // -1이면 배열안에 존재하지 않음
-        // 존재하지 않으면 삭제 리스트에 추가함.
-        // if( deleteList.indexOf(id) === -1)
-        //     setDeleteList([...deleteList, id]);
-        addDeleteList(changeDispatch,id);
-        console.log(changeState);
-
-    }
-    // console.log("렌더링됨");
-    if(loading) return <div> 데이터를 로딩중 입니다.</div>;
-    if( !phoneInfos ) return <div>데이터 로딩 실패</div>;
+    
+    if(loading) return null;    
+    if( !lastId ) return <div>데이터 로딩 실패</div>;
     if(error) return <div>에러 발생</div>;
 
     return(
         <StyledTable>
             {/* 상단 ROW(제목) */}
             <Row key="row_top">
+                <DeleteButton noButton/>
                 {columnProperties.map(property=>
-                    <Column key={`col_top${property.valname}`} width={property.width} textalign="center" top>
+                    <Column key={`col_top${property.colname}`} 
+                            width={property.width} 
+                            textalign="center" top
+                    >
                         {property.name}
                     </Column>
                 )}
             </Row>
             {/* 하단 Row(내용) */}
-            {phoneInfos.map(row =>
+            {rows.map(row =>
                 <Row key={`row_${row.id}`}>
-                    <DeleteButton onClick={()=>{ handleClickDelete(row.id); }}> {`삭제`} </DeleteButton>
+                    <DeleteButton onClick={()=>{ }}> {`삭제`} </DeleteButton>
                     {columnProperties.map(property=>
-                        <Column key={`col_${row.id}_${property.valname}`} width={property.width} textalign={property.textalign}> 
-                            {row[ property.valname ]} 
+                        <Column key={`col_${row.id}_${property.colname}`} 
+                                width={property.width} 
+                                textalign={property.textalign}
+                        > 
+                            <Input 
+                                textalign={property.textalign} 
+                                width={property.width} 
+                                colName={property.colname} 
+                                id={row.id}
+                                // value={row[ property.colname ]} 
+                            />
                         </Column>
                     )}
                 </Row>
@@ -128,4 +119,4 @@ function Tables(){
         </StyledTable>
     );
 }
-export default Tables
+export default React.memo(Tables);

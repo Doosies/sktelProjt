@@ -33,4 +33,5 @@ function Body(){
         </StyledBody>
     );
 }
-export default Body
+// export default React.memo(Body);
+export default Body;

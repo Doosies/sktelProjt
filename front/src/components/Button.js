@@ -1,4 +1,4 @@
-
+import React from 'react';
 import styled, { css } from "styled-components";
 
 const StyledButton = styled.div`
@@ -27,4 +27,4 @@ function Button({ onClick, width, height, color, font_size, font_weight, border,
         </StyledButton>
     );
 }
-export default Button
+export default React.memo(Button);

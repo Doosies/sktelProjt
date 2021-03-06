@@ -1,14 +1,7 @@
-import React from 'react';
-import { PhoneInfoProvider } from './InfoContext';
-import TestInfos from './TestInfos';
+import React from 'react'
 
-function Test(){
+export default function Test(){
     return(
-        <div>
-            <PhoneInfoProvider>
-                <TestInfos/>
-            </PhoneInfoProvider>
-        </div>
+        <dib>ssfdfds</dib>
     );
 }
-export default Test
