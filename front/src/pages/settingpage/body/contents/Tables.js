@@ -2,10 +2,11 @@ import React, {useCallback, useEffect} from 'react';
 import styled, { css } from 'styled-components';
 import Button from '../../../../components/Button';
 import { useDispatch, useSelector } from "react-redux";
-import { phoneDataError, phoneDataLoading, phoneDataSuccess } from '../../../../modules/phoneData';
+import { phoneDataError, phoneDataLoading, phoneDataSuccess, phoneDataDelete } from '../../../../modules/phoneData';
 import { getAllPhoneInfo } from '../../../../utils/api';
 import Column from './Column';
 import Input from './Input';
+import Row from './Row';
 
 const columnProperties = [
     {name:"기기명", width:"200px", colname:"model_name", textalign:"left"},
@@ -22,24 +23,24 @@ const StyledTable = styled.div`
     width:auto;
 `;
 
-const Row = styled.div`
-    text-align:center;
-    display:flex;
-    align-items:center;
-`;
+// const Row = styled.div`
+//     text-align:center;
+//     display:flex;
+//     align-items:center;
+// `;
 
-const DeleteButton = styled(Button)`
-    background-color: #ff7787;
-    margin-right:5px;
-    color:white;
-    width:40px;
+// const DeleteButton = styled(Button)`
+//     background-color: #ff7787;
+//     margin-right:5px;
+//     color:white;
+//     width:40px;
     
-    ${({noButton}) => noButton && css`
-        background-color:white;
-        color:white;
-        width:40px;
-    `}
-`;
+//     ${({noButton}) => noButton && css`
+//         background-color:white;
+//         color:white;
+//         width:40px;
+//     `}
+// `;
 
 
 
@@ -58,10 +59,7 @@ function Tables(){
     const nowLoading = () => dispatch(phoneDataLoading());
     const nowSuccess = (data) =>dispatch(phoneDataSuccess(data));
     const nowError = (error) => dispatch(phoneDataError(error));
-    // console.log("현재 스테이트->",state);
     
-    // const getData = useCallback( 
-    // },[nowError, nowLoading, nowSuccess]);
 
     
     useEffect(() =>{
@@ -77,6 +75,7 @@ function Tables(){
         fetchData();
 
     },[]);
+
     
     if(loading) return null;    
     if( !lastId ) return <div>데이터 로딩 실패</div>;
@@ -84,39 +83,36 @@ function Tables(){
 
     return(
         <StyledTable>
-            {/* 상단 ROW(제목) */}
-            <Row key="row_top">
-                <DeleteButton noButton/>
-                {columnProperties.map(property=>
-                    <Column key={`col_top${property.colname}`} 
-                            width={property.width} 
-                            textalign="center" top
-                    >
-                        {property.name}
-                    </Column>
-                )}
-            </Row>
-            {/* 하단 Row(내용) */}
-            {rows.map(row =>
-                <Row key={`row_${row.id}`}>
-                    <DeleteButton onClick={()=>{ }}> {`삭제`} </DeleteButton>
-                    {columnProperties.map(property=>
-                        <Column key={`col_${row.id}_${property.colname}`} 
-                                width={property.width} 
-                                textalign={property.textalign}
-                        > 
-                            <Input 
-                                textalign={property.textalign} 
-                                width={property.width} 
-                                colName={property.colname} 
-                                id={row.id}
-                                // value={row[ property.colname ]} 
-                            />
-                        </Column>
-                    )}
-                </Row>
+            <Row key={`row_head`} top />
+            {rows.map(row=>
+               <Row key={`row_body_${row.id}`} id={row.id} /> 
             )}
         </StyledTable>
     );
+    // return(
+    //     <StyledTable>
+    //         {/* 상단 ROW(제목) */}
+    //             <Row key="row_top">
+    //                 <DeleteButton noButton/>
+
+    //                 {columnProperties.map(property=>
+    //                     <Column key={`col_top${property.colname}`} width={property.width} textalign="center" top>
+    //                         {property.name}
+    //                     </Column>
+    //                 )}
+    //             </Row>
+    //         {/* 하단 Row(내용) */}
+    //         {rows.map(row =>
+    //             <Row key={`row_${row.id}`}>
+    //                 <DeleteButton onClick={ ()=>{handleDeleteButton(row.id) }}> {`삭제`} </DeleteButton>
+    //                 {columnProperties.map(property=>
+    //                     <Column key={`col_${row.id}_${property.colname}`} width={property.width} textalign={property.textalign} > 
+    //                         <Input textalign={property.textalign} width={property.width} colName={property.colname} id={row.id} />
+    //                     </Column>
+    //                 )}
+    //             </Row>
+    //         )}
+    //     </StyledTable>
+    // );
 }
 export default React.memo(Tables);
