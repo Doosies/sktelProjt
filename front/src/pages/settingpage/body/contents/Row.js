@@ -4,6 +4,7 @@ import styled, { css } from 'styled-components';
 import Button from '../../../../components/Button';
 import { phoneDataDelete, phoneDataError, phoneDataLoading, phoneDataSuccess } from '../../../../modules/phoneData';
 import Column from './Column';
+import Input from './Input';
 
 const StyledRow = styled.div`
     text-align:center;
@@ -46,16 +47,19 @@ function Row({top, id}){
         deleteRow(id);
     }
 
-    console.log("렌더됨");
+    console.log(`row 렌더됨`);
 
     return(
         <StyledRow>
             <DeleteButton onClick={()=>handleDeleteButton(id)} top={top}>삭제</DeleteButton>
             {columnProperties.map(prop => 
-                <Column width={prop.width} textalign={top ? 'center' : prop.textalign} top={top}>
-                    {top && prop.name}
-                    {row && row[prop.colname]}
-                </Column>
+            <Column width={prop.width} textalign={top ? 'center' : prop.textalign} top={top}>
+                {top && /* 탑일경우 */
+                    prop.name}
+                {row && /* 탑이 아닐경우 */
+                    <Input textalign={prop.textalign} width={prop.width} colName={prop.colname} id={row.id} />
+                }
+            </Column>
             )}
         </StyledRow>
     );
