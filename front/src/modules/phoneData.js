@@ -7,18 +7,6 @@ const PHONE_DATA_CHANGE = 'phoneData/PHONE_DATA_CHANGE';
 const PHONE_DATA_DELETE = 'phoneData/PHONE_DATA_DELETE';
 const PHONE_DATA_ADD = 'phoneData/PHONE_DATA_ADD';
 
-const init = {
-    id:'', 
-    model_name:'', 
-    machine_name:'', 
-    shipping_price:'',
-    maker:'',
-    created:'', 
-    battery:'', 
-    screen_size:'',
-    storage:'',
-};
-
 const initialState = {
     state:{
         loading:false,

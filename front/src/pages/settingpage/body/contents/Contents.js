@@ -1,7 +1,8 @@
 import React, { } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import CButton from '../../../../components/Button';
+import { dataAddListInsert } from '../../../../modules/changeData';
 import { phoneDataAdd } from '../../../../modules/phoneData';
 import Tables from './Tables';
 
@@ -55,13 +56,16 @@ const ContentsBottom = styled.div`
 `;
 
 function Contents(){
-    console.log("contents 컴포넌트 렌더");
+    const lastId = useSelector( state => state.phoneData.data.lastId);
     
     const dispatch = useDispatch();
     const addPhone = () => dispatch(phoneDataAdd());
+    const addList = () =>dispatch(dataAddListInsert(lastId));
 
     const handleAdd =  ()=>{
         addPhone();
+        //TODO - addphone() 후 addlist() 수행하게 변경해야함.
+        addList();
     };
 
     const handleApply = () =>{
@@ -69,6 +73,7 @@ function Contents(){
     
     return(
         <StyledContents className="contents">
+        {lastId}
             <ContentsBox>
                 <ContentsTop>
                     <ContentsTopName>핸드폰 정보 수정</ContentsTopName>
