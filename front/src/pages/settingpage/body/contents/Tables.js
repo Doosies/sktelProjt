@@ -1,55 +1,18 @@
-import React, {useCallback, useEffect} from 'react';
-import styled, { css } from 'styled-components';
-import Button from '../../../../components/Button';
+import React, {useEffect} from 'react';
+import styled from 'styled-components';
 import { useDispatch, useSelector } from "react-redux";
-import { phoneDataError, phoneDataLoading, phoneDataSuccess, phoneDataDelete } from '../../../../modules/phoneData';
+import { phoneDataError, phoneDataLoading, phoneDataSuccess } from '../../../../modules/phoneData';
 import { getAllPhoneInfo } from '../../../../utils/api';
-import Column from './Column';
-import Input from './Input';
 import Row from './Row';
-
-const columnProperties = [
-    {name:"기기명", width:"200px", colname:"model_name", textalign:"left"},
-    {name:"모델명", width:"180px", colname:"machine_name", textalign:"left"},
-    {name:"출고가", width:"70px", colname:"shipping_price", textalign:"right"},
-    {name:"브랜드", width:"100px", colname:"maker", textalign:"center"},
-    {name:"출시일", width:"100px", colname:"created", textalign:"center"},
-    {name:"배터리 용량", width:"80px", colname:"battery", textalign:"right"},
-    {name:"스크린 사이즈", width:"100px", colname:"screen_size", textalign:"right"},
-    {name:"저장 용량", width:"100px", colname:"storage", textalign:"right"},
-];
 
 const StyledTable = styled.div`
     width:auto;
 `;
 
-// const Row = styled.div`
-//     text-align:center;
-//     display:flex;
-//     align-items:center;
-// `;
-
-// const DeleteButton = styled(Button)`
-//     background-color: #ff7787;
-//     margin-right:5px;
-//     color:white;
-//     width:40px;
-    
-//     ${({noButton}) => noButton && css`
-//         background-color:white;
-//         color:white;
-//         width:40px;
-//     `}
-// `;
-
-
-
-
 function Tables(){
     console.log("테이블 렌더링");
 
-    const {lastId, rows, error,loading} = useSelector( state =>({
-        lastId: state.phoneData.data.lastId,
+    const {rows, error,loading} = useSelector( state =>({
         rows: state.phoneData.data.rows,
         loading:state.phoneData.state.loading,
         error:state.phoneData.state.error,
@@ -78,7 +41,7 @@ function Tables(){
 
     
     if(loading) return null;    
-    if( !lastId ) return <div>데이터 로딩 실패</div>;
+    if( !rows ) return <div>데이터 로딩 실패</div>;
     if(error) return <div>에러 발생</div>;
 
     return(
@@ -89,30 +52,5 @@ function Tables(){
             )}
         </StyledTable>
     );
-    // return(
-    //     <StyledTable>
-    //         {/* 상단 ROW(제목) */}
-    //             <Row key="row_top">
-    //                 <DeleteButton noButton/>
-
-    //                 {columnProperties.map(property=>
-    //                     <Column key={`col_top${property.colname}`} width={property.width} textalign="center" top>
-    //                         {property.name}
-    //                     </Column>
-    //                 )}
-    //             </Row>
-    //         {/* 하단 Row(내용) */}
-    //         {rows.map(row =>
-    //             <Row key={`row_${row.id}`}>
-    //                 <DeleteButton onClick={ ()=>{handleDeleteButton(row.id) }}> {`삭제`} </DeleteButton>
-    //                 {columnProperties.map(property=>
-    //                     <Column key={`col_${row.id}_${property.colname}`} width={property.width} textalign={property.textalign} > 
-    //                         <Input textalign={property.textalign} width={property.width} colName={property.colname} id={row.id} />
-    //                     </Column>
-    //                 )}
-    //             </Row>
-    //         )}
-    //     </StyledTable>
-    // );
 }
 export default React.memo(Tables);

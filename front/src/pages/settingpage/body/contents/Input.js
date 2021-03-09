@@ -13,11 +13,10 @@ const StyledInput = styled.input`
 
 
 function Input({textalign, width, colName, id}){
-    const { val } = useSelector( state =>({ 
-        val: state.phoneData.data.rows
+    const  val  = useSelector( state => state.phoneData.data.rows
             [ state.phoneData.data.rows.findIndex( val=>val.id===id )]
             [ colName ] 
-    }));
+    );
 
     const dispatch = useDispatch();
     const dataChange = (val) => dispatch(phoneDataChange(id,colName, val));

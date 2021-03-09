@@ -27,7 +27,6 @@ const StyledColumn = styled.div`
 `;
 
 function Column({width, textalign, top, children}){
-    console.log("콜럼 업데이터");
     return(
         <StyledColumn width={width} textalign={textalign} top={top}>
             {children}
