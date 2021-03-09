@@ -20,4 +20,28 @@ const initialState = {
     ]
 }
 
-const 
+const dataAddList = (id) => ({
+    type:DATA_ADD_LIST,
+});
+const dataDeleteList = (id) => ({
+    type:DATA_DELETE_LIST,
+});
+const dataChangeList = () => ({
+    type:DATA_CHANGE_LIST,
+});
+
+
+export default function ChangeData(state = initialState, action){
+    switch(action.type){
+        case DATA_ADD_LIST:
+            return{};
+        case DATA_DELETE_LIST:
+            return{};
+        case DATA_CHANGE_LIST:
+            return{};
+        default:
+            return state;
+    }
+}
+
+export {dataAddList, dataDeleteList, dataChangeList};

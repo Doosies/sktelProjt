@@ -1,6 +1,8 @@
 import React, { } from 'react';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import CButton from '../../../../components/Button';
+import { phoneDataAdd } from '../../../../modules/phoneData';
 import Tables from './Tables';
 
 const StyledContents = styled.div`
@@ -54,9 +56,12 @@ const ContentsBottom = styled.div`
 
 function Contents(){
     console.log("contents 컴포넌트 렌더");
+    
+    const dispatch = useDispatch();
+    const addPhone = () => dispatch(phoneDataAdd());
 
     const handleAdd =  ()=>{
-        
+        addPhone();
     };
 
     const handleApply = () =>{

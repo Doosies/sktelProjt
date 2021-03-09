@@ -47,7 +47,6 @@ function Row({top, id}){
         deleteRow(id);
     }
 
-    console.log(`row 렌더됨`);
 
     return(
         <StyledRow>

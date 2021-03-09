@@ -10,7 +10,6 @@ const StyledTable = styled.div`
 `;
 
 function Tables(){
-    console.log("테이블 렌더링");
 
     const {rows, error,loading} = useSelector( state =>({
         rows: state.phoneData.data.rows,
@@ -24,7 +23,7 @@ function Tables(){
         const nowLoading = () => dispatch(phoneDataLoading());
         const nowSuccess = (data) =>dispatch(phoneDataSuccess(data));
         const nowError = (error) => dispatch(phoneDataError(error));
-        
+
         nowLoading();
         try{
             const response = await getAllPhoneInfo();
@@ -33,26 +32,12 @@ function Tables(){
             nowError(e);
         }
     },[dispatch]);
-
-    // const nowLoading = useCallback(()=>{
-    //     dispatch(phoneDataLoading());
-    // },[dispatch]);
-
-    // const nowSuccess = useCallback((data)=>{
-    //     dispatch(phoneDataSuccess(data))
-    // },[dispatch]);
-
-    // const nowError = useCallback((error)=>{
-    //     dispatch(phoneDataError(error))
-    // },[dispatch]);
     
-
     
     useEffect(() =>{
         fetchData();
 
     },[fetchData]);
-
     
     if(loading) return null;    
     if( !rows ) return <div>데이터 로딩 실패</div>;

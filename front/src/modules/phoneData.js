@@ -5,6 +5,19 @@ const PHONE_DATA_SUCCESS = 'phoneData/PHONE_DATA_SUCCESS';
 const PHONE_DATA_ERROR = 'phoneData/PHONE_DATA_ERROR';
 const PHONE_DATA_CHANGE = 'phoneData/PHONE_DATA_CHANGE';
 const PHONE_DATA_DELETE = 'phoneData/PHONE_DATA_DELETE';
+const PHONE_DATA_ADD = 'phoneData/PHONE_DATA_ADD';
+
+const init = {
+    id:'', 
+    model_name:'', 
+    machine_name:'', 
+    shipping_price:'',
+    maker:'',
+    created:'', 
+    battery:'', 
+    screen_size:'',
+    storage:'',
+};
 
 const initialState = {
     state:{
@@ -40,9 +53,6 @@ const phoneDataError = (error) =>({
     type:PHONE_DATA_ERROR,
     error:error,
 });
-// const increaseLastId = () =>({
-//     type:INCREASE_LAST_ID,
-// });
 
 const phoneDataChange = (id, colName, value) =>({
     type:PHONE_DATA_CHANGE,
@@ -54,10 +64,14 @@ const phoneDataDelete = (id) =>({
     type:PHONE_DATA_DELETE,
     id: id,
 });
+const phoneDataAdd = () =>({
+    type:PHONE_DATA_ADD,
+});
 
 
 
 export default function phoneData(state = initialState, action){
+    console.log(state, action);
     switch(action.type){
         case PHONE_DATA_LOADING:
             return{
@@ -85,11 +99,6 @@ export default function phoneData(state = initialState, action){
                     error:action.error,
                 },
             };
-        // case INCREASE_LAST_ID:
-        //     return{
-        //         ...state,
-        //         lastId: state.lastId+1,
-        //     }
         case PHONE_DATA_CHANGE:
             return produce(state, draft=>{
                 const row = draft.data.rows.find( row => row.id === action.id);
@@ -98,11 +107,26 @@ export default function phoneData(state = initialState, action){
             
         case PHONE_DATA_DELETE:
             return produce(state, draft=>{
-                // const rows = draft.data.rows;
-                // const idx = rows.findIndex( row => row.id === action.id);
-                // rows.splice(idx,1);
-                // console.log(draft.data.rows);
                 draft.data.rows = draft.data.rows.filter(row =>row.id !== action.id);
+            });
+        case PHONE_DATA_ADD:
+            return produce(state, draft=>{
+                // const init = initialState.data.rows[0];
+                // init.id = state.data.lastId+1;
+                const init = {
+                    id:'', 
+                    model_name:'', 
+                    machine_name:'', 
+                    shipping_price:'',
+                    maker:'',
+                    created:'', 
+                    battery:'', 
+                    screen_size:'',
+                    storage:'',
+                };
+                draft.data.lastId ++;
+                init.id = state.data.lastId+1;
+                draft.data.rows.push(init);
             });
         default:
             return state;
@@ -110,5 +134,5 @@ export default function phoneData(state = initialState, action){
 }
 
 export {phoneDataLoading, phoneDataSuccess, phoneDataError, //increaseLastId,
-        phoneDataChange, phoneDataDelete, 
+        phoneDataChange, phoneDataDelete, phoneDataAdd,
         };
