@@ -64,9 +64,9 @@ function Contents(){
     // const nextId = useRef(0);
     console.log("contents 컴포넌트 렌더");
 
-    const handleAdd = useCallback( ()=>{
-        addPhoneInfo(phoneDispatch);
-    },[phoneDispatch]);
+    const handleAdd =  ()=>{
+        
+    };
 
     const handleApply = () =>{
     }

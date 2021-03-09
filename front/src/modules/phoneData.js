@@ -3,8 +3,10 @@ import produce from 'immer';
 const PHONE_DATA_LOADING = 'phoneData/PHONE_DATA';
 const PHONE_DATA_SUCCESS = 'phoneData/PHONE_DATA_SUCCESS';
 const PHONE_DATA_ERROR = 'phoneData/PHONE_DATA_ERROR';
+// const INCREASE_LAST_ID = 'phoneData/INCREASE_LAST_ID';
+
 const PHONE_DATA_CHANGE = 'phoneData/PHONE_DATA_CHANGE';
-const INCREASE_LAST_ID = 'phoneData/INCREASE_LAST_ID';
+const PHONE_DATA_DELETE = 'phoneData/PHONE_DATA_DELETE';
 
 const initialState = {
     state:{
@@ -13,17 +15,19 @@ const initialState = {
     },
     data:{
         lastId:'',
-        rows:{
-            id:'', 
-            model_name:'', 
-            machine_name:'', 
-            shipping_price:'',
-            maker:'',
-            created:'', 
-            battery:'', 
-            screen_size:'',
-            storage:'',
-        }
+        rows:[
+                {
+                    id:'', 
+                    model_name:'', 
+                    machine_name:'', 
+                    shipping_price:'',
+                    maker:'',
+                    created:'', 
+                    battery:'', 
+                    screen_size:'',
+                    storage:'',
+                },
+        ],
     },
 };
 
@@ -38,19 +42,24 @@ const phoneDataError = (error) =>({
     type:PHONE_DATA_ERROR,
     error:error,
 });
+// const increaseLastId = () =>({
+//     type:INCREASE_LAST_ID,
+// });
+
 const phoneDataChange = (id, colName, value) =>({
     type:PHONE_DATA_CHANGE,
     id: id,
     colName:colName,
     value: value,
 });
-const increaseLastId = () =>({
-    type:INCREASE_LAST_ID,
+const phoneDataDelete = (id) =>({
+    type:PHONE_DATA_DELETE,
+    id: id,
 });
 
 
+
 export default function phoneData(state = initialState, action){
-    console.log(action);
     switch(action.type){
         case PHONE_DATA_LOADING:
             return{
@@ -77,22 +86,31 @@ export default function phoneData(state = initialState, action){
                     loading:false,
                     error:action.error,
                 },
-                
-                // data:[],
             };
+        // case INCREASE_LAST_ID:
+        //     return{
+        //         ...state,
+        //         lastId: state.lastId+1,
+        //     }
         case PHONE_DATA_CHANGE:
             return produce(state, draft=>{
                 const row = draft.data.rows.find( row => row.id === action.id);
                 row[action.colName] = action.value;
             });
-        case INCREASE_LAST_ID:
-            return{
-                ...state,
-                lastId: state.lastId+1,
-            }
+            
+        case PHONE_DATA_DELETE:
+            return produce(state, draft=>{
+                // const rows = draft.data.rows;
+                // const idx = rows.findIndex( row => row.id === action.id);
+                // rows.splice(idx,1);
+                // console.log(draft.data.rows);
+                draft.data.rows = draft.data.rows.filter(row =>row.id !== action.id);
+            });
         default:
             return state;
     }
 }
 
-export {phoneDataLoading, phoneDataSuccess, phoneDataError, phoneDataChange, increaseLastId};
+export {phoneDataLoading, phoneDataSuccess, phoneDataError, //increaseLastId,
+        phoneDataChange, phoneDataDelete, 
+        };

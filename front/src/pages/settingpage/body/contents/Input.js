@@ -18,8 +18,6 @@ function Input({textalign, width, colName, id}){
             [ state.phoneData.data.rows.findIndex( val=>val.id===id )]
             [ colName ] 
     }));
-    // const rowId = rows.findIndex(val => val.id === id);
-    // const value = rows[rowId][colName];
 
     const dispatch = useDispatch();
     const dataChange = (val) => dispatch(phoneDataChange(id,colName, val));
@@ -30,7 +28,7 @@ function Input({textalign, width, colName, id}){
 
     // console.log("input렌더", id, colName, value);
 
-
+    console.log("렌더링됨 인풋");
     return( 
         <StyledInput 
             textalign={textalign} 
