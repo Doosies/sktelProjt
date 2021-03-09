@@ -59,7 +59,6 @@ const phoneDataAdd = () =>({
 
 
 export default function phoneData(state = initialState, action){
-    console.log(state, action);
     switch(action.type){
         case PHONE_DATA_LOADING:
             return{

@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect} from 'react';
 import styled from 'styled-components';
-import { useDispatch, useSelector } from "react-redux";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { phoneDataError, phoneDataLoading, phoneDataSuccess } from '../../../../modules/phoneData';
 import { getAllPhoneInfo } from '../../../../utils/api';
 import Row from './Row';
@@ -15,7 +15,7 @@ function Tables(){
         rows: state.phoneData.data.rows,
         loading:state.phoneData.state.loading,
         error:state.phoneData.state.error,
-    }));
+    }), shallowEqual);
     const dispatch = useDispatch();
 
 
