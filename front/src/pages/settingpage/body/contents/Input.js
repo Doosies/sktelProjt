@@ -25,9 +25,6 @@ function Input({textalign, width, colName, id}){
         dataChange(e.target.value);
     }
 
-    // console.log("input렌더", id, colName, value);
-
-    console.log("렌더링됨 인풋");
     return( 
         <StyledInput 
             textalign={textalign} 

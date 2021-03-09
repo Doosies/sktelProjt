@@ -3,8 +3,6 @@ import produce from 'immer';
 const PHONE_DATA_LOADING = 'phoneData/PHONE_DATA';
 const PHONE_DATA_SUCCESS = 'phoneData/PHONE_DATA_SUCCESS';
 const PHONE_DATA_ERROR = 'phoneData/PHONE_DATA_ERROR';
-// const INCREASE_LAST_ID = 'phoneData/INCREASE_LAST_ID';
-
 const PHONE_DATA_CHANGE = 'phoneData/PHONE_DATA_CHANGE';
 const PHONE_DATA_DELETE = 'phoneData/PHONE_DATA_DELETE';
 

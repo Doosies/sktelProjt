@@ -1,8 +1,6 @@
-import React, { useCallback} from 'react';
+import React, { } from 'react';
 import styled from 'styled-components';
 import CButton from '../../../../components/Button';
-// import { usePhoneChangeContext } from '../../../../context/PhoneChangeContext';
-import { addPhoneInfo, usePhoneInfoContext } from '../../../../context/PhoneInfoContext';
 import Tables from './Tables';
 
 const StyledContents = styled.div`
@@ -55,13 +53,6 @@ const ContentsBottom = styled.div`
 `;
 
 function Contents(){
-    const {dispatch:phoneDispatch}= usePhoneInfoContext();
-
-    // const {state:phoneState, dispatch:phoneDispatch}= usePhoneInfoContext();
-    // const {state:changeState, dispatch:changeDispatch}= usePhoneChangeContext();
-    // const {lastId} = phoneState;
-
-    // const nextId = useRef(0);
     console.log("contents 컴포넌트 렌더");
 
     const handleAdd =  ()=>{

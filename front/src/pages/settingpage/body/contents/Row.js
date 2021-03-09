@@ -2,7 +2,7 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import styled, { css } from 'styled-components';
 import Button from '../../../../components/Button';
-import { phoneDataDelete, phoneDataError, phoneDataLoading, phoneDataSuccess } from '../../../../modules/phoneData';
+import { phoneDataDelete } from '../../../../modules/phoneData';
 import Column from './Column';
 import Input from './Input';
 
@@ -51,13 +51,16 @@ function Row({top, id}){
 
     return(
         <StyledRow>
-            <DeleteButton onClick={()=>handleDeleteButton(id)} top={top}>삭제</DeleteButton>
+            <DeleteButton onClick={()=>handleDeleteButton(id)} top={top}>
+                삭제
+            </DeleteButton>
+
             {columnProperties.map(prop => 
-            <Column width={prop.width} textalign={top ? 'center' : prop.textalign} top={top}>
+            <Column key={`col_${id}_${prop.colname}`} width={prop.width} textalign={top ? 'center' : prop.textalign} top={top}>
                 {top && /* 탑일경우 */
                     prop.name}
                 {row && /* 탑이 아닐경우 */
-                    <Input textalign={prop.textalign} width={prop.width} colName={prop.colname} id={row.id} />
+                    <Input key={`input_${id}_${prop.colname}`} textalign={prop.textalign} width={prop.width} colName={prop.colname} id={row.id} />
                 }
             </Column>
             )}
