@@ -37,7 +37,7 @@ export default function ChangeData(state = initialState, action){
         case DATA_ADD_LIST_INSERT:
             return{
                 ...state,
-                dataAddList:state.dataAddList.concat(action.id),
+                dataAddList:state.dataAddList.concat(action.id+1),
             };
         case DATA_DELETE_LIST_INSERT:
             return{};

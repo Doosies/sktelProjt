@@ -1,10 +1,9 @@
 import phoneData from './phoneData';
-import changeData from './changeData';
 
 import { combineReducers} from 'redux';
 
 const rootReducer = combineReducers({
-    phoneData, changeData
+    phoneData
 })
 
 export default rootReducer;

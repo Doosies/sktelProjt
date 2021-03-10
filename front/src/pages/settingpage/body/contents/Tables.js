@@ -1,9 +1,8 @@
-import React, {useCallback, useEffect} from 'react';
+import React, {useEffect} from 'react';
 import styled from 'styled-components';
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
-import { phoneDataError, phoneDataLoading, phoneDataSuccess } from '../../../../modules/phoneData';
-import { getAllPhoneInfo } from '../../../../utils/api';
 import Row from './Row';
+import { phoneDataFetchAsync } from '../../../../modules/phoneData';
 
 const StyledTable = styled.div`
     width:auto;
@@ -16,28 +15,12 @@ function Tables(){
         loading:state.phoneData.state.loading,
         error:state.phoneData.state.error,
     }), shallowEqual);
+
     const dispatch = useDispatch();
 
-
-    const fetchData = useCallback(async()=>{
-        const nowLoading = () => dispatch(phoneDataLoading());
-        const nowSuccess = (data) =>dispatch(phoneDataSuccess(data));
-        const nowError = (error) => dispatch(phoneDataError(error));
-
-        nowLoading();
-        try{
-            const response = await getAllPhoneInfo();
-            nowSuccess(response);
-        }catch(e){
-            nowError(e);
-        }
+    useEffect(()=>{
+        dispatch(phoneDataFetchAsync());
     },[dispatch]);
-    
-    
-    useEffect(() =>{
-        fetchData();
-
-    },[fetchData]);
     
     if(loading) return null;    
     if( !rows ) return <div>데이터 로딩 실패</div>;
