@@ -115,13 +115,18 @@ export default function phoneData(state = initialState, action){
                 const init = [initialState.data.rows];
 
                 draft.data.lastId ++;
-                init.id = state.data.lastId+1;
+                init.id = draft.data.lastId;
                 draft.data.rows.push(init);
+                // 추가 리스트에 추가.
                 draft.dataChangeList.dataAddList.push(init.id);
             });
         case PHONE_DATA_DELETE:
             return produce(state, draft=>{
                 draft.data.rows = draft.data.rows.filter(row =>row.id !== action.id);
+                // 제거를 누른 row가 새로 추가한 row가 아닐 경우
+                if( state.dataChangeList.dataAddList.findIndex( val => val === action.id) === -1)
+                    draft.dataChangeList.dataDeleteList.push(action.id);
+                
             });
         case PHONE_DATA_CHANGE:
             return produce(state, draft=>{

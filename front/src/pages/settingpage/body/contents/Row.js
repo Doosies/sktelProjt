@@ -37,15 +37,16 @@ const columnProperties = [
 ];
 
 function Row({top, id}){
-    const row = useSelector( state=> 
-        state.phoneData.data.rows.find(row=> row.id === id));
-    
+    const row = useSelector( state=> state.phoneData.data.rows.find(row=> row.id === id));
     const dispatch = useDispatch();
-    const deleteRow = (id) => dispatch(phoneDataDelete(id));
 
     const handleDeleteButton = (id) =>{
-        deleteRow(id);
+        // 제거 누른 id는 data.rows 에서 제거함.
+        // 그리고 dataAddList 배열에 겹치는 값이 없을 경우에만 
+        // data.changeDatalist.dataDeleteList에 추가함
+        dispatch(phoneDataDelete(id));
     }
+    console.log("row render");
 
 
     return(
@@ -58,7 +59,7 @@ function Row({top, id}){
             <Column key={`col_${id}_${prop.colname}`} width={prop.width} textalign={top ? 'center' : prop.textalign} top={top}>
                 {top && /* 탑일경우 */
                     prop.name}
-                {row && /* 탑이 아닐경우 */
+                {!top && /* 탑이 아닐경우 */
                     <Input key={`input_${id}_${prop.colname}`} textalign={prop.textalign} width={prop.width} colName={prop.colname} id={row.id} />
                 }
             </Column>
