@@ -48,7 +48,7 @@ const ContentsTopButtons = styled.div`
     font-weight:500; 
 `;
 
-const ContentsBottom = styled.div`
+const ContentsBottomForm = styled.form`
     width:100%;
     display:flex;
     padding-top:7px;
@@ -63,7 +63,11 @@ function Contents(){
     };
 
     const handleApply = () =>{
-    }
+    };
+
+    const handleSubmit = () =>{
+
+    };
     
     return(
         <StyledContents className="contents">
@@ -71,13 +75,16 @@ function Contents(){
                 <ContentsTop>
                     <ContentsTopName>핸드폰 정보 수정</ContentsTopName>
                 </ContentsTop>
-                <ContentsBottom>
+                <ContentsBottomForm onSubmit={handleSubmit}>
                     <ContentsTopButtons>
-                        <CButton onClick={ handleAdd } width="60px"font_size="13px" font_weight="bold" border>추가</CButton>
-                        <CButton onClick={ handleApply } width="60px"font_size="13px" font_weight="bold" border>적용</CButton>
+                        <CButton onClick={ handleAdd } width="60px" height="40px" font_size="13px" font_weight="bold" border>추가</CButton>
+                        <input id="namedInput" name="name" type="submit" hidden/>
+                        <label htmlFor="namedInput">
+                            <CButton onClick={ handleApply } width="60px" height="40px" font_size="13px" font_weight="bold" border>적용</CButton>
+                        </label>
                     </ContentsTopButtons>
                     <Tables key="tableskey"/>
-                </ContentsBottom>
+                </ContentsBottomForm>
             </ContentsBox>
         </StyledContents>
     );

@@ -10,7 +10,10 @@ const StyledInput = styled.input`
         text-align:${textalign};
     `}
 `;
-
+// 필수 입력 항목이 아닌것들
+const notRequired = [
+    "battery", "screen_size", "storage"
+];
 
 function Input({textalign, width, colName, id}){
     const  val  = useSelector( state => state.phoneData.data.rows
@@ -23,6 +26,7 @@ function Input({textalign, width, colName, id}){
 
     const handleChange = (e) =>{
         dataChange(e.target.value);
+        console.log(e.target.value);
     }
 
     return( 
@@ -31,6 +35,8 @@ function Input({textalign, width, colName, id}){
             width={width} 
             value={val === null ? '': val}
             onChange={handleChange}
+            // notRequired에 있는 배열에 포함되면 필수항목이 아님.
+            required={notRequired.every(val => val !== colName) ? true : false}
         />
     );
 }

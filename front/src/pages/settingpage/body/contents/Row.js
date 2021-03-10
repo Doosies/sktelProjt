@@ -25,19 +25,20 @@ const DeleteButton = styled(Button)`
     `}
 `;
 
-const columnProperties = [
-    {name:"기기명", width:"200px", colname:"model_name", textalign:"left"},
-    {name:"모델명", width:"180px", colname:"machine_name", textalign:"left"},
-    {name:"출고가", width:"70px", colname:"shipping_price", textalign:"right"},
-    {name:"브랜드", width:"100px", colname:"maker", textalign:"center"},
-    {name:"출시일", width:"100px", colname:"created", textalign:"center"},
-    {name:"배터리 용량", width:"80px", colname:"battery", textalign:"right"},
-    {name:"스크린 사이즈", width:"100px", colname:"screen_size", textalign:"right"},
-    {name:"저장 용량", width:"100px", colname:"storage", textalign:"right"},
-];
-
+// const columnProperties = [
+//     {name:"기기명", width:"200px", colname:"model_name", textalign:"left"},
+//     {name:"모델명", width:"180px", colname:"machine_name", textalign:"left"},
+//     {name:"출고가", width:"70px", colname:"shipping_price", textalign:"right"},
+//     {name:"브랜드", width:"100px", colname:"maker", textalign:"center"},
+//     {name:"출시일", width:"100px", colname:"created", textalign:"center"},
+//     {name:"배터리 용량", width:"80px", colname:"battery", textalign:"right"},
+//     {name:"스크린 사이즈", width:"100px", colname:"screen_size", textalign:"right"},
+//     {name:"저장 용량", width:"100px", colname:"storage", textalign:"right"},
+// ];
 function Row({top, id}){
     const row = useSelector( state=> state.phoneData.data.rows.find(row=> row.id === id));
+    const colProps = useSelector( state => state.phoneData.columnProperties);
+
     const dispatch = useDispatch();
 
     const handleDeleteButton = (id) =>{
@@ -46,7 +47,7 @@ function Row({top, id}){
         // data.changeDatalist.dataDeleteList에 추가함
         dispatch(phoneDataDelete(id));
     }
-    console.log("row render");
+    // console.log("row render");
 
 
     return(
@@ -55,7 +56,7 @@ function Row({top, id}){
                 삭제
             </DeleteButton>
 
-            {columnProperties.map(prop => 
+            {colProps.map(prop => 
             <Column key={`col_${id}_${prop.colname}`} width={prop.width} textalign={top ? 'center' : prop.textalign} top={top}>
                 {top && /* 탑일경우 */
                     prop.name}

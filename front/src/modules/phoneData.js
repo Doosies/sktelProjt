@@ -49,7 +49,17 @@ const initialState = {
                 ]
             },
         ]
-    }
+    },
+    columnProperties : [
+        {name:"기기명", width:"200px", colname:"model_name", textalign:"left"},
+        {name:"모델명", width:"180px", colname:"machine_name", textalign:"left"},
+        {name:"출고가", width:"70px", colname:"shipping_price", textalign:"right"},
+        {name:"브랜드", width:"100px", colname:"maker", textalign:"center"},
+        {name:"출시일", width:"100px", colname:"created", textalign:"center"},
+        {name:"배터리 용량", width:"80px", colname:"battery", textalign:"right"},
+        {name:"스크린 사이즈", width:"100px", colname:"screen_size", textalign:"right"},
+        {name:"저장 용량", width:"100px", colname:"storage", textalign:"right"},
+    ],
 };
 const phoneDataFetchAsync = createPromiseThunk(PHONE_DATA, postsAPI.getAllPhoneInfo);
 // const phoneDataFetchAsync = () => async (dispatch) =>{
