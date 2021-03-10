@@ -49,19 +49,6 @@ const initialState = {
         ]
     }
 };
-
-////////////////////////////////////////////////////////
-const phoneDataLoading = () =>({
-    type:PHONE_DATA_LOADING,
-});
-const phoneDataSuccess = (data) =>({
-    type:PHONE_DATA_SUCCESS,
-    data:data
-});
-const phoneDataError = (error) =>({
-    type:PHONE_DATA_ERROR,
-    error:error,
-});
 ////////////////////////////////////////////////////////
 const phoneDataAdd = () =>({
     type:PHONE_DATA_ADD,
@@ -140,15 +127,15 @@ export default function phoneData(state = initialState, action){
 
 
 const phoneDataFetchAsync = () => async (dispatch) =>{
-    dispatch(phoneDataLoading());
+    dispatch({type:PHONE_DATA_LOADING});
     try{
         const response = await getAllPhoneInfo();
-        dispatch(phoneDataSuccess(response));
+        dispatch({type:PHONE_DATA_SUCCESS,data:response});
     }catch(e){
-        dispatch(phoneDataError(e));
+        dispatch({type:PHONE_DATA_ERROR,error:e});
     }
 }
 
-export {phoneDataLoading, phoneDataSuccess, phoneDataError, phoneDataFetchAsync,
+export {phoneDataFetchAsync,
         phoneDataChange, phoneDataDelete, phoneDataAdd,
         };

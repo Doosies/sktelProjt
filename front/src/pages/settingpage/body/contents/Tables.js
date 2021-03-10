@@ -22,10 +22,10 @@ function Tables(){
         dispatch(phoneDataFetchAsync());
     },[dispatch]);
     
-    
+
     if(loading) return null;    
-    if( !rows ) return <div>데이터 로딩 실패</div>;
     if(error) return <div>에러 발생</div>;
+    if( !rows ) return <div>데이터 로딩 실패</div>;
 
     return(
         <StyledTable>
