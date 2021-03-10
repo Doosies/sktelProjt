@@ -1,7 +1,9 @@
 import produce from 'immer';
-import { getAllPhoneInfo } from '../utils/api';
+import { createPromiseThunk, handleAsyncActions } from '../lib/asyncUtils';
+import * as postsAPI from '../utils/api';
 
-const PHONE_DATA_LOADING = 'phoneData/PHONE_DATA';
+const PHONE_DATA = 'phoneData/PHONE_DATA';
+const PHONE_DATA_LOADING = 'phoneData/PHONE_DATA_LOADING';
 const PHONE_DATA_SUCCESS = 'phoneData/PHONE_DATA_SUCCESS';
 const PHONE_DATA_ERROR = 'phoneData/PHONE_DATA_ERROR';
 ////////////////////////////////////////////////////////
@@ -49,6 +51,16 @@ const initialState = {
         ]
     }
 };
+const phoneDataFetchAsync = createPromiseThunk(PHONE_DATA, postsAPI.getAllPhoneInfo);
+// const phoneDataFetchAsync = () => async (dispatch) =>{
+//     dispatch({type:PHONE_DATA_LOADING});
+//     try{
+//         const response = await postsAPI.getAllPhoneInfo();
+//         dispatch({type:PHONE_DATA_SUCCESS,payload:response});
+//     }catch(e){
+//         dispatch({type:PHONE_DATA_ERROR,error:e});
+//     }
+// }
 ////////////////////////////////////////////////////////
 const phoneDataAdd = () =>({
     type:PHONE_DATA_ADD,
@@ -69,33 +81,38 @@ const phoneDataChange = (id, colName, value) =>({
 
 
 export default function phoneData(state = initialState, action){
+    // console.log(state,action);
     switch(action.type){
+        // case PHONE_DATA_LOADING:
+        //     return{
+        //         ...state,
+        //         state:{
+        //             loading:true,
+        //             error:false,
+        //         },
+        //         data:[],
+        //     };
+        // case PHONE_DATA_SUCCESS:
+        //     return{
+        //         ...state,
+        //         state:{
+        //             loading:false,
+        //             error:false,
+        //         },
+        //         data:action.payload,
+        //     };
+        // case PHONE_DATA_ERROR:
+        //     return{
+        //         ...state,
+        //         state:{
+        //             loading:false,
+        //             error:action.error,
+        //         },
+        //     };
         case PHONE_DATA_LOADING:
-            return{
-                ...state,
-                state:{
-                    loading:true,
-                    error:false,
-                },
-                data:[],
-            };
         case PHONE_DATA_SUCCESS:
-            return{
-                ...state,
-                state:{
-                    loading:false,
-                    error:false,
-                },
-                data:action.data,
-            };
         case PHONE_DATA_ERROR:
-            return{
-                ...state,
-                state:{
-                    loading:false,
-                    error:action.error,
-                },
-            };
+            return handleAsyncActions(PHONE_DATA)(state,action);
         ////////////////////////////////////////////////////////
         case PHONE_DATA_ADD:
             return produce(state, draft=>{
@@ -126,15 +143,6 @@ export default function phoneData(state = initialState, action){
 }
 
 
-const phoneDataFetchAsync = () => async (dispatch) =>{
-    dispatch({type:PHONE_DATA_LOADING});
-    try{
-        const response = await getAllPhoneInfo();
-        dispatch({type:PHONE_DATA_SUCCESS,data:response});
-    }catch(e){
-        dispatch({type:PHONE_DATA_ERROR,error:e});
-    }
-}
 
 export {phoneDataFetchAsync,
         phoneDataChange, phoneDataDelete, phoneDataAdd,
