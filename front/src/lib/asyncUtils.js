@@ -19,13 +19,6 @@ export const createPromiseThunk = (type, promiseCreator) =>{
 }
 
 
-// state:{
-//     loading:true,
-//     error:false,
-// },
-// data:[],
-
-
 const reducerUtils = {
     // initial:(initialData = null) =>({
     //     state:{
@@ -64,21 +57,17 @@ export const handleAsyncActions = (type) =>{
                 return{
                     ...state,
                     state:reducerUtils.loading().state,
-                    // data:reducerUtils.loading.data,
                 }
             case SUCCESS:
                 return{
                     ...state,
                     state:reducerUtils.success().state,
                     data:reducerUtils.success(action.payload).data,
-                    // [key]:reducerUtils.success(action.payload),
                 };
             case ERROR:
                 return{
                     ...state,
-                    state:reducerUtils.error(action.payload).state,
-                    // data:reducerUtils.error.data,
-                    // [key]:reducerUtils.error(action.payload),
+                    state:reducerUtils.error(action.error).state,
                 };
             default:
                 return state;

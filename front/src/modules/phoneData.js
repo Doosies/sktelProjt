@@ -77,38 +77,9 @@ const phoneDataChange = (id, colName, value) =>({
 });
 ////////////////////////////////////////////////////////
 
-
-
-
 export default function phoneData(state = initialState, action){
     // console.log(state,action);
     switch(action.type){
-        // case PHONE_DATA_LOADING:
-        //     return{
-        //         ...state,
-        //         state:{
-        //             loading:true,
-        //             error:false,
-        //         },
-        //         data:[],
-        //     };
-        // case PHONE_DATA_SUCCESS:
-        //     return{
-        //         ...state,
-        //         state:{
-        //             loading:false,
-        //             error:false,
-        //         },
-        //         data:action.payload,
-        //     };
-        // case PHONE_DATA_ERROR:
-        //     return{
-        //         ...state,
-        //         state:{
-        //             loading:false,
-        //             error:action.error,
-        //         },
-        //     };
         case PHONE_DATA_LOADING:
         case PHONE_DATA_SUCCESS:
         case PHONE_DATA_ERROR:
@@ -126,11 +97,17 @@ export default function phoneData(state = initialState, action){
             });
         case PHONE_DATA_DELETE:
             return produce(state, draft=>{
+                //렌더 배열에서 제거함.
                 draft.data.rows = draft.data.rows.filter(row =>row.id !== action.id);
                 // 제거를 누른 row가 새로 추가한 row가 아닐 경우
-                if( state.dataChangeList.dataAddList.findIndex( val => val === action.id) === -1)
+                // deleteList에 추가
+                const idx = state.dataChangeList.dataAddList.findIndex( val => val === action.id);
+                if(  idx === -1)
                     draft.dataChangeList.dataDeleteList.push(action.id);
-                
+                // 제거를 누른 row가 새로 추가한 row일 경우
+                // addList에서 해당 배열 제거
+                else
+                    draft.dataChangeList.dataAddList.splice(idx,1);
             });
         case PHONE_DATA_CHANGE:
             return produce(state, draft=>{
