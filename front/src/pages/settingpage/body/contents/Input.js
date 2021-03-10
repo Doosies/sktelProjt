@@ -17,9 +17,10 @@ const notRequired = [
 
 function Input({prop, id}){
     const  val  = useSelector( state => state.phoneData.data.rows
-            [ state.phoneData.data.rows.findIndex( val=>val.id===id )]
+            [ state.phoneData.data.rows.findIndex( val=>val.id === id )]
             [ prop.colname ] 
     );
+    // const value = useSelector(state=> state.phoneData.data.rows)
 
     const dispatch = useDispatch();
     // const dataChange = (val) => dispatch(phoneDataChange(id,prop.colname, val));

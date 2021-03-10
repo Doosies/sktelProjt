@@ -21,6 +21,7 @@ const StyledButton = styled.div`
 `;
 
 function Button({ onClick, width, height, color, font_size, font_weight, border, children, ...rest }){
+    console.log("버튼",children);
     return(
         <StyledButton onClick={onClick} width={width} height={height} color={color} font_size={font_size} font_weight={font_weight} border={border} {...rest}>
             {children}

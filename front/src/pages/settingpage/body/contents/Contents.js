@@ -56,6 +56,7 @@ const ContentsBottomForm = styled.form`
 
 function Contents(){
     // const lastId = useSelector( state => state.phoneData.data.lastId);
+    console.log("contents");
     const dispatch = useDispatch();
 
     const handleAdd =  ()=>{
@@ -83,7 +84,7 @@ function Contents(){
                             <CButton onClick={ handleApply } width="60px" height="40px" font_size="13px" font_weight="bold" border>적용</CButton>
                         </label>
                     </ContentsTopButtons>
-                    <Tables key="tableskey"/>
+                    <Tables/>
                 </ContentsBottomForm>
             </ContentsBox>
         </StyledContents>
