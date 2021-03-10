@@ -26,9 +26,14 @@ const StyledColumn = styled.div`
     `}
 `;
 
-function Column({width, textalign, top, children}){
+// function Column({prop,top,children}){
+    function Column({children}){
+    console.log("col렌더!!");
+        // {name:"기기명", width:"200px", colname:"model_name", textalign:"left"},
+    // console.log(prop);
     return(
-        <StyledColumn width={width} textalign={textalign} top={top}>
+        // <StyledColumn width={prop.width} textalign={prop.textalign} top={top}>
+        <StyledColumn >
             {children}
         </StyledColumn>
     );

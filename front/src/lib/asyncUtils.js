@@ -32,7 +32,6 @@ const reducerUtils = {
             loading:true,
             error:false,
         },
-        data:prevstate,
     }),
     success:(payload)=> ({
         state:{

@@ -23,7 +23,7 @@ const initialState = {
         lastId:'',
         rows:[
                 {
-                    id:'', 
+                    id:'head', 
                     model_name:'', 
                     machine_name:'', 
                     shipping_price:'',
