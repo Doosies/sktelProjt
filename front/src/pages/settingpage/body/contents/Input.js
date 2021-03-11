@@ -1,5 +1,5 @@
-import React, { useCallback, useMemo, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useCallback, useRef } from 'react';
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import styled, { css } from 'styled-components';
 import { phoneDataChange } from '../../../../modules/phoneData';
 
@@ -14,6 +14,9 @@ const StyledInput = styled.input`
 const notRequired = [
     "battery", "screen_size", "storage"
 ];
+const commaValues = [
+    "shipping_price", "battery",  "storage"
+]
 
 function inputNumberFormat(value) {
     return comma(uncomma(value));
@@ -33,13 +36,20 @@ function Input({colIndex, id}){
     // alert 두번 나오는거 방지 위한 ref
     const didShowAlert = useRef(false);
 
+    // const validCheck = useSelector( state=> state.phoneData.inputValidCheck[colIndex]);
+    // const  val  = useSelector( state => state.phoneData.data.rows
+    //         [ state.phoneData.data.rows.findIndex( val=>val.id === id )]
+    //         [ column.colname ] 
+    // );
     const dispatch = useDispatch();
     const column = useSelector( state => state.phoneData.columnProperties[colIndex]);
-    const validCheck = useSelector( state=> state.phoneData.inputValidCheck[colIndex]);
-    const  val  = useSelector( state => state.phoneData.data.rows
+    const {validCheck, val} = useSelector(state =>({
+        // column:state.phoneData.columnProperties[colIndex],
+        validCheck:state.phoneData.inputValidCheck[colIndex],
+        val:state.phoneData.data.rows
             [ state.phoneData.data.rows.findIndex( val=>val.id === id )]
-            [ column.colname ] 
-    );
+            [ column.colname ] ,
+    }),shallowEqual);
 
      ///////////////////////////////////////////////////////// input state 변경
     const inputChange = useCallback( (value) => {
@@ -48,10 +58,12 @@ function Input({colIndex, id}){
 
     ///////////////////////////////////////////////////////// 값이 바뀌었을떄
     const handleChange = useCallback( (e) => {
-        const val = column.colname==='shipping_price'
+        // commaValue에 포함될 경우
+        const val = commaValues.some(val => val === column.colname)
                     ? inputNumberFormat(e.target.value)
                     : e.target.value;
         inputChange(val);
+        console.log(val);
     },[column.colname, inputChange]);
 
      ///////////////////////////////////////////////////////// 포커싱이 벗어났을 때
@@ -67,9 +79,6 @@ function Input({colIndex, id}){
               didShowAlert.current = false;
             } 
             didShowAlert.current = !didShowAlert.current;
-            // else {
-            //   didShowAlert.current = true;
-            // }
         }
         // 만약 column이 shipping_price일 경우 콤마를 찍고 출력함.
         if( column.colname === 'shipping_price') inputChange(comma(deletedWord));    
@@ -93,5 +102,3 @@ function Input({colIndex, id}){
     );
 }
 export default React.memo(Input);
-
-// export default (Input);

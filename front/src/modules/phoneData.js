@@ -172,7 +172,17 @@ export default function phoneData(state = initialState, action){
         ////////////////////////////////////////////////////////
         case PHONE_DATA_ADD:
             return produce(state, draft=>{
-                const init = [initialState.data.rows];
+                const init = {
+                    id:'', 
+                    model_name:'', 
+                    machine_name:'', 
+                    shipping_price:'',
+                    maker:'',
+                    created:'', 
+                    battery:'', 
+                    screen_size:'',
+                    storage:'',
+                };
 
                 draft.data.lastId ++;
                 init.id = draft.data.lastId;
