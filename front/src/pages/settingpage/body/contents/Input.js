@@ -15,10 +15,12 @@ const notRequired = [
     "battery", "screen_size", "storage"
 ];
 
-function Input({prop, id}){
+function Input({colIndex, id}){
+    console.log("input",colIndex);
+    const column = useSelector( state => state.phoneData.columnProperties[colIndex]);
     const  val  = useSelector( state => state.phoneData.data.rows
             [ state.phoneData.data.rows.findIndex( val=>val.id === id )]
-            [ prop.colname ] 
+            [ column.colname ] 
     );
     // const value = useSelector(state=> state.phoneData.data.rows)
 
@@ -27,18 +29,18 @@ function Input({prop, id}){
 
     const handleChange = useCallback( (e) => {
         const val = e.target.value;
-        dispatch(phoneDataChange(id,prop.colname, val));
-        },[dispatch, id, prop.colname]
-    )
+        dispatch(phoneDataChange(id,column.colname, val));
+        },[column.colname, dispatch, id]
+    );
 
     return( 
         <StyledInput 
-            textalign={prop.textalign} 
-            width={prop.width} 
+            textalign={column.textalign} 
+            width={column.width} 
             value={val === null ? '': val}
             onChange={handleChange}
             // notRequired에 있는 배열에 포함되면 필수항목이 아님.
-            required={notRequired.every(val => val !== prop.colname) ? true : false}
+            required={notRequired.every(val => val !== column.colname) ? true : false}
             // placeholder={}
         />
     );

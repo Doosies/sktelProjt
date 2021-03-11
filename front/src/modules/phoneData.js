@@ -61,6 +61,7 @@ const initialState = {
         {name:"저장 용량", width:"100px", colname:"storage", textalign:"right"},
     ],
 };
+
 const phoneDataFetchAsync = createPromiseThunk(PHONE_DATA, postsAPI.getAllPhoneInfo);
 // const phoneDataFetchAsync = () => async (dispatch) =>{
 //     dispatch({type:PHONE_DATA_LOADING});
@@ -117,7 +118,7 @@ export default function phoneData(state = initialState, action){
                 // 제거를 누른 row가 새로 추가한 row일 경우
                 // addList에서 해당 배열 제거
                 else
-                    draft.dataChangeList.dataAddList.splice(idx,1);
+                    draft.dataChangeList.dataAddList.slice(idx,1);
             });
         case PHONE_DATA_CHANGE:
             return produce(state, draft=>{

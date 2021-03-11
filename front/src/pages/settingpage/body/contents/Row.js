@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import styled, { css } from 'styled-components';
 import Button from '../../../../components/Button';
@@ -50,52 +50,57 @@ const DeleteButton = styled(Button)`
         width:40px;
     `}
 `;
-const colProps = [
-    {name:"기기명", width:"200px", colname:"model_name", textalign:"left"},
-    {name:"모델명", width:"180px", colname:"machine_name", textalign:"left"},
-    {name:"출고가", width:"70px", colname:"shipping_price", textalign:"right"},
-    {name:"브랜드", width:"100px", colname:"maker", textalign:"center"},
-    {name:"출시일", width:"100px", colname:"created", textalign:"center"},
-    {name:"배터리 용량", width:"80px", colname:"battery", textalign:"right"},
-    {name:"스크린 사이즈", width:"100px", colname:"screen_size", textalign:"right"},
-    {name:"저장 용량", width:"100px", colname:"storage", textalign:"right"},
-];
-const prop = colProps[0];
-const prop1 = colProps[1];
-function Row({top, row}){
-    console.log("row 렌더");
-    // const colProps = useSelector( state => state.phoneData.columnProperties);
-    // const dispatch = useDispatch();
-    const handleDeleteButton = (id) =>{
-        // 제거 누른 id는 data.rows 에서 제거함.
-        // 그리고 dataAddList 배열에 겹치는 값이 없을 경우에만 
-        // data.changeDatalist.dataDeleteList에 추가함
-        // dispatch(phoneDataDelete(id));
-    }
+// const columns = [
+//     {name:"기기명", width:"200px", colname:"model_name", textalign:"left"},
+//     {name:"모델명", width:"180px", colname:"machine_name", textalign:"left"},
+//     {name:"출고가", width:"70px", colname:"shipping_price", textalign:"right"},
+//     {name:"브랜드", width:"100px", colname:"maker", textalign:"center"},
+//     {name:"출시일", width:"100px", colname:"created", textalign:"center"},
+//     {name:"배터리 용량", width:"80px", colname:"battery", textalign:"right"},
+//     {name:"스크린 사이즈", width:"100px", colname:"screen_size", textalign:"right"},
+//     {name:"저장 용량", width:"100px", colname:"storage", textalign:"right"},
+// ];
 
-    if(top) return(
+function Row({top, rowId}){
+    console.log("ROW");
+    const columns = useSelector( state => state.phoneData.columnProperties);
+    const dispatch = useDispatch();
+
+
+    const handleDeleteButton = useCallback( (id) => {
+            // 제거 누른 id는 data.rows 에서 제거함.
+            // 그리고 dataAddList 배열에 겹치는 값이 없을 경우에만 
+            // data.changeDatalist.dataDeleteList에 추가함
+            dispatch(phoneDataDelete(id));
+        },[dispatch]);
+    // const handleDeleteButton =  (id) => {
+    //         // 제거 누른 id는 data.rows 에서 제거함.
+    //         // 그리고 dataAddList 배열에 겹치는 값이 없을 경우에만 
+    //         // data.changeDatalist.dataDeleteList에 추가함
+    //         dispatch(phoneDataDelete(id));
+    //     };
+
+    // if(top) return(
+    //     <StyledRow>
+    //         <DeleteButton top/>
+    //         {columns.map(column => 
+    //             <Column key={`head_${column.colname}`}top>
+    //                 {column.name}
+    //             </Column>
+    //         )}
+    //     </StyledRow>
+    // );
+    // textalign, width, colname, id
+    return( //React.useMemo(()=>
         <StyledRow>
-            <DeleteButton top/>
-            {colProps.map(prop => 
-                <Column key={`col_top${prop.colname}`} prop={prop} top>
-                        {prop.name}
+            <DeleteButton onClick={()=>handleDeleteButton(rowId)}> 삭제 </DeleteButton>
+            {columns.map((column, index)=>
+                <Column key={`row_${rowId}_${column.name}`} width={column.width} textalign={column.textalign}>
+                    <Input colIndex={index} id={rowId} column={column} />
                 </Column>
             )}
         </StyledRow>
-    );
-
-    return(
-        <StyledRow>
-            <DeleteButton onClick={()=>handleDeleteButton(row.id)}> 삭제 </DeleteButton>
-            {/* {colProps.map(prop =>  */}
-                <Column key={`col_${row.id}_${prop.colname}`} prop={prop} top>
-                    <Input prop={prop} id={row.id} />
-                </Column>
-                <Column key={`col_${row.id}_${prop1.colname}`} prop={prop1} top>
-                    <Input prop={prop1} id={row.id} />
-                </Column>
-            {/* )} */}
-        </StyledRow>
+        //,[])
     );
 }
 export default React.memo(Row);

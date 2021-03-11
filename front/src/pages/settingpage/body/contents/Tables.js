@@ -9,7 +9,7 @@ const StyledTable = styled.div`
 `;
 
 function Tables(){
-    console.log("tables 렌더");
+
     const {rows, error,loading} = useSelector( state =>({
         rows: state.phoneData.data.rows,
         loading:state.phoneData.state.loading,
@@ -23,15 +23,15 @@ function Tables(){
     },[dispatch]);
     
 
-    if(loading) return null;
+    if(loading) return ' ';
     if(error) return <div>에러 발생</div>;
     if( !rows ) return <div>데이터 로딩 실패</div>;
 
     return(
         <StyledTable>
-            <Row key={`row_head`} top />
-            {rows.map(row=>
-                <Row key={`row_body_${row.id}`} row={row} /> 
+            {/* <Row key={`row_head`} top /> */}
+            {rows.map( (row,index) =>
+                <Row key={`row_body_${row.id}`} rowId={row.id}/> 
             )}
         </StyledTable>
     );

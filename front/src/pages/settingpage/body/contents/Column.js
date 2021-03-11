@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import styled, { css } from 'styled-components';
 
 const StyledColumn = styled.div`
@@ -26,10 +27,11 @@ const StyledColumn = styled.div`
     `}
 `;
 
-function Column({prop,top,children}){
+function Column({width, textalign,top=false,children}){
     console.log("col렌더!!");
+    // const colProps = useSelector( state => state.phoneData.columnProperties);
     return(
-        <StyledColumn width={prop.width} textalign={top?"center":prop.textalign} top={top}>
+        <StyledColumn width={width} textalign={top?"center":textalign} top={top}>
             {children}
         </StyledColumn>
     );
