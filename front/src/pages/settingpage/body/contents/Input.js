@@ -56,28 +56,26 @@ function Input({colIndex, id}){
 
      ///////////////////////////////////////////////////////// 포커싱이 벗어났을 때
     const handleBlur = useCallback( (e) =>{
-        console.log("blur", didShowAlert);
         const deletedWord = e.target.value.replace(validCheck.deleteWord,"");
-        // 정규식 통과할 경우
+        // 정규식 통과 못 할 경우
         if( validCheck.reg.test(deletedWord) === false){
             inputRef.current.focus();
-            if (didShowAlert.current) {
+            // alert 두번 나오는거 수정 위한 if문
+            if ( !didShowAlert.current) {
+                alert(validCheck.error);
+                inputChange('val');
               didShowAlert.current = false;
-            } else {
-              didShowAlert.current = true;
-                  alert(validCheck.error);
-                  inputChange(val);
-            }
-        // 정규식 통과 못할 경우
-        }else{
+            } 
+            didShowAlert.current = !didShowAlert.current;
+            // else {
+            //   didShowAlert.current = true;
+            // }
         }
-        console.log("if문끝");
         // 만약 column이 shipping_price일 경우 콤마를 찍고 출력함.
-        if( column.colname === 'shipping_price')
-            inputChange(comma(deletedWord));    
+        if( column.colname === 'shipping_price') inputChange(comma(deletedWord));    
         else inputChange(deletedWord);
         
-    },[column.colname, inputChange, val, validCheck.deleteWord, validCheck.error, validCheck.reg]);
+    },[column.colname, inputChange, validCheck.deleteWord, validCheck.error, validCheck.reg]);
     
 
     return( 
