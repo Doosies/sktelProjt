@@ -9,9 +9,6 @@ export const createPromiseThunk = (type, promiseCreator) =>{
             // console.log(promiseCreator);
             const payload = await promiseCreator(param);
             dispatch({type:SUCCESS, payload});
-            // console.log("data=>",payload);
-            // console.log(SUCCESS);
-            // console.log("payload",payload);
         }catch(e){
             dispatch({type:ERROR, error:e, param});
         }
@@ -20,13 +17,6 @@ export const createPromiseThunk = (type, promiseCreator) =>{
 
 
 const reducerUtils = {
-    // initial:(initialData = null) =>({
-    //     state:{
-    //         loading:false,
-    //         error:false,
-    //     },
-    //     data:[],
-    // }),
     loading:(prevstate=[]) => ({
         state:{
             loading:true,
@@ -62,6 +52,7 @@ export const handleAsyncActions = (type) =>{
                     ...state,
                     state:reducerUtils.success().state,
                     data:reducerUtils.success(action.payload).data,
+                    firstData:reducerUtils.success(action.payload).data,
                 };
             case ERROR:
                 return{

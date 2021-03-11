@@ -48,7 +48,7 @@ const ContentsTopButtons = styled.div`
     font-weight:500; 
 `;
 
-const ContentsBottomForm = styled.form`
+const ContentsBottom = styled.form`
     width:100%;
     display:flex;
     padding-top:7px;
@@ -67,7 +67,7 @@ function Contents(){
     };
 
     const handleSubmit = () =>{
-
+        return false;
     };
     
     return(
@@ -76,7 +76,7 @@ function Contents(){
                 <ContentsTop>
                     <ContentsTopName>핸드폰 정보 수정</ContentsTopName>
                 </ContentsTop>
-                <ContentsBottomForm onSubmit={handleSubmit}>
+                <ContentsBottom>
                     <ContentsTopButtons>
                         <CButton onClick={ handleAdd } width="60px" height="40px" font_size="13px" font_weight="bold" border>추가</CButton>
                         <input id="namedInput" name="name" type="submit" hidden/>
@@ -85,7 +85,7 @@ function Contents(){
                         </label>
                     </ContentsTopButtons>
                     <Tables/>
-                </ContentsBottomForm>
+                </ContentsBottom>
             </ContentsBox>
         </StyledContents>
     );

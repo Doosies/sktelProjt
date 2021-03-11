@@ -26,6 +26,7 @@ const StyledColumn = styled.div`
             font-weight:bold;
     `}
 `;
+
 // top일경우 center, false 기본설정
 function Column({width, textalign="center",top,children}){
     // const colProps = useSelector( state => state.phoneData.columnProperties);
