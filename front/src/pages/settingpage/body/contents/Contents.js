@@ -79,10 +79,8 @@ function Contents(){
                 <ContentsBottom>
                     <ContentsTopButtons>
                         <CButton onClick={ handleAdd } width="60px" height="40px" font_size="13px" font_weight="bold" border>추가</CButton>
-                        <input id="namedInput" name="name" type="submit" hidden/>
-                        <label htmlFor="namedInput">
-                            <CButton onClick={ handleApply } width="60px" height="40px" font_size="13px" font_weight="bold" border>적용</CButton>
-                        </label>
+                        <CButton onClick={ handleApply } width="60px" height="40px" font_size="13px" font_weight="bold" border>적용</CButton>
+
                     </ContentsTopButtons>
                     <Tables/>
                 </ContentsBottom>

@@ -83,7 +83,6 @@ function Input({colIndex, id}){
             textalign={column.textalign} 
             width={column.width} 
             value={val === null ? '': val}
-            onFocus={ () => {console.log('main', 'focus');} }
             onChange={handleChange}
             onBlur={handleBlur}
             // notRequired에 있는 배열에 포함되면 필수항목이 아님.
