@@ -31,24 +31,19 @@ function uncomma(str) {
 }
 
 function Input({colIndex, id}){
+    const dispatch = useDispatch();
     // 포커싱 위한 ref
     const inputRef = useRef();
     // alert 두번 나오는거 방지 위한 ref
     const didShowAlert = useRef(false);
-
-    // const validCheck = useSelector( state=> state.phoneData.inputValidCheck[colIndex]);
-    // const  val  = useSelector( state => state.phoneData.data.rows
-    //         [ state.phoneData.data.rows.findIndex( val=>val.id === id )]
-    //         [ column.colname ] 
-    // );
-    const dispatch = useDispatch();
+    // 몇번쨰 줄인지 알기위해
+    const rowIndex = useSelector(state => state.phoneData.data.rows.findIndex( val=>val.id === id ));
     const column = useSelector( state => state.phoneData.columnProperties[colIndex]);
+
     const {validCheck, val} = useSelector(state =>({
         // column:state.phoneData.columnProperties[colIndex],
         validCheck:state.phoneData.inputValidCheck[colIndex],
-        val:state.phoneData.data.rows
-            [ state.phoneData.data.rows.findIndex( val=>val.id === id )]
-            [ column.colname ] ,
+        val:state.phoneData.data.rows[ rowIndex][ column.colname ],
     }),shallowEqual);
 
      ///////////////////////////////////////////////////////// input state 변경
