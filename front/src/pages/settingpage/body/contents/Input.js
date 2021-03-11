@@ -16,7 +16,6 @@ const notRequired = [
 ];
 
 function Input({colIndex, id}){
-    console.log("input",colIndex);
     const column = useSelector( state => state.phoneData.columnProperties[colIndex]);
     const  val  = useSelector( state => state.phoneData.data.rows
             [ state.phoneData.data.rows.findIndex( val=>val.id === id )]

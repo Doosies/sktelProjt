@@ -26,12 +26,11 @@ const StyledColumn = styled.div`
             font-weight:bold;
     `}
 `;
-
-function Column({width, textalign,top=false,children}){
-    console.log("col렌더!!");
+// top일경우 center, false 기본설정
+function Column({width, textalign="center",top,children}){
     // const colProps = useSelector( state => state.phoneData.columnProperties);
     return(
-        <StyledColumn width={width} textalign={top?"center":textalign} top={top}>
+        <StyledColumn width={width} textalign={textalign} top={top}>
             {children}
         </StyledColumn>
     );
