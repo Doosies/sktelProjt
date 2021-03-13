@@ -1,7 +1,9 @@
 import React, { useCallback, useRef } from 'react';
+import { useMemo } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import styled, { css } from 'styled-components';
 import { phoneDataChange } from '../../../../modules/phoneData';
+import { columnPhoneInfo } from '../../../../utils/propertyInfo';
 
 
 const StyledInput = styled.input`
@@ -38,8 +40,12 @@ function Input({colIndex, id}){
     const didShowAlert = useRef(false);
     // 몇번쨰 줄인지 알기위해
     const rowIndex = useSelector(state => state.phoneData.data.rows.findIndex( val=>val.id === id ));
-    const column = useSelector( state => state.phoneData.columnProperties[colIndex]);
-
+    const column = useMemo(() => columnPhoneInfo[colIndex],[colIndex]);//useSelector( state => state.phoneData.columnProperties);
+    //const column = useSelector( state => state.phoneData.columnProperties[colIndex]);
+    // const {rowIndex, column} = useSelector( state=>({
+    //     rowIndex: state.phoneData.data.rows.findIndex( val=>val.id === id ),
+    //     column: state.phoneData.columnProperties[colIndex]
+    // }),shallowEqual);
     const {validCheck, val} = useSelector(state =>({
         // column:state.phoneData.columnProperties[colIndex],
         validCheck:state.phoneData.inputValidCheck[colIndex],

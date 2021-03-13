@@ -1,8 +1,9 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import styled, { css } from 'styled-components';
 import Button from '../../../../components/Button';
 import { phoneDataDelete } from '../../../../modules/phoneData';
+import { columnPhoneInfo } from '../../../../utils/propertyInfo';
 import Column from './Column';
 import Input from './Input';
 
@@ -52,7 +53,7 @@ const DeleteButton = styled(Button)`
 `;
 
 function Row({top, rowId}){
-    const columns = useSelector( state => state.phoneData.columnProperties);
+    const columns = useMemo(() => columnPhoneInfo,[]);//useSelector( state => state.phoneData.columnProperties);
     const dispatch = useDispatch();
 
 

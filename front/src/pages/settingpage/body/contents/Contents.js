@@ -1,8 +1,8 @@
-import React, { } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import CButton from '../../../../components/Button';
-import { phoneDataAdd } from '../../../../modules/phoneData';
+import { phoneDataAdd, phoneDataFetchAsync } from '../../../../modules/phoneData';
 import Tables from './Tables';
 
 const StyledContents = styled.div`
@@ -55,9 +55,18 @@ const ContentsBottom = styled.form`
 `;
 
 function Contents(){
-    // const lastId = useSelector( state => state.phoneData.data.lastId);
-    console.log("contents");
     const dispatch = useDispatch();
+    const {rows, error,loading} = useSelector( state =>({
+        rows: state.phoneData.data.rows,
+        loading:state.phoneData.state.loading,
+        error:state.phoneData.state.error,
+    }), shallowEqual);
+
+    useEffect(()=>{
+        dispatch(phoneDataFetchAsync());
+    },[dispatch]);
+
+    
 
     const handleAdd =  ()=>{
         dispatch(phoneDataAdd());
@@ -69,6 +78,10 @@ function Contents(){
     const handleSubmit = () =>{
         return false;
     };
+
+    if(loading) return null;
+    if(error) return <div>에러 발생</div>;
+    if( !rows ) return <div>데이터 로딩 실패</div>;
     
     return(
         <StyledContents className="contents">
