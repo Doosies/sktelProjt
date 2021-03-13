@@ -11,21 +11,27 @@ const PHONE_DATA_ADD = 'phoneData/PHONE_DATA_ADD';
 const PHONE_DATA_DELETE = 'phoneData/PHONE_DATA_DELETE';
 const PHONE_DATA_CHANGE = 'phoneData/PHONE_DATA_CHANGE';
 ////////////////////////////////////////////////////////
+const PHONE_DATA_UPDATE_LIST_ROW_INSERT = 'phoneData/PHONE_DATA_UPDATE_LIST_ROW_INSERT';
+const PHONE_DATA_UPDATE_LIST_ROW_DELETE = 'phoneData/PHONE_DATA_UPDATE_LIST_ROW_DELETE';
+const PHONE_DATA_UPDATE_LIST_COLUMN_INSERT = 'phoneData/PHONE_DATA_UPDATE_LIST_COLUMN_INSERT';
+const PHONE_DATA_UPDATE_LIST_COLUMN_DELETE = 'phoneData/PHONE_DATA_UPDATE_LIST_COLUMN_DELETE';
+const PHONE_DATA_UPDATE_LIST_COLUMN_CHANGE = 'phoneData/PHONE_DATA_UPDATE_LIST_COLUMN_CHANGE';
 
+const dataInitRow = {
+    id:'', 
+    model_name:'', 
+    machine_name:'', 
+    shipping_price:'',
+    maker:'',
+    created:'', 
+    battery:'', 
+    screen_size:'',
+    storage:'',
+};
 const dataInit = {
     lastId:'',
     rows:[
-            {
-                id:'', 
-                model_name:'', 
-                machine_name:'', 
-                shipping_price:'',
-                maker:'',
-                created:'', 
-                battery:'', 
-                screen_size:'',
-                storage:'',
-            },
+        dataInitRow,
     ],
 }
 
@@ -39,33 +45,14 @@ const initialState = {
     dataChangeList:{
         dataAddList:[],
         dataDeleteList:[],
-        dataUpdateList:[
-            {
-                colId:'',
-                row:[
-                    {
-                        colName:'',
-                        colValue:'',
-                    }
-                ]
-            },
-        ]
+        dataUpdateList:[],
     },
 };
 
 
 
-
+// 처음 데이터 받아오는 promisethunk
 const phoneDataFetchAsync = createPromiseThunk(PHONE_DATA, postsAPI.getAllPhoneInfo);
-// const phoneDataFetchAsync = () => async (dispatch) =>{
-//     dispatch({type:PHONE_DATA_LOADING});
-//     try{
-//         const response = await postsAPI.getAllPhoneInfo();
-//         dispatch({type:PHONE_DATA_SUCCESS,payload:response});
-//     }catch(e){
-//         dispatch({type:PHONE_DATA_ERROR,error:e});
-//     }
-// }
 ////////////////////////////////////////////////////////
 const phoneDataAdd = () =>({
     type:PHONE_DATA_ADD,
@@ -80,6 +67,33 @@ const phoneDataChange = (id, colName, value) =>({
     colName:colName,
     value: value,
 });
+
+const phoneDataUpdateList = ({
+    RowInsert:(id) => ({
+        type:PHONE_DATA_UPDATE_LIST_ROW_INSERT,
+        id: id,
+    }),
+    RowDelete:(id) => ({
+        type:PHONE_DATA_UPDATE_LIST_ROW_DELETE,
+        id: id,
+    }),
+    ColumnInsert:(id, colName) => ({
+        type:PHONE_DATA_UPDATE_LIST_COLUMN_INSERT,
+        id: id,
+        colName: colName,
+    }),
+    ColumnDelete:(id, colName) => ({
+        type:PHONE_DATA_UPDATE_LIST_COLUMN_DELETE,
+        id: id,
+        colName: colName,
+    }),
+    ColumnChange:(id, colName) => ({
+        type:PHONE_DATA_UPDATE_LIST_COLUMN_CHANGE,
+        id: id,
+        colName: colName,
+    }),
+});
+
 ////////////////////////////////////////////////////////
 
 export default function phoneData(state = initialState, action){
@@ -92,18 +106,7 @@ export default function phoneData(state = initialState, action){
         ////////////////////////////////////////////////////////
         case PHONE_DATA_ADD:
             return produce(state, draft=>{
-                // const init = {
-                //     id:'', 
-                //     model_name:'', 
-                //     machine_name:'', 
-                //     shipping_price:'',
-                //     maker:'',
-                //     created:'', 
-                //     battery:'', 
-                //     screen_size:'',
-                //     storage:'',
-                // };
-                const init = dataInit.rows;
+                let init = {...dataInitRow}
 
                 draft.data.lastId ++;
                 init.id = draft.data.lastId;
@@ -132,6 +135,19 @@ export default function phoneData(state = initialState, action){
                 //                         inputNumberFormat(action.value) : action.value;
                 row[action.colName] = action.value;
             });
+        case PHONE_DATA_UPDATE_LIST_ROW_INSERT:
+            return produce(state, draft =>{
+                const init = dataInit.rows;
+                draft.dataChangeList.dataUpdateList.push();
+            });
+        case PHONE_DATA_UPDATE_LIST_ROW_DELETE:
+            return{};
+        case PHONE_DATA_UPDATE_LIST_COLUMN_INSERT:
+            return{};
+        case PHONE_DATA_UPDATE_LIST_COLUMN_DELETE:
+            return{};
+        case PHONE_DATA_UPDATE_LIST_COLUMN_CHANGE:
+            return{};
         default:
             return state;
     }
@@ -142,4 +158,5 @@ export default function phoneData(state = initialState, action){
 
 export {phoneDataFetchAsync,
         phoneDataChange, phoneDataDelete, phoneDataAdd,
+        phoneDataUpdateList,
         };
