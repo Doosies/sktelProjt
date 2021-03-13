@@ -2,7 +2,7 @@ import React, { useCallback, useMemo } from 'react'
 import { useDispatch } from 'react-redux';
 import styled, { css } from 'styled-components';
 import Button from '../../../../components/Button';
-import { phoneDataDelete } from '../../../../modules/phoneData';
+import { phoneDataUpdate } from '../../../../modules/phoneData';
 import { columnPhoneInfo } from '../../../../utils/propertyInfo';
 import Column from './Column';
 import Input from './Input';
@@ -61,7 +61,7 @@ function Row({top, rowId}){
             // 제거 누른 id는 data.rows 에서 제거함.
             // 그리고 dataAddList 배열에 겹치는 값이 없을 경우에만 
             // data.changeDatalist.dataDeleteList에 추가함
-            dispatch(phoneDataDelete(id));
+            dispatch(phoneDataUpdate.Delete(id));
         },[dispatch]);
 
     if( top ) return(

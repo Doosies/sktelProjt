@@ -11,11 +11,13 @@ const PHONE_DATA_ADD = 'phoneData/PHONE_DATA_ADD';
 const PHONE_DATA_DELETE = 'phoneData/PHONE_DATA_DELETE';
 const PHONE_DATA_CHANGE = 'phoneData/PHONE_DATA_CHANGE';
 ////////////////////////////////////////////////////////
-const PHONE_DATA_UPDATE_LIST_ROW_INSERT = 'phoneData/PHONE_DATA_UPDATE_LIST_ROW_INSERT';
 const PHONE_DATA_UPDATE_LIST_ROW_DELETE = 'phoneData/PHONE_DATA_UPDATE_LIST_ROW_DELETE';
-const PHONE_DATA_UPDATE_LIST_COLUMN_INSERT = 'phoneData/PHONE_DATA_UPDATE_LIST_COLUMN_INSERT';
 const PHONE_DATA_UPDATE_LIST_COLUMN_DELETE = 'phoneData/PHONE_DATA_UPDATE_LIST_COLUMN_DELETE';
 const PHONE_DATA_UPDATE_LIST_COLUMN_CHANGE = 'phoneData/PHONE_DATA_UPDATE_LIST_COLUMN_CHANGE';
+
+
+const PHONE_DATA_UPDATE_LIST_CHANGE = 'phoneData/PHONE_DATA_UPDATE_LIST_CHANGE';
+const PHONE_DATA_UPDATE_LIST_DELETE = 'phoneData/PHONE_DATA_UPDATE_LIST_DELETE';
 
 const dataInitRow = {
     id:'', 
@@ -54,41 +56,31 @@ const initialState = {
 // 처음 데이터 받아오는 promisethunk
 const phoneDataFetchAsync = createPromiseThunk(PHONE_DATA, postsAPI.getAllPhoneInfo);
 ////////////////////////////////////////////////////////
-const phoneDataAdd = () =>({
-    type:PHONE_DATA_ADD,
-});
-const phoneDataDelete = (id) =>({
-    type:PHONE_DATA_DELETE,
-    id: id,
-});
-const phoneDataChange = (id, colName, value) =>({
-    type:PHONE_DATA_CHANGE,
-    id: id,
-    colName:colName,
-    value: value,
+const phoneDataUpdate =({
+    Add:()=>({
+        type:PHONE_DATA_ADD,
+    }),
+    Delete:(id)=>({
+        type:PHONE_DATA_DELETE,
+        id: id,
+    }),
+    Change:(id, colName, value)=>({
+        type:PHONE_DATA_CHANGE,
+        id: id,
+        colName:colName,
+        value: value,
+    }),
 });
 
 const phoneDataUpdateList = ({
-    RowInsert:(id) => ({
-        type:PHONE_DATA_UPDATE_LIST_ROW_INSERT,
-        id: id,
-    }),
-    RowDelete:(id) => ({
-        type:PHONE_DATA_UPDATE_LIST_ROW_DELETE,
-        id: id,
-    }),
-    ColumnInsert:(id, colName) => ({
-        type:PHONE_DATA_UPDATE_LIST_COLUMN_INSERT,
+    Change:(id,colName, value) => ({
+        type:PHONE_DATA_UPDATE_LIST_CHANGE,
         id: id,
         colName: colName,
+        value: value,
     }),
-    ColumnDelete:(id, colName) => ({
-        type:PHONE_DATA_UPDATE_LIST_COLUMN_DELETE,
-        id: id,
-        colName: colName,
-    }),
-    ColumnChange:(id, colName) => ({
-        type:PHONE_DATA_UPDATE_LIST_COLUMN_CHANGE,
+    Delete:(id, colName) => ({
+        type:PHONE_DATA_UPDATE_LIST_DELETE,
         id: id,
         colName: colName,
     }),
@@ -97,16 +89,15 @@ const phoneDataUpdateList = ({
 ////////////////////////////////////////////////////////
 
 export default function phoneData(state = initialState, action){
-    // console.log(state,action);
     switch(action.type){
         case PHONE_DATA_LOADING:
         case PHONE_DATA_SUCCESS:
         case PHONE_DATA_ERROR:
             return handleAsyncActions(PHONE_DATA)(state,action);
-        ////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
         case PHONE_DATA_ADD:
             return produce(state, draft=>{
-                let init = {...dataInitRow}
+                let init = {...dataInitRow};
 
                 draft.data.lastId ++;
                 init.id = draft.data.lastId;
@@ -131,23 +122,36 @@ export default function phoneData(state = initialState, action){
         case PHONE_DATA_CHANGE:
             return produce(state, draft=>{
                 const row = draft.data.rows.find( row => row.id === action.id);
-                // row[action.colName] = action.colName === 'shipping_price' ? 
-                //                         inputNumberFormat(action.value) : action.value;
                 row[action.colName] = action.value;
             });
-        case PHONE_DATA_UPDATE_LIST_ROW_INSERT:
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        case PHONE_DATA_UPDATE_LIST_CHANGE:
             return produce(state, draft =>{
-                const init = dataInit.rows;
-                draft.dataChangeList.dataUpdateList.push();
+                const idx = state.dataChangeList.dataUpdateList.findIndex( row => row.id === action.id);
+                // update 리스트에 해당 id가 존재하지 않을경우 추가해줌
+                if( idx === -1 ){
+                    let initRow = {};
+                    initRow.id = action.id;
+                    initRow[action.colName] = action.value;
+                    draft.dataChangeList.dataUpdateList.push(initRow);
+                //update 리스트에 해당 id가 존재할 경우 column만 추가해줌.
+                }else if( action.value !== state.dataChangeList.dataUpdateList[idx][action.colName]){
+                    draft.dataChangeList.dataUpdateList[idx][action.colName] = action.value;
+                }
+
             });
-        case PHONE_DATA_UPDATE_LIST_ROW_DELETE:
-            return{};
-        case PHONE_DATA_UPDATE_LIST_COLUMN_INSERT:
-            return{};
-        case PHONE_DATA_UPDATE_LIST_COLUMN_DELETE:
-            return{};
-        case PHONE_DATA_UPDATE_LIST_COLUMN_CHANGE:
-            return{};
+        case PHONE_DATA_UPDATE_LIST_DELETE:
+            return produce(state,draft=>{
+                const idx = state.dataChangeList.dataUpdateList.findIndex( row => row.id === action.id);
+                // row에 1개이상 값이 들어있을 떄
+                if( idx !== -1){
+                    delete draft.dataChangeList.dataUpdateList[idx][action.colName];
+                    // 안에남은 원소가 하나도 없으면 row를 삭제함.
+                    if( Object.keys(draft.dataChangeList.dataUpdateList[idx]).length <= 1  ){
+                        draft.dataChangeList.dataUpdateList.splice(idx,1);
+                    }
+                }
+            });
         default:
             return state;
     }
@@ -157,6 +161,7 @@ export default function phoneData(state = initialState, action){
 
 
 export {phoneDataFetchAsync,
-        phoneDataChange, phoneDataDelete, phoneDataAdd,
+        //phoneDataChange, phoneDataDelete, phoneDataAdd,
+        phoneDataUpdate,
         phoneDataUpdateList,
         };

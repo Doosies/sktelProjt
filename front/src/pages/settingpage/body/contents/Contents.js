@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import CButton from '../../../../components/Button';
-import { phoneDataAdd, phoneDataFetchAsync } from '../../../../modules/phoneData';
+import { phoneDataUpdate, phoneDataFetchAsync } from '../../../../modules/phoneData';
 import Tables from './Tables';
 
 const StyledContents = styled.div`
@@ -69,7 +69,7 @@ function Contents(){
     
 
     const handleAdd =  ()=>{
-        dispatch(phoneDataAdd());
+        dispatch(phoneDataUpdate.Add());
     };
 
     const handleApply = () =>{
