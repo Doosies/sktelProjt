@@ -1,5 +1,4 @@
 import React, { useCallback, useRef } from 'react';
-import { useMemo } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import styled, { css } from 'styled-components';
 import { phoneDataUpdateList, phoneDataUpdate} from '../../../../modules/phoneData';
@@ -30,28 +29,17 @@ function Input({colIndex, id}){
     const inputRef = useRef();
     // alert 두번 나오는거 방지 위한 ref
     const didShowAlert = useRef(false);
-    const test = useRef(1);
     // 현재 data의 column 정보
     const nowColumnInfo = columnPhoneInfo[colIndex];
     const nowColumnValidCheck = inputValidCheck[colIndex];
     
-    const { rowIndex, updateListRowIndex } = useSelector(state=>({
-        // 현재 data의 row index 
-        rowIndex           : state.phoneData.data.rows.findIndex( val=>val.id === id ),
-        // update list의 row index
-        updateListRowIndex : ''//state.phoneData.dataChangeList.dataUpdateList.findIndex( val=>val.id === id )
-    }),shallowEqual);
-    
-    const { nowVal, firstVal, updatedVal } = useSelector(state =>({
+    const  rowIndex = useSelector(state=> state.phoneData.data.rows.findIndex( val=>val.id === id ))
+    const { nowVal, firstVal } = useSelector(state =>({
         nowVal     : state.phoneData.data.rows[ rowIndex ][ nowColumnInfo.colname ],
         // // 현재 column의 최초 데이터, 추가된 데이터의 경우 null임
         firstVal   : state.phoneData.firstData.lastId < id 
                      ? null
                      : state.phoneData.firstData.rows[ rowIndex ][nowColumnInfo.colname],
-    // // 그 때는 값이 없기때문에 null처리.
-        // updatedVal : updateListRowIndex === -1
-        //               ? null
-        //               : state.phoneData.dataChangeList.dataUpdateList[updateListRowIndex][nowColumnInfo.colname] 
     }),shallowEqual);
      
     const callbackDispatch = useCallback((dispatchFun) =>{
@@ -113,23 +101,10 @@ function Input({colIndex, id}){
             //처음이랑 수정된 값이 다를 경우
             else{
                 updateListChange(id, nowColumnInfo.colname, modifiedValue);
-                // 리스트에 해당 row가 비어있으면 row를생성, column을 업데이트해줌
-                // if(updateListRowIndex === -1){
-                    // console.log(id, nowColumnInfo.colname, modifiedValue)
-                    // updateListRowInsert(id, nowColumnInfo.colname, modifiedValue);   
-                // }
-                //리스트에 해당 row가 있고 값이 같지 않으면
-                // if(updatedVal !== modifiedValue){
-                    // updateListColumnChange(updateListRowIndex, nowColumnInfo.colname, modifiedValue);
-
-                // }else 
-                // if(updateListRowIndex === -1){
-                    // console.log(id, nowColumnInfo.colname, modifiedValue)
-                //  }
             }
         }
         
-    },[nowColumnValidCheck.deleteWord, nowColumnValidCheck.reg, nowColumnValidCheck.error, firstVal, nowColumnInfo.colname, updateListDelete, id, updateListRowIndex, updateListChange]);
+    },[nowColumnValidCheck.deleteWord, nowColumnValidCheck.reg, nowColumnValidCheck.error, firstVal, nowColumnInfo.colname, updateListDelete, id, updateListChange]);
     
 
     return( 
