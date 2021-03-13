@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import styled, { css } from 'styled-components';
 import Button from '../../../../components/Button';
 import { phoneDataDelete } from '../../../../modules/phoneData';

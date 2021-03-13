@@ -1,8 +1,7 @@
-import React, {useEffect} from 'react';
+import React, {} from 'react';
 import styled from 'styled-components';
-import { shallowEqual, useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import Row from './Row';
-import { phoneDataFetchAsync } from '../../../../modules/phoneData';
 
 const StyledTable = styled.div`
     width:auto;

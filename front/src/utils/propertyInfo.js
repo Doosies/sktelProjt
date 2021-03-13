@@ -29,6 +29,7 @@ export const inputValidCheck = [
     // 출고가
     {
         // colName:col3,
+        // deleteWord:/[^\d]+/g,
         deleteWord:/[^\d]+/g,
         reg:/^(0|[1-9][0-9]+|[1-9])$/,
         error:`
@@ -59,7 +60,7 @@ export const inputValidCheck = [
     },
     // 배터리
     {
-        deleteWord:/^ +/g,
+        deleteWord:/[^\d]+/g,
         reg:/^/g,
         error:``,
         beforValue:'',
@@ -73,7 +74,7 @@ export const inputValidCheck = [
     },
     // 저장용량
     {
-        deleteWord:/^ +/g,
+        deleteWord:/[^\d]+/g,
         reg:/^/g,
         error:``,
         beforValue:'',
