@@ -1,7 +1,7 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import styled, { css } from 'styled-components';
-import { phoneDataUpdateList, phoneDataUpdate} from '../../../../modules/phoneData';
+import { phoneDataUpdateList, phoneDataUpdate,phoneDataAddRef} from '../../../../modules/phoneData';
 import { columnPhoneInfo, inputValidCheck } from '../../../../utils/propertyInfo';
 import * as utils from '../../../../utils/utils';
 
@@ -23,7 +23,11 @@ const commaValues = [
 
 
 function Input({colIndex, id}){
+    // console.log("input",id);
     const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(phoneDataAddRef(id,inputRef.current));
+    }, [dispatch, id])
     // 포커싱 위한 ref
     const inputRef = useRef();
     // alert 두번 나오는거 방지 위한 ref
@@ -32,6 +36,7 @@ function Input({colIndex, id}){
     const nowColumnInfo = columnPhoneInfo[colIndex];
     const nowColumnValidCheck = inputValidCheck[colIndex];
     
+    // console.log(test);
     const  rowIndex = useSelector(state=> state.phoneData.data.rows.findIndex( val=>val.id === id ))
     const { nowVal, firstVal, isAddedRow } = useSelector(state =>({
         // 현재 input값
@@ -44,8 +49,10 @@ function Input({colIndex, id}){
         // 추가된 row인지 판별
         isAddedRow : state.phoneData.firstData.lastId < id
                      ? true
-                     : false
+                     : false,
     }),shallowEqual);
+
+
      
     const callbackDispatch = useCallback((dispatchFunc) =>{
         return(...args)=>{
@@ -55,11 +62,11 @@ function Input({colIndex, id}){
     const inputChange = useCallback( (value) => 
         dispatch(phoneDataUpdate.Change(id,nowColumnInfo.colname, value))
     ,[nowColumnInfo.colname, dispatch, id]);
-    const callbackHandle = useCallback((callbackFunc)=>{
-        return(...args)=>{
-            callbackFunc(...args);
-        }
-    },[])
+    // const callbackHandle = useCallback((callbackFunc)=>{
+    //     return(...args)=>{
+    //         callbackFunc(...args);
+    //     }
+    // },[])
     
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // state를 바꿔주는 dispatch* change,delete //
@@ -67,16 +74,16 @@ function Input({colIndex, id}){
     const updateListDelete = callbackDispatch(phoneDataUpdateList.Delete);
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    const handleChange = callbackHandle((e) => {
+    const handleChange = useCallback( (e) => {
         // commaValue에 포함될 경우
         const val = commaValues.some(val => val === nowColumnInfo.colname)
                     ? utils.inputNumberFormat(e.target.value) // 콤마를 적어줌
                     : e.target.value; // 그냥 그대로 입력
         inputChange(val);
-    });
+    },[nowColumnInfo.colname, inputChange]);
 
      ///////////////////////////////////////////////////////// 포커싱이 벗어났을 때
-     const handleBlur = callbackHandle((e) =>{
+    const handleBlur = useCallback( (e) =>{
         //최종 수정값
         const deletedWord = e.target.value.replace(nowColumnValidCheck.deleteWord,"");
         // 해당 column에 해당하는 정규식 통과 못 할 경우(올바르지 않은 값일 경우)
@@ -86,6 +93,7 @@ function Input({colIndex, id}){
             // alert 두번 나오는거 버그 수정 위한 if문
             if ( !didShowAlert.current) {
                 alert(nowColumnValidCheck.error);
+                inputChange(firstVal);
                 didShowAlert.current = false;
             } 
             didShowAlert.current = !didShowAlert.current;
@@ -103,8 +111,11 @@ function Input({colIndex, id}){
             if( !isAddedRow ) modifiedValue === firstValue              
             ?updateListDelete(id, nowColumnInfo.colname)                // 최초값과 수정한 값이 같을경우, delete
             :updateListChange(id, nowColumnInfo.colname, modifiedValue);// 최초값과 수정한 값이 다를경우, change
+            
+            inputChange(deletedWord);
         }
-    });
+        
+    },[nowColumnValidCheck.deleteWord, nowColumnValidCheck.reg, nowColumnValidCheck.error, inputChange, firstVal, isAddedRow, updateListDelete, id, nowColumnInfo.colname, updateListChange]);
     
 
     return( 

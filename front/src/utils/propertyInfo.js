@@ -40,7 +40,7 @@ export const inputValidCheck = [
     },
     // 브랜드
     {
-        deleteWord:'',
+        deleteWord:/^ +/g,
         reg:/^(samsung|lg|apple|etc)$/,
         error:`
             공백이 존재하거나 제조사 형식이 잘못되었습니다..
@@ -50,7 +50,7 @@ export const inputValidCheck = [
     },
     // 출시일
     {
-        deleteWord:'',
+        deleteWord:/^ +/g,
         reg:/^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/,
         error:`
             공백이 존재하거나 날짜값의 형식이 잘못 되었습니다.
@@ -60,23 +60,27 @@ export const inputValidCheck = [
     },
     // 배터리
     {
-        deleteWord:/[^\d]+/g,
+        deleteWord:/^/g,
         reg:/^/g,
-        error:``,
+        error:`숫자가 아닌 값이 입력되었습니다. 확인해주세요.`,
         beforValue:'',
     },
     // 스크린 사이즈
     {
-        deleteWord:/^ +/g,
-        reg:/^/g,
-        error:``,
+        deleteWord:/^ /g,
+        reg:/(^[1-9]{1}[[1-9]{0,1}]+$)|(^\d{1,}\.\d{0,2}$)/,
+        error:`
+            입력된 값이 숫자가 아니거나.\n
+            소수점 둘째 자리 이상 입력되었습니다.\n
+            다시 확인해주세요
+        `,
         beforValue:'',
     },
     // 저장용량
     {
-        deleteWord:/[^\d]+/g,
+        deleteWord:/^/g,
         reg:/^/g,
-        error:``,
+        error:`숫자가 아닌 값이 입력되었습니다. 확인해주세요.`,
         beforValue:'',
     },
 ];

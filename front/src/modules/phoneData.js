@@ -1,6 +1,6 @@
 import produce from 'immer';
 import { createPromiseThunk, handleAsyncActions } from '../lib/asyncUtils';
-import * as postsAPI from '../utils/api';
+import * as restAPI from '../utils/api';
 
 const PHONE_DATA = 'phoneData/PHONE_DATA';
 const PHONE_DATA_LOADING = 'phoneData/PHONE_DATA_LOADING';
@@ -10,6 +10,8 @@ const PHONE_DATA_ERROR = 'phoneData/PHONE_DATA_ERROR';
 const PHONE_DATA_ADD = 'phoneData/PHONE_DATA_ADD';
 const PHONE_DATA_DELETE = 'phoneData/PHONE_DATA_DELETE';
 const PHONE_DATA_CHANGE = 'phoneData/PHONE_DATA_CHANGE';
+////////////////////////////////////////////////////////
+const PHONE_DATA_ADD_REF = 'phoneData/PHONE_DATA_ADD_REF';
 ////////////////////////////////////////////////////////
 const PHONE_DATA_UPDATE_LIST_CHANGE = 'phoneData/PHONE_DATA_UPDATE_LIST_CHANGE';
 const PHONE_DATA_UPDATE_LIST_DELETE = 'phoneData/PHONE_DATA_UPDATE_LIST_DELETE';
@@ -25,6 +27,7 @@ const dataInitRow = {
     screen_size:'',
     storage:'',
 };
+
 const dataInit = {
     lastId:'',
     rows:[
@@ -38,6 +41,7 @@ const initialState = {
         error:false,
     },
     data:dataInit,
+    refData:[],
     firstData:dataInit,
     dataChangeList:{
         dataAddList:[],
@@ -49,7 +53,7 @@ const initialState = {
 
 
 // 처음 데이터 받아오는 promisethunk
-const phoneDataFetchAsync = createPromiseThunk(PHONE_DATA, postsAPI.getAllPhoneInfo);
+const phoneDataFetchAsync = createPromiseThunk(PHONE_DATA, restAPI.getAllPhoneInfo);
 ////////////////////////////////////////////////////////
 const phoneDataUpdate =({
     Add:()=>({
@@ -65,6 +69,11 @@ const phoneDataUpdate =({
         colName:colName,
         value: value,
     }),
+});
+const phoneDataAddRef=(id, ref) =>({
+    type:PHONE_DATA_ADD_REF,
+    id:id,
+    ref:ref,
 });
 
 const phoneDataUpdateList = ({
@@ -94,12 +103,15 @@ export default function phoneData(state = initialState, action){
         case PHONE_DATA_ADD:
             return produce(state, draft=>{
                 let init = {...dataInitRow};
-
                 draft.data.lastId ++;
                 init.id = draft.data.lastId;
                 draft.data.rows.push(init);
+
                 // 추가 리스트에 추가.
                 draft.dataChangeList.dataAddList.push(init.id);
+
+                // ref 추가
+                draft.refData[draft.data.lastId].refs.push(action.ref);
             });
         case PHONE_DATA_DELETE:
             return produce(state, draft=>{
@@ -109,7 +121,7 @@ export default function phoneData(state = initialState, action){
                 const idx = state.dataChangeList.dataAddList.findIndex( val => val === action.id);
                 // 제거할 row가 추가된 row가 아닐 경우
                 // deleteList에 추가
-                if(  idx === -1)
+                if(  idx === -1 )
                     draft.dataChangeList.dataDeleteList.push(action.id);
                 // 제거할 row가 추가된 row일 경우
                 // addList에서 해당 배열 제거
@@ -122,6 +134,28 @@ export default function phoneData(state = initialState, action){
             return produce(state, draft=>{
                 const row = draft.data.rows.find( row => row.id === action.id);
                 row[action.colName] = action.value;
+            });
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        case PHONE_DATA_ADD_REF:
+            return produce(state, draft=>{
+                // action.id, action.ref
+                const refIdx = state.refData.findIndex(row => row.id === action.id);
+                console.log(action.id,refIdx);
+                //해당 아이디가 없으면
+                if( refIdx === -1 ){
+                    draft.refData.push({id:action.id,refs:[]});
+                //존재하면
+                }else{
+                    const refCnt = state.refData[refIdx].length;
+                    draft.refData[refIdx].refs.push(action.ref);
+                }
+                // state.data.rows.forEach((row)=>{
+                //     const nowRow = Object.entries(row);
+                //     nowRow.forEach((val,idx) => {
+
+                //     });
+                //     draft.refData.push({id:row.id});
+                // });
             });
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////
         case PHONE_DATA_UPDATE_LIST_CHANGE:
@@ -161,6 +195,7 @@ export default function phoneData(state = initialState, action){
 
 export {phoneDataFetchAsync,
         //phoneDataChange, phoneDataDelete, phoneDataAdd,
+        phoneDataAddRef,
         phoneDataUpdate,
         phoneDataUpdateList,
         };

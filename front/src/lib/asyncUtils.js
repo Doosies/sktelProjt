@@ -1,3 +1,4 @@
+import produce from 'immer';
 
 export const createPromiseThunk = (type, promiseCreator) =>{
     const [LOADING, SUCCESS, ERROR] = [`${type}_LOADING`, `${type}_SUCCESS`, `${type}_ERROR`];
@@ -48,12 +49,24 @@ export const handleAsyncActions = (type) =>{
                     state:reducerUtils.loading().state,
                 }
             case SUCCESS:
-                return{
-                    ...state,
-                    state:reducerUtils.success().state,
-                    firstData:reducerUtils.success(action.payload).data,
-                    data:reducerUtils.success(action.payload).data,
-                };
+                return produce(state, draft=>{
+                    draft.state = reducerUtils.success().state;
+                    draft.firstData = reducerUtils.success(action.payload).data;
+                    draft.data = reducerUtils.success(action.payload).data;
+
+                    // ref 넣기위해 
+                    // draft.data.rows.forEach(row => {
+                    //     // refData는 배열.
+                    //     draft.refData.push({ id:row.id });
+                    // });
+                });
+            // case SUCCESS:
+            //     return{
+            //         ...state,
+            //         state:reducerUtils.success().state,
+            //         firstData:reducerUtils.success(action.payload).data,
+            //         data:reducerUtils.success(action.payload).data,
+            //     };
             case ERROR:
                 return{
                     ...state,
