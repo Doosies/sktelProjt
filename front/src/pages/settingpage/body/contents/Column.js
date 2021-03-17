@@ -28,8 +28,6 @@ const StyledColumn = styled.div`
 
 // top일경우 center, false 기본설정
 function Column({width, textalign="center",top,children}){
-    // console.log("컬럼");
-    // const colProps = useSelector( state => state.phoneData.columnProperties);
     return(
         <StyledColumn width={width} textalign={textalign} top={top}>
             {children}

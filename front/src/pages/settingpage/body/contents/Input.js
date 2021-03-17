@@ -23,51 +23,60 @@ const commaValues = [
 
 
 function Input({colIndex, id}){
-    console.log("인풋");
     const dispatch = useDispatch();
     // 포커싱 위한 ref
     const inputRef = useRef();
     // alert 두번 나오는거 방지 위한 ref
     const didShowAlert = useRef(false);
-    // 현재 data의 column 정보
+    // 현재 data의 column 정보와 검증값
     const nowColumnInfo = columnPhoneInfo[colIndex];
     const nowColumnValidCheck = inputValidCheck[colIndex];
     
     const  rowIndex = useSelector(state=> state.phoneData.data.rows.findIndex( val=>val.id === id ))
-    const { nowVal, firstVal } = useSelector(state =>({
+    const { nowVal, firstVal, isAddedRow } = useSelector(state =>({
+        // 현재 input값
         nowVal     : state.phoneData.data.rows[ rowIndex ][ nowColumnInfo.colname ],
-        // // 현재 column의 최초 데이터, 추가된 데이터의 경우 null임
+        // 현재 column의 최초 데이터, 추가버튼으로 추가된 row의 경우 null임
         firstVal   : state.phoneData.firstData.lastId < id 
                      ? null
                      : state.phoneData.firstData.rows[ rowIndex ][nowColumnInfo.colname],
+        // 현재 row의 값이 받아온 데이터의 lastId보다 크다면 true
+        // 추가된 row인지 판별
+        isAddedRow : state.phoneData.firstData.lastId < id
+                     ? true
+                     : false
     }),shallowEqual);
      
-    const callbackDispatch = useCallback((dispatchFun) =>{
+    const callbackDispatch = useCallback((dispatchFunc) =>{
         return(...args)=>{
-            dispatch(dispatchFun(...args));
+            dispatch(dispatchFunc(...args));
         }
     },[dispatch]);
     const inputChange = useCallback( (value) => 
         dispatch(phoneDataUpdate.Change(id,nowColumnInfo.colname, value))
     ,[nowColumnInfo.colname, dispatch, id]);
+    const callbackHandle = useCallback((callbackFunc)=>{
+        return(...args)=>{
+            callbackFunc(...args);
+        }
+    },[])
     
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // state를 바꿔주는 dispatch* change,delete //
     const updateListChange = callbackDispatch(phoneDataUpdateList.Change);
     const updateListDelete = callbackDispatch(phoneDataUpdateList.Delete);
-    // const updateListColumnDelete = callbackDispatch(phoneDataUpdateList.ColumnDelete);
-    // const updateListColumnChange = callbackDispatch(phoneDataUpdateList.ColumnChange);
-
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    const handleChange = useCallback( (e) => {
+
+    const handleChange = callbackHandle((e) => {
         // commaValue에 포함될 경우
         const val = commaValues.some(val => val === nowColumnInfo.colname)
                     ? utils.inputNumberFormat(e.target.value) // 콤마를 적어줌
                     : e.target.value; // 그냥 그대로 입력
         inputChange(val);
-    },[nowColumnInfo.colname, inputChange]);
+    });
 
      ///////////////////////////////////////////////////////// 포커싱이 벗어났을 때
-    const handleBlur = useCallback( (e) =>{
+     const handleBlur = callbackHandle((e) =>{
         //최종 수정값
         const deletedWord = e.target.value.replace(nowColumnValidCheck.deleteWord,"");
         // 해당 column에 해당하는 정규식 통과 못 할 경우(올바르지 않은 값일 경우)
@@ -90,21 +99,12 @@ function Input({colIndex, id}){
             const firstValue = firstVal === null ? '': firstVal;
             
             // NOTE - 이 if문은 column값이 수정 됐는지 확인한다.
-
-            //처음이랑 수정된 값이 같을 경우
-            if( modifiedValue === firstValue){
-                // 리스트에 해당 row가 비어있지 않고 빈값이 아니면 column값 제거
-                // if( updateListRowIndex !== -1 && Boolean(updatedVal)){
-                updateListDelete(id, nowColumnInfo.colname);
-                // }
-            }
-            //처음이랑 수정된 값이 다를 경우
-            else{
-                updateListChange(id, nowColumnInfo.colname, modifiedValue);
-            }
+            // 새로 추가한 row가 아닐경우
+            if( !isAddedRow ) modifiedValue === firstValue              
+            ?updateListDelete(id, nowColumnInfo.colname)                // 최초값과 수정한 값이 같을경우, delete
+            :updateListChange(id, nowColumnInfo.colname, modifiedValue);// 최초값과 수정한 값이 다를경우, change
         }
-        
-    },[nowColumnValidCheck.deleteWord, nowColumnValidCheck.reg, nowColumnValidCheck.error, firstVal, nowColumnInfo.colname, updateListDelete, id, updateListChange]);
+    });
     
 
     return( 

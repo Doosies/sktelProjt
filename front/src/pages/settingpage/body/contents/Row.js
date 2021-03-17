@@ -53,9 +53,9 @@ const DeleteButton = styled(Button)`
 `;
 
 function Row({top, rowId}){
-    const columns = useMemo(() => columnPhoneInfo,[]);//useSelector( state => state.phoneData.columnProperties);
     const dispatch = useDispatch();
-
+    // columns 정보
+    const columns = useMemo(() => columnPhoneInfo,[]);//useSelector( state => state.phoneData.columnProperties);
 
     const handleDeleteButton = useCallback( (id) => {
             // 제거 누른 id는 data.rows 에서 제거함.

@@ -8,19 +8,7 @@ const StyledTable = styled.div`
 `;
 
 function Tables(){
-
     const rows = useSelector( state =>state.phoneData.data.rows);
-
-    // const dispatch = useDispatch();
-
-    // useEffect(()=>{
-    //     dispatch(phoneDataFetchAsync());
-    // },[dispatch]);
-    
-
-    // if(loading) return null;
-    // if(error) return <div>에러 발생</div>;
-    // if( !rows ) return <div>데이터 로딩 실패</div>;
 
     return(
         <StyledTable>
