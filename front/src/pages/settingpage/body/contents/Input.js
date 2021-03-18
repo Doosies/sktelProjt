@@ -22,7 +22,7 @@ const commaValues = [
 ]
 
 
-const Input= forwardRef(({colIndex, id},inputRef) =>{
+const Input = forwardRef(({colIndex, id},inputRef) =>{
 // function Input({colIndex, id}){
     console.log("input");
     const dispatch = useDispatch();
