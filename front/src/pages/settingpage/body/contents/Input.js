@@ -48,8 +48,12 @@ const Input = forwardRef(({colIndex, id},inputRef) =>{
     }),shallowEqual);
      
     // useEffect(() => {
-    //     dispatch(phoneDataAddRef(id,inputRef.current));
-    // }, [dispatch, id, inputRef])
+    //     // console.log(inputRef,id);
+    //     if( id !== "")
+    //         dispatch(phoneDataAddRef(id,inputRef));
+    //     // return( );
+    // }, [])
+
     const callbackDispatch = useCallback((dispatchFunc) =>{
         return(...args)=>{
             dispatch(dispatchFunc(...args));
@@ -79,13 +83,16 @@ const Input = forwardRef(({colIndex, id},inputRef) =>{
         //최종 수정값
         const deletedWord = e.target.value.replace(nowColumnValidCheck.deleteWord,"");
         // 해당 column에 해당하는 정규식 통과 못 할 경우(올바르지 않은 값일 경우)
-        if( nowColumnValidCheck.reg.test(deletedWord) === false){
+        if( nowColumnValidCheck.reg.test(deletedWord) === false 
+        // 값이 빈값이고, 필수값일 경우
+        || (deletedWord ==="" && notRequired.every(val=>val !== nowColumnInfo.colname))){
             // 포커싱이 바뀌어도 다시 포커싱해줌.
             inputRef.current.focus();
             // alert 두번 나오는거 버그 수정 위한 if문
             if ( !didShowAlert.current) {
+                //안내문 출력
                 alert(nowColumnValidCheck.error);
-                inputChange(firstVal);
+                // inputChange(firstVal);
                 didShowAlert.current = false;
             } 
             didShowAlert.current = !didShowAlert.current;
@@ -104,11 +111,10 @@ const Input = forwardRef(({colIndex, id},inputRef) =>{
             ?updateListDelete(id, nowColumnInfo.colname)                // 최초값과 수정한 값이 같을경우, delete
             :updateListChange(id, nowColumnInfo.colname, modifiedValue);// 최초값과 수정한 값이 다를경우, change
             
-            inputChange(deletedWord);
+            inputChange(modifiedValue);
         }
         
     },[firstVal, id, inputChange, inputRef, isAddedRow, nowColumnInfo.colname, nowColumnValidCheck.deleteWord, nowColumnValidCheck.error, nowColumnValidCheck.reg, updateListChange, updateListDelete]);
-    
 
     return( 
         <StyledInput 
@@ -118,7 +124,7 @@ const Input = forwardRef(({colIndex, id},inputRef) =>{
             onChange={handleChange}
             onBlur={handleBlur}
             // notRequired에 있는 배열에 포함되면 필수항목이 아님.
-            required={notRequired.every(val => val !== nowColumnInfo.colname) ? true : false}
+            // required={notRequired.every(val => val !== nowColumnInfo.colname) ? true : false}
             ref={inputRef}
             // placeholder={}
         />

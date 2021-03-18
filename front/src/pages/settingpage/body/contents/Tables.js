@@ -9,10 +9,11 @@ const StyledTable = styled.div`
 
 function Tables(){
     const rows = useSelector( state =>state.phoneData.data.rows);
+    console.log("tables");
 
     return(
         <StyledTable>
-            {/* <Row top /> */}
+            <Row key={`top_row_head`} top />
             {rows.map( (row) =>
                 <Row key={`row_body_${row.id}`} rowId={row.id}/> 
             )}

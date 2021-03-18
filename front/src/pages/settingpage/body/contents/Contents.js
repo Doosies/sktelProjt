@@ -61,6 +61,9 @@ const ContentsBottom = styled.form`
 const notRequired = [
     "battery", "screen_size", "storage"
 ];
+const commaValues = [
+    "shipping_price", "battery",  "storage"
+]
 
 //리스트가 1개 이상인지 확인하는 함수
 function isFilledList(list){
@@ -72,6 +75,7 @@ function isFilledList(list){
 }
 
 function Contents(){
+    console.log("contents!!"); 
     const dispatch = useDispatch();
     const {refData, dataChangeList, rows, error,loading} = useSelector( state =>({
         refData: state.phoneData.refData,
@@ -81,11 +85,10 @@ function Contents(){
         error:state.phoneData.state.error,
     }), shallowEqual);
 
-    console.log("contents!!");
     useEffect(()=>{
         //NOTE - 화면이 로딩될 때 데이터들을 받아와줌.
         dispatch(phoneDataFetchAsync());
-    },[dispatch]);
+    },[]);
 
     //NOTE - 추가버튼 클릭시
     const handleAdd =  ()=>{
@@ -114,10 +117,11 @@ function Contents(){
                 // || value[1] === "" )){
 
                     rowEntries.some((ele,colIdx) => {
+                        const key = ele[0];
+                        const val = ele[1]
                         // 빈칸이거나 정규식을 통과하지 못했을 때
-                        if( (ele[1] === "" || inputValidCheck[colIdx].reg.test(ele[1]) === false) 
-                        //필수항목일 때
-                        && notRequired.every(colName => colName !== ele[0])) {
+                        if( ( val === null || val === ""|| val === " "|| inputValidCheck[colIdx].reg.test(val)===false ) 
+                                && notRequired.every(colName => colName !== key )) {
                             refData[rowIdx].refs[colIdx].current.focus();
                             return true;
                         }
@@ -144,7 +148,7 @@ function Contents(){
                         <CButton onClick={ handleAdd } width="60px" height="40px" font_size="13px" font_weight="bold" border>추가</CButton>
                         <CButton onClick={ handleApply } width="60px" height="40px" font_size="13px" font_weight="bold" border>적용</CButton>
                     </ContentsTopButtons>
-                    <Tables/>
+                    {!loading && !error && <Tables/>}
                 </ContentsBottom>
             </ContentsBox>
         </StyledContents>

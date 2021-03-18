@@ -16,14 +16,14 @@ export const inputValidCheck = [
     {
         deleteWord:/^ +/g,
         reg:/^/g,
-        error:``,
+        error:`값이 공백입니다. 다시 입력해주세요`,
         beforValue:'',
     },
     // 모델명
     {
         deleteWord:/^ +/g,
         reg:/^/g,
-        error:``,
+        error:`값이 공백입니다. 다시 입력해주세요`,
         beforValue:'',
     },
     // 출고가
@@ -68,7 +68,7 @@ export const inputValidCheck = [
     // 스크린 사이즈
     {
         deleteWord:/^ /g,
-        reg:/(^[1-9]{1}[[1-9]{0,1}]+$)|(^\d{1,}\.\d{0,2}$)|^$/,
+        reg:/(^[1-9]{1}[[1-9]{0,1}]+$)|(^\d{1,}\.\d{0,2}$)|^[1-9]$|^$/,
         error:`
             입력된 값이 숫자가 아니거나.\n
             소수점 둘째 자리 이상 입력되었습니다.\n
