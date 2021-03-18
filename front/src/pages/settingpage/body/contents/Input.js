@@ -55,11 +55,11 @@ const Input = forwardRef(({colIndex, id},inputRef) =>{
     // // eslint-disable-next-line react-hooks/exhaustive-deps
     // },[]);
      
-    // const callbackDispatch = useCallback((dispatchFunc) =>{
-    //     return(...args)=>{
-    //         dispatch(dispatchFunc(...args));
-    //     }
-    // },[dispatch]);
+    const callbackDispatch = useCallback((dispatchFunc) =>{
+        return(...args)=>{
+            dispatch(dispatchFunc(...args));
+        }
+    },[dispatch]);
     const inputChange = useCallback( (value) => 
         dispatch(phoneDataUpdate.Change(id,nowColumnInfo.colname, value))
     ,[nowColumnInfo.colname, dispatch, id]);
@@ -71,10 +71,10 @@ const Input = forwardRef(({colIndex, id},inputRef) =>{
     
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // state를 바꿔주는 dispatch* change,delete //
-    // const updateListChange = callbackDispatch(phoneDataUpdateList.Change);
-    // const updateListDelete = callbackDispatch(phoneDataUpdateList.Delete);
-    const updateListChange = (id,colName,value) => phoneDataUpdateList.Change(id,colName,value);
-    const updateListDelete = (id) => phoneDataUpdateList.Delete(id);
+    const updateListChange = callbackDispatch(phoneDataUpdateList.Change);
+    const updateListDelete = callbackDispatch(phoneDataUpdateList.Delete);
+    // const updateListChange = (id,colName,value) => phoneDataUpdateList.Change(id,colName,value);
+    // const updateListDelete = (id) => phoneDataUpdateList.Delete(id);
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     const handleChange = useCallback( (e) => {
@@ -118,7 +118,7 @@ const Input = forwardRef(({colIndex, id},inputRef) =>{
             inputChange(deletedWord);
         }
         
-    },[id, inputChange, inputRef, isAddedRow, nowColumnInfo.colname, nowColumnValidCheck.deleteWord, nowColumnValidCheck.error, nowColumnValidCheck.reg]);
+    },[firstVal, id, inputChange, inputRef, isAddedRow, nowColumnInfo.colname, nowColumnValidCheck.deleteWord, nowColumnValidCheck.error, nowColumnValidCheck.reg, updateListChange, updateListDelete]);
     
 
     return( 
