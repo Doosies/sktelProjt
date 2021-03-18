@@ -125,7 +125,7 @@ export default function phoneData(state = initialState, action){
                 // 제거할 row가 추가된 row일 경우
                 // addList에서 해당 배열 제거
                 else
-                    draft.dataChangeList.dataAddList.splice(idx,1);
+                    draft.dataChangeList.dataAddList.slice(idx,1);
                 
                 
             });
@@ -168,7 +168,7 @@ export default function phoneData(state = initialState, action){
                     delete draft.dataChangeList.dataUpdateList[idx][action.colName];
                     // 안에남은 원소가 하나도 없으면 row를 삭제함.
                     if( Object.keys(draft.dataChangeList.dataUpdateList[idx]).length <= 1  ){
-                        draft.dataChangeList.dataUpdateList.splice(idx,1);
+                        draft.dataChangeList.dataUpdateList.slice(idx,1);
                     }
                 }
             });

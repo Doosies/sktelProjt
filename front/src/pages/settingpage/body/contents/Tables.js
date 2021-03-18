@@ -12,9 +12,9 @@ function Tables(){
 
     return(
         <StyledTable>
-            <Row key={`row_head`} top />
+            {/* <Row top /> */}
             {rows.map( (row) =>
-                <Row key={`row_${row.id}`} rowId={row.id}/> 
+                <Row key={`row_body_${row.id}`} rowId={row.id}/> 
             )}
         </StyledTable>
     );

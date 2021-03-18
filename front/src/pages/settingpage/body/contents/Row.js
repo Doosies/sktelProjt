@@ -53,13 +53,13 @@ const DeleteButton = styled(Button)`
 `;
 
 function Row({top, rowId}){
-    // console.log(("row"));
+    console.log(("row"));
     const dispatch = useDispatch();
     // console.log
     // columns 정보
     const columns = useMemo(() => columnPhoneInfo,[]);//useSelector( state => state.phoneData.columnProperties);
     // const refData = useSelector(state=>state.phoneData.refData);
-    const inputsRef = !top && Array(7).fill(0).map(() => createRef());
+    // const inputsRef = !top && Array(7).fill(0).map(() => createRef());
     // const inputsRef = useRef();
     // coinputsR
     // console.log(inputsRef);
@@ -75,22 +75,22 @@ function Row({top, rowId}){
             dispatch(phoneDataUpdate.Delete(id));
         },[dispatch]);
 
-    if( top ) return(
-        <StyledRow>
-            <DeleteButton top/>
-            {columns.map((column)=>
-                <Column  key={`head_${column.name}`} width={column.width} top>
-                    {column.name}
-                </Column>
-            )}
-        </StyledRow>
+    // if( top ) return(
+    //     <StyledRow>
+    //         <DeleteButton top/>
+    //         {columns.map((column)=>
+    //             <Column  key={`head_${column.name}`} width={column.width} top>
+    //                 {column.name}
+    //             </Column>
+    //         )}
+    //     </StyledRow>
 
-    );
+    // );
     return( 
         <StyledRow>
             <DeleteButton onClick={()=>handleDeleteButton(rowId)}> 삭제 </DeleteButton>
             {columns.map((column, index)=>
-                <Column key={`row${rowId}_${column.name}`} width={column.width} textalign={column.textalign}>
+                <Column key={`row_${rowId}_${column.name}`} width={column.width} textalign={column.textalign}>
                     {/* <Input  ref={inputsRef[index] } colIndex={index} id={rowId} column={column} /> */}
                     <Input colIndex={index} id={rowId} column={column} />
                 </Column>   

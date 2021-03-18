@@ -29,7 +29,7 @@ const StyledColumn = styled.div`
 // top일경우 center, false 기본설정
 function Column({width, textalign="center",top,children}){
     return(
-        <StyledColumn width={width} textalign={textalign} top={top}>
+        <StyledColumn width={width} textalign={top?"center":textalign} top={top}>
             {children}
         </StyledColumn>
     );
