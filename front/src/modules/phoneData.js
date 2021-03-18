@@ -137,12 +137,15 @@ export default function phoneData(state = initialState, action){
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////
         case PHONE_DATA_ADD_REF:
             return produce(state, draft=>{
-                // const refIdx = state.refData.findIndex(row => row.id === action.id );
-                // if( refIdx === -1 )
-                //     draft.refData.push({id:action.id,refs:[action.ref]});
-                // // //존재하면
-                // else
-                //     draft.refData[refIdx].refs.push(action.ref);
+                if( action.id !== ""){
+                    console.log(action);
+                    const refIdx = state.refData.findIndex(row => row.id === action.id );
+                    if( refIdx === -1 )
+                        draft.refData.push({id:action.id,refs:action.ref});
+                    // //존재하면
+                    else
+                        draft.refData[refIdx].refs.push(action.ref);
+                }
             });
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////
         case PHONE_DATA_UPDATE_LIST_CHANGE:

@@ -1,7 +1,7 @@
-import React, {forwardRef, useCallback,  useRef } from 'react';
+import React, {forwardRef, useCallback,  useEffect,  useRef } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import styled, { css } from 'styled-components';
-import { phoneDataUpdateList, phoneDataUpdate} from '../../../../modules/phoneData';
+import { phoneDataUpdateList, phoneDataUpdate, phoneDataAddRef} from '../../../../modules/phoneData';
 import { columnPhoneInfo, inputValidCheck } from '../../../../utils/propertyInfo';
 import * as utils from '../../../../utils/utils';
 
@@ -23,8 +23,6 @@ const commaValues = [
 
 
 const Input = forwardRef(({colIndex, id},inputRef) =>{
-// function Input({colIndex, id}){
-    console.log("input",colIndex,id);
     const dispatch = useDispatch();
     // 포커싱 위한 ref
     // const inputRef = useRef();
@@ -48,33 +46,24 @@ const Input = forwardRef(({colIndex, id},inputRef) =>{
                      ? true
                      : false,
     }),shallowEqual);
-
-    // useEffect(()=>{
-    //     // if( inputRef.current !== null)
-    //         dispatch(phoneDataAddRef(id,inputRef))
-    // // eslint-disable-next-line react-hooks/exhaustive-deps
-    // },[]);
      
+    // useEffect(() => {
+    //     dispatch(phoneDataAddRef(id,inputRef.current));
+    // }, [dispatch, id, inputRef])
     const callbackDispatch = useCallback((dispatchFunc) =>{
         return(...args)=>{
             dispatch(dispatchFunc(...args));
         }
     },[dispatch]);
+    //////////////////////
     const inputChange = useCallback( (value) => 
         dispatch(phoneDataUpdate.Change(id,nowColumnInfo.colname, value))
     ,[nowColumnInfo.colname, dispatch, id]);
-    // const callbackHandle = useCallback((callbackFunc)=>{
-    //     return(...args)=>{
-    //         callbackFunc(...args);
-    //     }
-    // },[])
     
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // state를 바꿔주는 dispatch* change,delete //
     const updateListChange = callbackDispatch(phoneDataUpdateList.Change);
     const updateListDelete = callbackDispatch(phoneDataUpdateList.Delete);
-    // const updateListChange = (id,colName,value) => phoneDataUpdateList.Change(id,colName,value);
-    // const updateListDelete = (id) => phoneDataUpdateList.Delete(id);
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     const handleChange = useCallback( (e) => {
@@ -134,6 +123,5 @@ const Input = forwardRef(({colIndex, id},inputRef) =>{
             // placeholder={}
         />
     );
-// }
 });
 export default React.memo(Input);

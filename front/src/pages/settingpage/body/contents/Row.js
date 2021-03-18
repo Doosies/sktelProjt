@@ -1,8 +1,8 @@
-import React, { createRef, useCallback, useMemo, } from 'react'
+import React, { createRef, useCallback, useEffect, useMemo, } from 'react'
 import { useDispatch } from 'react-redux';
 import styled, { css } from 'styled-components';
 import Button from '../../../../components/Button';
-import { phoneDataUpdate } from '../../../../modules/phoneData';
+import { phoneDataAddRef, phoneDataUpdate } from '../../../../modules/phoneData';
 import { columnPhoneInfo } from '../../../../utils/propertyInfo';
 import Column from './Column';
 import Input from './Input';
@@ -59,14 +59,22 @@ function Row({top, rowId}){
     // columns 정보
     const columns = useMemo(() => columnPhoneInfo,[]);//useSelector( state => state.phoneData.columnProperties);
     // const refData = useSelector(state=>state.phoneData.refData);
-    // const inputsRef = !top && Array(7).fill(0).map(() => createRef());
+    const inputsRef = !top && Array(7).fill(0).map(() => createRef());
+    // console.log(inputsRef);
     // const inputsRef = useRef();
     // coinputsR
     // console.log(inputsRef);
 
-    // useEffect(()=>{
-    //     dispatch(phoneDataAddRef(rowId,inputsRef.current))
-    // },[]);
+    useEffect(()=>{
+        console.log("디스패치 하기 직전");
+        dispatch(phoneDataAddRef(rowId,inputsRef));
+    },[]);
+    // useEffect(() => {
+    //     dispatch(phoneDataAddRef(rowId,));
+    // }, [])
+    // useEffect(() => {
+    //     dispatch(phoneDataAddRef(rowId,inputsRef));
+    // }, [dispatch, inputsRef, rowId])
 
     const handleDeleteButton = useCallback( (id) => {
             // 제거 누른 id는 data.rows 에서 제거함.
@@ -75,24 +83,24 @@ function Row({top, rowId}){
             dispatch(phoneDataUpdate.Delete(id));
         },[dispatch]);
 
-    // if( top ) return(
-    //     <StyledRow>
-    //         <DeleteButton top/>
-    //         {columns.map((column)=>
-    //             <Column  key={`head_${column.name}`} width={column.width} top>
-    //                 {column.name}
-    //             </Column>
-    //         )}
-    //     </StyledRow>
+    if( top ) return(
+        <StyledRow>
+            <DeleteButton top/>
+            {columns.map((column)=>
+                <Column  key={`head_${column.name}`} width={column.width} top>
+                    {column.name}
+                </Column>
+            )}
+        </StyledRow>
 
-    // );
+    );
     return( 
         <StyledRow>
             <DeleteButton onClick={()=>handleDeleteButton(rowId)}> 삭제 </DeleteButton>
             {columns.map((column, index)=>
                 <Column key={`row_${rowId}_${column.name}`} width={column.width} textalign={column.textalign}>
-                    {/* <Input  ref={inputsRef[index] } colIndex={index} id={rowId} column={column} /> */}
-                    <Input colIndex={index} id={rowId} column={column} />
+                    <Input  ref={inputsRef[index] } colIndex={index} id={rowId} column={column} />
+                    {/* <Input colIndex={index} id={rowId} column={column} /> */}
                 </Column>   
             )}
         </StyledRow>
