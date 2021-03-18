@@ -24,7 +24,7 @@ const commaValues = [
 
 const Input = forwardRef(({colIndex, id},inputRef) =>{
 // function Input({colIndex, id}){
-    console.log("input",colIndex,id);
+    console.log("input");
     const dispatch = useDispatch();
     // 포커싱 위한 ref
     // const inputRef = useRef();
@@ -34,14 +34,15 @@ const Input = forwardRef(({colIndex, id},inputRef) =>{
     const nowColumnInfo = columnPhoneInfo[colIndex];
     const nowColumnValidCheck = inputValidCheck[colIndex];
     
-    // console.log(nowRow);
+    // console.log(test);
+    const  rowIndex = useSelector(state=> state.phoneData.data.rows.findIndex( val=>val.id === id ))
     const { nowVal, firstVal, isAddedRow } = useSelector(state =>({
         // 현재 input값
-        nowVal     : state.phoneData.data.rows.find(val=>val.id === id)[nowColumnInfo.colname],
+        nowVal     : state.phoneData.data.rows[ rowIndex ][ nowColumnInfo.colname ],
         // 현재 column의 최초 데이터, 추가버튼으로 추가된 row의 경우 null임
         firstVal   : state.phoneData.firstData.lastId < id 
                      ? null
-                     : state.phoneData.firstData.rows.find(val=>val.id===id)[nowColumnInfo.colname],
+                     : state.phoneData.firstData.rows[ rowIndex ][nowColumnInfo.colname],
         // 현재 row의 값이 받아온 데이터의 lastId보다 크다면 true
         // 추가된 row인지 판별
         isAddedRow : state.phoneData.firstData.lastId < id
@@ -55,11 +56,11 @@ const Input = forwardRef(({colIndex, id},inputRef) =>{
     // // eslint-disable-next-line react-hooks/exhaustive-deps
     // },[]);
      
-    // const callbackDispatch = useCallback((dispatchFunc) =>{
-    //     return(...args)=>{
-    //         dispatch(dispatchFunc(...args));
-    //     }
-    // },[dispatch]);
+    const callbackDispatch = useCallback((dispatchFunc) =>{
+        return(...args)=>{
+            dispatch(dispatchFunc(...args));
+        }
+    },[dispatch]);
     const inputChange = useCallback( (value) => 
         dispatch(phoneDataUpdate.Change(id,nowColumnInfo.colname, value))
     ,[nowColumnInfo.colname, dispatch, id]);
@@ -71,10 +72,8 @@ const Input = forwardRef(({colIndex, id},inputRef) =>{
     
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // state를 바꿔주는 dispatch* change,delete //
-    // const updateListChange = callbackDispatch(phoneDataUpdateList.Change);
-    // const updateListDelete = callbackDispatch(phoneDataUpdateList.Delete);
-    const updateListChange = (id,colName,value) => phoneDataUpdateList.Change(id,colName,value);
-    const updateListDelete = (id) => phoneDataUpdateList.Delete(id);
+    const updateListChange = callbackDispatch(phoneDataUpdateList.Change);
+    const updateListDelete = callbackDispatch(phoneDataUpdateList.Delete);
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     const handleChange = useCallback( (e) => {
@@ -118,7 +117,7 @@ const Input = forwardRef(({colIndex, id},inputRef) =>{
             inputChange(deletedWord);
         }
         
-    },[id, inputChange, inputRef, isAddedRow, nowColumnInfo.colname, nowColumnValidCheck.deleteWord, nowColumnValidCheck.error, nowColumnValidCheck.reg]);
+    },[firstVal, id, inputChange, inputRef, isAddedRow, nowColumnInfo.colname, nowColumnValidCheck.deleteWord, nowColumnValidCheck.error, nowColumnValidCheck.reg, updateListChange, updateListDelete]);
     
 
     return( 
@@ -126,8 +125,8 @@ const Input = forwardRef(({colIndex, id},inputRef) =>{
             textalign={nowColumnInfo.textalign} 
             width={nowColumnInfo.width} 
             value={nowVal === null ? '': nowVal }
-            onChange={handleChange}
-            onBlur={handleBlur}
+            // onChange={handleChange}
+            // onBlur={handleBlur}
             // notRequired에 있는 배열에 포함되면 필수항목이 아님.
             required={notRequired.every(val => val !== nowColumnInfo.colname) ? true : false}
             ref={inputRef}
