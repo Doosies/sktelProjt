@@ -61,14 +61,14 @@ export const inputValidCheck = [
     // 배터리
     {
         deleteWord:/^/g,
-        reg:/^/g,
+        reg:/^$|^\d$/g,
         error:`숫자가 아닌 값이 입력되었습니다. 확인해주세요.`,
         beforValue:'',
     },
     // 스크린 사이즈
     {
         deleteWord:/^ /g,
-        reg:/(^[1-9]{1}[[1-9]{0,1}]+$)|(^\d{1,}\.\d{0,2}$)/,
+        reg:/(^[1-9]{1}[[1-9]{0,1}]+$)|(^\d{1,}\.\d{0,2}$)|^$/,
         error:`
             입력된 값이 숫자가 아니거나.\n
             소수점 둘째 자리 이상 입력되었습니다.\n
@@ -79,7 +79,7 @@ export const inputValidCheck = [
     // 저장용량
     {
         deleteWord:/^/g,
-        reg:/^/g,
+        reg:/^$|^\d$/g,
         error:`숫자가 아닌 값이 입력되었습니다. 확인해주세요.`,
         beforValue:'',
     },

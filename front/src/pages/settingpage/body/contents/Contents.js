@@ -1,10 +1,10 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import CButton from '../../../../components/Button';
 import { phoneDataUpdate, phoneDataFetchAsync } from '../../../../modules/phoneData';
-import * as restAPI from '../../../../utils/api';
-import { inputValidCheck } from '../../../../utils/propertyInfo';
+// import * as restAPI from '../../../../utils/api';
+// import { inputValidCheck } from '../../../../utils/propertyInfo';
 import Tables from './Tables';
 
 const StyledContents = styled.div`
@@ -57,30 +57,29 @@ const ContentsBottom = styled.form`
 `;
 
 // 필수 입력 항목이 아닌것들
-const notRequired = [
-    "battery", "screen_size", "storage"
-];
+// const notRequired = [
+//     "battery", "screen_size", "storage"
+// ];
 
-//리스트가 1개 이상인지 확인하는 함수
-function isFilledList(list){
-    // console.log(list.length);
-    if(list.length > 0)
-        return true;
-    else   
-        return false;
-}
+// //리스트가 1개 이상인지 확인하는 함수
+// function isFilledList(list){
+//     // console.log(list.length);
+//     if(list.length > 0)
+//         return true;
+//     else   
+//         return false;
+// }
 
 function Contents(){
     const dispatch = useDispatch();
-    const {refData, dataChangeList, rows, error,loading} = useSelector( state =>({
-        refData: state.phoneData.refData,
+    const {dataChangeList, rows, error,loading} = useSelector( state =>({
         dataChangeList: state.phoneData.dataChangeList,
         rows: state.phoneData.data.rows,
         loading:state.phoneData.state.loading,
         error:state.phoneData.state.error,
     }), shallowEqual);
 
-    console.log("!!");
+    console.log("contents!!");
     useEffect(()=>{
         //NOTE - 화면이 로딩될 때 데이터들을 받아와줌.
         dispatch(phoneDataFetchAsync());
@@ -94,35 +93,30 @@ function Contents(){
     //NOTE - 적용버튼 클릭시
     const handleApply = () =>{
         
-        const addList = dataChangeList.dataAddList;
-        const deleteList = dataChangeList.datadDeleteList;
-        const updateList = dataChangeList.dataUpdateList;
-        // 만약 추가버튼을 눌러서 추가한 데이터가 있으면
-        if( isFilledList(addList) === true){
-            //adlist 모두 순환
-            addList.forEach( addedRowId => {
-                const rowIdx = rows.findIndex(originalRow=>originalRow.id === addedRowId);
-                // 추가된 row를 맨 앞 id를 자르고서 array에 넣어줌
-                const rowArray = Object.entries(rows[rowIdx]).splice(1);
-                // 추가된 row 하나 순환
-                rowArray.forEach((value,colIdx) => {
-                    // 해당 colum이 notRequired에 포함되지 않음
-                    if( notRequired.every(key => key !== value[0]) &&
-                    // 정규식을 통과 못헀거나 빈칸일 경우
-                    ( inputValidCheck[colIdx].reg.test(value[1]) === false || value[1] === "" )){
-                        // console.log(value[1]);
-                        // refData[]
-                        // alert();
-                        // console.log(rowIdx,value,colIdx);
-                        const refRowIdx = refData.findIndex(val => val.id === addedRowId);
-                        console.log(refData[refRowIdx]);
-                    // 정규식을 통과한 경우
-                    }else{
-                        // console.log(value[0]);
-                    }
-                });// rowArray.forEach()끝
-            });// addList.forEach() 끝
-        }
+        // const addList = dataChangeList.dataAddList;
+        // const deleteList = dataChangeList.datadDeleteList;
+        // const updateList = dataChangeList.dataUpdateList;
+        // // 만약 추가버튼을 눌러서 추가한 데이터가 있으면
+        // if( isFilledList(addList) === true){
+        //     //adlist 모두 순환
+        //     addList.forEach( addedRowId => {
+        //         const rowIdx = rows.findIndex(originalRow=>originalRow.id === addedRowId);
+        //         // const row = rows.find(ele => ele.id === addedRowId);
+        //         // row.foreach(val=>console.log(val));
+        //         // console.log(row);
+        //         // 추가된 row를 맨 앞 id를 자르고서 키와 값을 rowEntires에 넣음
+        //         const rowEntries = Object.entries(rows[rowIdx]).splice(1);
+        //         rowEntries.some((ele,idx) => {
+        //             if( ele[1] === "") {
+        //                 console.log("비어있어",ele[0]);
+        //                 // refData[rowIdx][idx].focus();
+        //                 // console.log(refData[rowIdx]);
+        //                 return true;
+        //             }
+        //             else return false;
+        //         })
+        //     });// addList.forEach() 끝
+        // }
     };
 
     if( loading ) return null;

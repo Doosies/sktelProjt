@@ -86,7 +86,6 @@ const phoneDataUpdateList = ({
     Delete:(id, colName) => ({
         type:PHONE_DATA_UPDATE_LIST_DELETE,
         id: id,
-        colName: colName,
     }),
 });
 
@@ -111,7 +110,7 @@ export default function phoneData(state = initialState, action){
                 draft.dataChangeList.dataAddList.push(init.id);
 
                 // ref 추가
-                draft.refData[draft.data.lastId].refs.push(action.ref);
+                // draft.refData[draft.data.lastId].refs.push(action.ref);
             });
         case PHONE_DATA_DELETE:
             return produce(state, draft=>{
@@ -138,24 +137,12 @@ export default function phoneData(state = initialState, action){
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////
         case PHONE_DATA_ADD_REF:
             return produce(state, draft=>{
-                // action.id, action.ref
-                const refIdx = state.refData.findIndex(row => row.id === action.id);
-                console.log(action.id,refIdx);
-                //해당 아이디가 없으면
-                if( refIdx === -1 ){
-                    draft.refData.push({id:action.id,refs:[]});
-                //존재하면
-                }else{
-                    const refCnt = state.refData[refIdx].length;
-                    draft.refData[refIdx].refs.push(action.ref);
-                }
-                // state.data.rows.forEach((row)=>{
-                //     const nowRow = Object.entries(row);
-                //     nowRow.forEach((val,idx) => {
-
-                //     });
-                //     draft.refData.push({id:row.id});
-                // });
+                // const refIdx = state.refData.findIndex(row => row.id === action.id );
+                // if( refIdx === -1 )
+                //     draft.refData.push({id:action.id,refs:[action.ref]});
+                // // //존재하면
+                // else
+                //     draft.refData[refIdx].refs.push(action.ref);
             });
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////
         case PHONE_DATA_UPDATE_LIST_CHANGE:

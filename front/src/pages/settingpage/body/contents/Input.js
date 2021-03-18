@@ -1,7 +1,7 @@
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, {forwardRef, useCallback,  useRef } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import styled, { css } from 'styled-components';
-import { phoneDataUpdateList, phoneDataUpdate,phoneDataAddRef} from '../../../../modules/phoneData';
+import { phoneDataUpdateList, phoneDataUpdate} from '../../../../modules/phoneData';
 import { columnPhoneInfo, inputValidCheck } from '../../../../utils/propertyInfo';
 import * as utils from '../../../../utils/utils';
 
@@ -22,14 +22,12 @@ const commaValues = [
 ]
 
 
-function Input({colIndex, id}){
-    // console.log("input",id);
+const Input= forwardRef(({colIndex, id},inputRef) =>{
+// function Input({colIndex, id}){
+    console.log("input");
     const dispatch = useDispatch();
-    useEffect(() => {
-        dispatch(phoneDataAddRef(id,inputRef.current));
-    }, [dispatch, id])
     // 포커싱 위한 ref
-    const inputRef = useRef();
+    // const inputRef = useRef();
     // alert 두번 나오는거 방지 위한 ref
     const didShowAlert = useRef(false);
     // 현재 data의 column 정보와 검증값
@@ -52,7 +50,11 @@ function Input({colIndex, id}){
                      : false,
     }),shallowEqual);
 
-
+    // useEffect(()=>{
+    //     // if( inputRef.current !== null)
+    //         dispatch(phoneDataAddRef(id,inputRef))
+    // // eslint-disable-next-line react-hooks/exhaustive-deps
+    // },[]);
      
     const callbackDispatch = useCallback((dispatchFunc) =>{
         return(...args)=>{
@@ -115,7 +117,7 @@ function Input({colIndex, id}){
             inputChange(deletedWord);
         }
         
-    },[nowColumnValidCheck.deleteWord, nowColumnValidCheck.reg, nowColumnValidCheck.error, inputChange, firstVal, isAddedRow, updateListDelete, id, nowColumnInfo.colname, updateListChange]);
+    },[firstVal, id, inputChange, inputRef, isAddedRow, nowColumnInfo.colname, nowColumnValidCheck.deleteWord, nowColumnValidCheck.error, nowColumnValidCheck.reg, updateListChange, updateListDelete]);
     
 
     return( 
@@ -131,5 +133,6 @@ function Input({colIndex, id}){
             // placeholder={}
         />
     );
-}
+// }
+});
 export default React.memo(Input);
