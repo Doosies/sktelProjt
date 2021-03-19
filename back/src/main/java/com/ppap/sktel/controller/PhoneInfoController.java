@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,11 +39,17 @@ public class PhoneInfoController {
     @GetMapping(value = "/api/phoneinfo")
     public HashMap<String, Object>  test() {
         HashMap<String, Object> result = new HashMap<String, Object>();
-        List<PhoneInfo> lists = phoneInfoService.getAllInfo();
-        int lastId =  lists.get(lists.size()-1).getId();
+        // List<PhoneInfo> lists = phoneInfoService.getAllInfo();
+        // int lastId =  lists.get(lists.size()-1).getId();
+        List<PhoneInfo> lists = new ArrayList<PhoneInfo>();
+        PhoneInfo info1 = new PhoneInfo(1, "model1", "모델1", "10000", "lg", (java.sql.Date) new Date(65456), "1", "1", "1");
+        lists.add(info1);
 
-        result.put("lastId",lastId);
-        result.put("rows",lists);
+        result.put("lastId", 0);
+        result.put("rows", lists);
+
+        // result.put("lastId",lastId);
+        // result.put("rows",lists);
 
         return result;
     }
