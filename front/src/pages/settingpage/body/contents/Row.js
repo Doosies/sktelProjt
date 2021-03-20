@@ -28,17 +28,30 @@ const DeleteButton = styled(Button)`
 `;
 
 function Row({top, rowId}){
-    console.log("row",rowId,"top: ",top);
+    // console.log("row",rowId,"top: ",top);
     const dispatch = useDispatch();
     // columns 정보
     const columns = useMemo(() => columnPhoneInfo,[]);
     const inputsRef = !top && Array(8).fill(0).map(() => createRef());
 
-    useEffect(()=> !top &&
-        dispatch(phoneDataAddRef(rowId,inputsRef)) && console.log("ref dispatched")
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    ,[]);
+    useEffect(()=> {
+        console.log(rowId,top);
+        !top &&
+            dispatch(phoneDataAddRef(rowId,inputsRef));
+
+        return ()=>{
+            console.log("없어져",rowId);
+            // const arr = Object.entries(inputsRef);
+            // arr.forEach( (ele,key) => {
+            //         inputsRef[key].current =1;
+            //     }
+            // )
+        };
+            // console.log(aa)
+            
+            // console.log(inputsRef[0]);
     
+    },[dispatch, inputsRef, rowId, top]);
 
     const handleDeleteButton = useCallback( (id) => {
             // 제거 누른 id는 data.rows 에서 제거함.

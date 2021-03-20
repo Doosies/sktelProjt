@@ -92,7 +92,8 @@ const Input = forwardRef(({colIndex, id},inputRef) =>{
             if ( !didShowAlert.current) {
                 //안내문 출력
                 alert(nowColumnValidCheck.error);
-                // inputChange(firstVal);
+                //처음값으로 되돌려버림
+                inputChange(firstVal);
                 didShowAlert.current = false;
             } 
             didShowAlert.current = !didShowAlert.current;
@@ -103,6 +104,7 @@ const Input = forwardRef(({colIndex, id},inputRef) =>{
             const modifiedValue = commaValues.some(val => val === nowColumnInfo.colname)
             ? utils.comma(deletedWord)
             : deletedWord;
+            // const firstValue = firstVal || '';
             const firstValue = firstVal === null ? '': firstVal;
             
             // NOTE - 이 if문은 column값이 수정 됐는지 확인한다.

@@ -4,9 +4,12 @@ import styled from 'styled-components';
 import CButton from '../../../../components/Button';
 import { phoneDataUpdate, phoneDataFetchAsync } from '../../../../modules/phoneData';
 import { inputValidCheck } from '../../../../utils/propertyInfo';
+import * as utils from '../../../../utils/utils';
+
 // import * as restAPI from '../../../../utils/api';
 // import { inputValidCheck } from '../../../../utils/propertyInfo';
 import Tables from './Tables';
+
 
 const StyledContents = styled.div`
     width:100%;
@@ -75,7 +78,7 @@ function isFilledList(list){
 }
 
 function Contents(){
-    console.log("contents!!"); 
+    // console.log("contents!!"); 
     const dispatch = useDispatch();
     const {refData, dataChangeList, rows, error,loading} = useSelector( state =>({
         refData: state.phoneData.refData,
@@ -104,31 +107,25 @@ function Contents(){
         // 만약 추가버튼을 눌러서 추가한 데이터가 있으면
         if( isFilledList(addList) === true){
             //adlist 모두 순환
-            addList.forEach( addedRowId => {
+            addList.some( addedRowId => {
                 const rowIdx = rows.findIndex(originalRow=>originalRow.id === addedRowId);
-                // const row = rows.find(ele => ele.id === addedRowId);
-                // row.foreach(val=>console.log(val));
-                // console.log(row);
                 // 추가된 row를 맨 앞 id를 자르고서 키와 값을 rowEntires에 넣음
                 const rowEntries = Object.entries(rows[rowIdx]).splice(1);
-
-                // if( notRequired.every(key => key !== value[0]) 
-                // && inputValidCheck[colIdx].reg.test(value[1]) === false // 정규식을 통과 못헀거나 빈칸일 경우(
-                // || value[1] === "" )){
-
-                    rowEntries.some((ele,colIdx) => {
-                        const key = ele[0];
-                        const val = ele[1]
-                        // 빈칸이거나 정규식을 통과하지 못했을 때
-                        if( ( val === null || val === ""|| val === " "|| inputValidCheck[colIdx].reg.test(val)===false ) 
-                                && notRequired.every(colName => colName !== key )) {
-                            refData[rowIdx].refs[colIdx].current.focus();
-                            return true;
-                        }
-                        else return false;
-                    })
                 
-                
+                // 빈칸이 있거나 정규식을 통과 못하면 TRUE 아니면 FALSE
+                const isPass = rowEntries.some((ele,colIdx) => {
+                    const key = ele[0];
+                    const val = commaValues.some(val=>val === key) ? utils.uncomma(ele[1]) : ele[1];
+                    // 빈칸이거나 정규식을 통과하지 못했을 때 포커싱 후 true 리턴
+                    if( ( !val || val === " "|| inputValidCheck[colIdx].reg.test(val)===false ) 
+                            && notRequired.every(colName => colName !== key )) {
+                        //포커싱 해줌
+                        refData[rowIdx].refs[colIdx].current.focus();
+                        return true;
+                    }else return false;
+                });
+                if( isPass )return true;
+                else return false;
             });// addList.forEach() 끝
         }
     };

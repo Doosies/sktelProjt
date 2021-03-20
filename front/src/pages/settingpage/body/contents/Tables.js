@@ -9,7 +9,7 @@ const StyledTable = styled.div`
 
 function Tables(){
     const rows = useSelector( state =>state.phoneData.data.rows);
-    console.log("tables");
+    // console.log("tables");
 
     return(
         <StyledTable>
