@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
+import { createRef } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import CButton from '../../../../components/Button';
@@ -80,24 +81,33 @@ function isFilledList(list){
 function Contents(){
     // console.log("contents!!"); 
     const dispatch = useDispatch();
-    const {refData, dataChangeList, rows, error,loading} = useSelector( state =>({
-        refData: state.phoneData.refData,
+    const {dataChangeList, rows, error,loading} = useSelector( state =>({
+        // refData: state.phoneData.refData,
         dataChangeList: state.phoneData.dataChangeList,
         rows: state.phoneData.data.rows,
         loading:state.phoneData.state.loading,
         error:state.phoneData.state.error,
     }), shallowEqual);
 
+
+    // const itemsRef = useRef([]);
+    const refs = useMemo( ()=> new Array(rows.length).fill().map(()=>new Array(8).fill().map(()=>createRef())),[rows.length]);
+
+
     useEffect(()=>{
         //NOTE - 화면이 로딩될 때 데이터들을 받아와줌.
         dispatch(phoneDataFetchAsync());
-    },[dispatch]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[]);
 
     //NOTE - 추가버튼 클릭시
     const handleAdd =  ()=>{
         dispatch(phoneDataUpdate.Add());
     };
-
+    //NOTE - 제거 버튼 클릭시
+    const handleDelete = useCallback( (id) => {
+        dispatch(phoneDataUpdate.Delete(id));
+    },[dispatch]);
     //NOTE - 적용버튼 클릭시
     const handleApply = () =>{
         
@@ -120,7 +130,8 @@ function Contents(){
                     if( ( !val || val === " "|| inputValidCheck[colIdx].reg.test(val)===false ) 
                             && notRequired.every(colName => colName !== key )) {
                         //포커싱 해줌
-                        refData[rowIdx].refs[colIdx].current.focus();
+                        // refData[rowIdx].refs[colIdx].current.focus();
+                        refs[rowIdx][colIdx].current.focus();
                         return true;
                     }else return false;
                 });
@@ -134,6 +145,7 @@ function Contents(){
     if( error ) return <div>에러 발생 자세한건 로그 참조</div>;
     if( !rows ) return <div>서버로부터 데이터 로딩 실패!</div>;
     
+
     return(
         <StyledContents className="contents">
             <ContentsBox>
@@ -145,11 +157,12 @@ function Contents(){
                         <CButton onClick={ handleAdd } width="60px" height="40px" font_size="13px" font_weight="bold" border>Add</CButton>
                         <CButton onClick={ handleApply } width="60px" height="40px" font_size="13px" font_weight="bold" border>Apply</CButton>
                     </ContentsTopButtons>
-                    {!loading && !error && <Tables/>}
+                    {!loading && !error && <Tables itemsRef={refs}/>}
+                    {/* {!loading && !error && <Tables/>} */}
                 </ContentsBottom>
             </ContentsBox>
         </StyledContents>
     );
 }
 
-export default React.memo(Contents);
+export default React.memo(Contents)

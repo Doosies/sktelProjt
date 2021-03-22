@@ -10,6 +10,7 @@ export const createPromiseThunk = (type, promiseCreator) =>{
             // console.log(promiseCreator);
             const payload = await promiseCreator(param);
             dispatch({type:SUCCESS, payload});
+            // successCallBack();
         }catch(e){
             dispatch({type:ERROR, error:e, param});
         }
@@ -53,20 +54,8 @@ export const handleAsyncActions = (type) =>{
                     draft.state = reducerUtils.success().state;
                     draft.firstData = reducerUtils.success(action.payload).data;
                     draft.data = reducerUtils.success(action.payload).data;
-
-                    // ref 넣기위해 
-                    // draft.data.rows.forEach(row => {
-                    //     // refData는 배열.
-                    //     draft.refData.push({ id:row.id });
-                    // });
+                    // draft.refData
                 });
-            // case SUCCESS:
-            //     return{
-            //         ...state,
-            //         state:reducerUtils.success().state,
-            //         firstData:reducerUtils.success(action.payload).data,
-            //         data:reducerUtils.success(action.payload).data,
-            //     };
             case ERROR:
                 return{
                     ...state,

@@ -11,7 +11,7 @@ const PHONE_DATA_ADD = 'phoneData/PHONE_DATA_ADD';
 const PHONE_DATA_DELETE = 'phoneData/PHONE_DATA_DELETE';
 const PHONE_DATA_CHANGE = 'phoneData/PHONE_DATA_CHANGE';
 ////////////////////////////////////////////////////////
-const PHONE_DATA_ADD_REF = 'phoneData/PHONE_DATA_ADD_REF';
+// const PHONE_DATA_ADD_REF = 'phoneData/PHONE_DATA_ADD_REF';
 ////////////////////////////////////////////////////////
 const PHONE_DATA_UPDATE_LIST_CHANGE = 'phoneData/PHONE_DATA_UPDATE_LIST_CHANGE';
 const PHONE_DATA_UPDATE_LIST_DELETE = 'phoneData/PHONE_DATA_UPDATE_LIST_DELETE';
@@ -39,7 +39,7 @@ const initialState = {
         error:false,
     },
     data:dataInit,
-    refData:[],
+    // refData:[],
     firstData:dataInit,
     dataChangeList:{
         dataAddList:[],
@@ -68,11 +68,10 @@ const phoneDataUpdate =({
         value: value,
     }),
 });
-const phoneDataAddRef=(id, ref) =>({
-    type:PHONE_DATA_ADD_REF,
-    id:id,
-    ref:ref,
-});
+// const phoneDataAddRef=(length) =>({
+//     type:PHONE_DATA_ADD_REF,
+//     length,
+// });
 
 const phoneDataUpdateList = ({
     Change:(id,colName, value) => ({
@@ -124,7 +123,7 @@ export default function phoneData(state = initialState, action){
             // });
         case PHONE_DATA_DELETE:
             const dataAddListIdx = state.dataChangeList.dataAddList.findIndex( val => val === action.id);
-            console.log("데이터삭제",action);
+            console.log("deleteRow",action);
             return{
                 ...state,
                 // refData:state.refData.filter(row => row.id !== action.id),
@@ -184,22 +183,22 @@ export default function phoneData(state = initialState, action){
         //             }
         //         ),
         //     };
-        case PHONE_DATA_ADD_REF:
-            // console.log("ref추가");
-            return produce(state, draft=>{
-                draft.refData.push({id:action.id, refs:action.ref});
+        // case PHONE_DATA_ADD_REF:
+        //     // console.log("ref추가");
+        //     return produce(state, draft=>{
+        //         draft.refData.push({id:action.id, refs:action.ref});
 
                 
-                // const refIdx = state.refData.findIndex(row=>row.id===action.id);
-                // // row가 존재하지 않을 경우
-                // if( refIdx === -1 ){
-                //     draft.refData.push({id:action.id, refs:[action.ref]});
-                // //row가 존재할 경우
-                // }else{
-                //     draft.refData[refIdx].refs.push(action.ref);
-                // }
+        //         // const refIdx = state.refData.findIndex(row=>row.id===action.id);
+        //         // // row가 존재하지 않을 경우
+        //         // if( refIdx === -1 ){
+        //         //     draft.refData.push({id:action.id, refs:[action.ref]});
+        //         // //row가 존재할 경우
+        //         // }else{
+        //         //     draft.refData[refIdx].refs.push(action.ref);
+        //         // }
                 
-            });
+        //     });
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////
         case PHONE_DATA_UPDATE_LIST_CHANGE:
             return produce(state, draft =>{
@@ -217,6 +216,14 @@ export default function phoneData(state = initialState, action){
 
             });
         case PHONE_DATA_UPDATE_LIST_DELETE:
+            // const idx = state.dataChangeList.dataUpdateList.findIndex( row => row.id === action.id);
+            // return{
+            //     ...state,
+            //     dataChangeList:{
+            //         ...state.dataChangeList,
+            //         dataUpdateList: idx !== 1 && st
+            //     }
+            // };
             return produce(state,draft=>{
                 const idx = state.dataChangeList.dataUpdateList.findIndex( row => row.id === action.id);
                 // row에 1개이상 값이 들어있을 떄
@@ -237,7 +244,7 @@ export default function phoneData(state = initialState, action){
 
 export {phoneDataFetchAsync,
         //phoneDataChange, phoneDataDelete, phoneDataAdd,
-        phoneDataAddRef,
+        // phoneDataAddRef,
         phoneDataUpdate,
         phoneDataUpdateList,
         };

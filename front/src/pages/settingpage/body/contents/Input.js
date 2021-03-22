@@ -1,7 +1,7 @@
-import React, {forwardRef, useCallback,  useEffect,  useLayoutEffect,  useRef } from 'react';
+import React, {forwardRef, useCallback,  useRef } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import styled, { css } from 'styled-components';
-import { phoneDataUpdateList, phoneDataUpdate, phoneDataAddRef} from '../../../../modules/phoneData';
+import { phoneDataUpdateList, phoneDataUpdate} from '../../../../modules/phoneData';
 import { columnPhoneInfo, inputValidCheck } from '../../../../utils/propertyInfo';
 import * as utils from '../../../../utils/utils';
 
@@ -22,9 +22,9 @@ const commaValues = [
 ]
 
 
-const Input = forwardRef(({colIndex, id},inputRef) =>{
+const Input = forwardRef(({colIndex, id,},inputRef) =>{
+    // const inputRef = useRef('');
     const dispatch = useDispatch();
-    // const inputRef = useRef(rreeff);
     // alert 두번 나오는거 방지 위한 ref
     const didShowAlert = useRef(false);
     // 현재 data의 column 정보와 검증값
@@ -118,7 +118,7 @@ const Input = forwardRef(({colIndex, id},inputRef) =>{
             onChange={handleChange}
             onBlur={handleBlur}
             // notRequired에 있는 배열에 포함되면 필수항목이 아님.
-            // required={notRequired.every(val => val !== nowColumnInfo.colname) ? true : false}
+            required={notRequired.every(val => val !== nowColumnInfo.colname) ? true : false}
             ref={inputRef}
             // placeholder={}
         />

@@ -1,8 +1,8 @@
-import React, { createRef, forwardRef, useCallback, useEffect, useMemo, useRef, useState, } from 'react'
-import { useDispatch } from 'react-redux';
-import styled, { css } from 'styled-components';
-import Button from '../../../../components/Button';
-import { phoneDataAddRef, phoneDataUpdate } from '../../../../modules/phoneData';
+import React, { forwardRef, useCallback } from 'react'
+import { useDispatch} from 'react-redux';
+import styled, {  } from 'styled-components';
+import DeleteButton from '../../../../components/DeleteButton';
+import {  phoneDataUpdate } from '../../../../modules/phoneData';
 import { columnPhoneInfo } from '../../../../utils/propertyInfo';
 import Column from './Column';
 import Input from './Input';
@@ -13,65 +13,10 @@ const StyledRow = styled.div`
     align-items:center;
 `;
 
-const StyledColumn = styled.div`
-    border-bottom: solid 1px;
-    padding-top:10px;
-    padding-bottom:10px;
-    padding-left:5px;
-    padding-right:5px;
-    font-size:12px;
-    height:20px;
-
-    width: 100px;
-    ${props=>css` 
-        width: ${props.width}; 
-        text-align:${props.textalign};
-    `}
-
-    /* 제일 상단에 있는 column일 경우 */
-    ${({ top }) => top && 
-        css `
-            padding-top:15px;
-            padding-bottom:15px;
-            font-size:15px;
-            font-weight:bold;
-    `}
-`;
-
-
-const DeleteButton = styled(Button)`
-    background-color: #ff7787;
-    margin-right:5px;
-    color:white;
-    width:40px;
-    
-    ${({top}) => top && css`
-        background-color:white;
-        color:white;
-        width:40px;
-    `}
-`;
-
-const Row = forwardRef(({top, rowId, children},inputsRef) =>{
-    //test
-    // const [inputsRef, setTestRefs] = useState([]);
-
-
+const Row = ({top=false, rowId, itemsRef=''}) =>{
+    console.log("rowRender");
     const dispatch = useDispatch();
-    // columns 정보
-    const columns = useMemo(() => columnPhoneInfo,[]);
-    // const inputsRef = useMemo(()=>
-    //     !top && 
-    //         Array(8).fill(0).map(() => createRef()
-    // ),[]);
 
-    // useEffect(()=>{
-    //     // inputsRef = Array(8).fill(0).map(() => createRef());
-    //     console.log(inputsRef);
-    // },[]);
-    // console.log(refs)
-    // const inputsRef = useRef({});
-    // console.log(inputsRef);
     const handleDeleteButton = useCallback( (id) => {
             dispatch(phoneDataUpdate.Delete(id));
     },[]);
@@ -80,7 +25,7 @@ const Row = forwardRef(({top, rowId, children},inputsRef) =>{
         <StyledRow>
         {/* {testRefs.map(val=>val.id)} */}
             <DeleteButton top/>
-            {columns.map((column)=>
+            {columnPhoneInfo.map((column)=>
                 <Column  key={`head_${column.name}`} width={column.width} top>
                     {column.name}
                 </Column>
@@ -89,10 +34,19 @@ const Row = forwardRef(({top, rowId, children},inputsRef) =>{
 
     );
     return( 
-        <StyledRow>
+        <StyledRow >
             <DeleteButton onClick={()=>handleDeleteButton(rowId)}> delete </DeleteButton>
-            {children}
+            {columnPhoneInfo.map((column, index)=>
+                <Column key={`row_${rowId}_${column.name}`} width={column.width} textalign={column.textalign}>
+                    <Input ref={itemsRef[index]} colIndex={index} id={rowId} column={column} />
+                </Column>   
+            )}
         </StyledRow>
     );
-});
-export default React.memo(Row);
+}
+
+export default React.memo(Row, 
+    (prev,next)=>{
+        return prev.itemsRef  !== next.itemsRef
+        || prev.top === next.top
+    });
