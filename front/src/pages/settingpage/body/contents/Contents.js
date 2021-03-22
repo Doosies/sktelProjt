@@ -91,7 +91,7 @@ function Contents(){
     useEffect(()=>{
         //NOTE - 화면이 로딩될 때 데이터들을 받아와줌.
         dispatch(phoneDataFetchAsync());
-    },[]);
+    },[dispatch]);
 
     //NOTE - 추가버튼 클릭시
     const handleAdd =  ()=>{
@@ -142,8 +142,8 @@ function Contents(){
                 </ContentsTop>
                 <ContentsBottom>
                     <ContentsTopButtons>
-                        <CButton onClick={ handleAdd } width="60px" height="40px" font_size="13px" font_weight="bold" border>추가</CButton>
-                        <CButton onClick={ handleApply } width="60px" height="40px" font_size="13px" font_weight="bold" border>적용</CButton>
+                        <CButton onClick={ handleAdd } width="60px" height="40px" font_size="13px" font_weight="bold" border>Add</CButton>
+                        <CButton onClick={ handleApply } width="60px" height="40px" font_size="13px" font_weight="bold" border>Apply</CButton>
                     </ContentsTopButtons>
                     {!loading && !error && <Tables/>}
                 </ContentsBottom>

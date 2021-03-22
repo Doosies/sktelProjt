@@ -1,4 +1,4 @@
-import React, {forwardRef, useCallback,  useEffect,  useRef } from 'react';
+import React, {forwardRef, useCallback,  useEffect,  useLayoutEffect,  useRef } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import styled, { css } from 'styled-components';
 import { phoneDataUpdateList, phoneDataUpdate, phoneDataAddRef} from '../../../../modules/phoneData';
@@ -24,8 +24,7 @@ const commaValues = [
 
 const Input = forwardRef(({colIndex, id},inputRef) =>{
     const dispatch = useDispatch();
-    // 포커싱 위한 ref
-    // const inputRef = useRef();
+    // const inputRef = useRef(rreeff);
     // alert 두번 나오는거 방지 위한 ref
     const didShowAlert = useRef(false);
     // 현재 data의 column 정보와 검증값
@@ -46,13 +45,6 @@ const Input = forwardRef(({colIndex, id},inputRef) =>{
                      ? true
                      : false,
     }),shallowEqual);
-     
-    // useEffect(() => {
-    //     // console.log(inputRef,id);
-    //     if( id !== "")
-    //         dispatch(phoneDataAddRef(id,inputRef));
-    //     // return( );
-    // }, [])
 
     const callbackDispatch = useCallback((dispatchFunc) =>{
         return(...args)=>{

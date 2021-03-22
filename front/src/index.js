@@ -7,7 +7,7 @@ import { applyMiddleware, createStore } from 'redux';
 import rootReducer from './modules';
 import { Provider } from 'react-redux';
 import {composeWithDevTools} from 'redux-devtools-extension'
-// import logger from 'redux-logger';
+import logger from 'redux-logger';
 import ReduxThunk from 'redux-thunk';
 
 const store = createStore(rootReducer, composeWithDevTools(
@@ -17,9 +17,9 @@ const store = createStore(rootReducer, composeWithDevTools(
 
 ReactDOM.render(
   <Provider store={store}>
-    {/* <React.StrictMode> */}
+    <React.StrictMode>
       <App />
-    {/* </React.StrictMode> */}
+    </React.StrictMode>
   </Provider>,
     document.getElementById('root')
 );
