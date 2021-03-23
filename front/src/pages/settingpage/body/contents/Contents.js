@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import { createRef } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
@@ -91,12 +91,30 @@ function Contents(){
 
 
     // const itemsRef = useRef([]);
-    const refs = useMemo( ()=> new Array(rows.length).fill().map(()=>new Array(8).fill().map(()=>createRef())),[rows.length]);
-    const changeRefsRow = (rowIdx,colIdx,ele) =>{
-        refs[rowIdx][colIdx].current = ele;
-        return refs[rowIdx][colIdx];
-    }
+    // const refs = useMemo( ()=> new Array(rows.length).fill().map(()=>new Array(8).fill().map(()=>createRef())),[rows.length]);
+    // const refs = useMemo( ()=> new Array(rows.length).fill().map(()=>createRef()),[rows.length]);
+    // const changeRefsRow = (rowIdx,colIdx,ele) =>{
+    // const refs = useRef(new Array(rows.length));
+    const refs = useRef(new Array(rows.length).fill());
+    // console.log(refs.current);
+    // console.log(refs.current);
+    // useEffect(()=>{
+    //     refs.current = refs.current.slice(0, rows.length);
+    //     // console.log(refs.current.length, rows.length);
+    // },[rows.length]);
+    //     refs[rowIdx][colIdx] = {...refs[rowIdx][colIdx], current:ele};
+    //     return refs[rowIdx][colIdx];
+    // }
+    //  const changeRefsRow = (rowIdx,ele) =>{
+    //      refs.current[rowIdx] = ele;
+    //     //  console.log(refs.current[rowIdx].children[1])
+    //     console.log(refs);
+    //      return refs.current[rowIdx];
+    //     // refs[rowIdx][colIdx] = {...refs[rowIdx][colIdx], current:ele};
+    //     // return refs[rowIdx][colIdx];
+    // }
     useEffect(()=>{
+        console.log("contentl.js");
         //NOTE - 화면이 로딩될 때 데이터들을 받아와줌.
         dispatch(phoneDataFetchAsync());
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -133,8 +151,10 @@ function Contents(){
                             && notRequired.every(colName => colName !== key )) {
                         //포커싱 해줌
                         // refData[rowIdx].refs[colIdx].current.focus();
-                        console.log(refs);
-                        refs[rowIdx][colIdx].current.focus();
+                        // 아래 주석은 해당 컴포넌트임.
+                        //   테이블   Row        Column           Input
+                        refs.current[rowIdx].children[colIdx+1].children[0].focus();
+                        // refs[rowIdx][colIdx].current.focus();
                         return true;
                     }else return false;
                 });
@@ -160,7 +180,7 @@ function Contents(){
                         <CButton onClick={ handleAdd } width="60px" height="40px" font_size="13px" font_weight="bold" border>Add</CButton>
                         <CButton onClick={ handleApply } width="60px" height="40px" font_size="13px" font_weight="bold" border>Apply</CButton>
                     </ContentsTopButtons>
-                    {!loading && !error && <Tables itemsRef={refs} changeRefsRow={changeRefsRow}/>}
+                    {!loading && !error && <Tables  ref={refs}/>}
                     {/* {!loading && !error && <Tables/>} */}
                 </ContentsBottom>
             </ContentsBox>

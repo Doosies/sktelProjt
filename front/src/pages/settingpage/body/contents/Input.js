@@ -22,10 +22,11 @@ const commaValues = [
 ]
 
 
-const Input = forwardRef(({colIndex, id,},ref) =>{
+const Input = ({colIndex, id,}) =>{
+    console.log("input.js");
     // console.log(ref());
     // const inputRef = useRef('');
-    // const ref = inputRef();
+    const ref = useRef();
     const dispatch = useDispatch();
     // alert 두번 나오는거 방지 위한 ref
     const didShowAlert = useRef(false);
@@ -126,5 +127,5 @@ const Input = forwardRef(({colIndex, id,},ref) =>{
             // placeholder={}
         />
     );
-});
+}
 export default React.memo(Input);

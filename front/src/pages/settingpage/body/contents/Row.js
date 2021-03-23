@@ -1,4 +1,4 @@
-import React, { forwardRef, useCallback } from 'react'
+import React, { forwardRef, useCallback, useEffect, useRef } from 'react'
 import { useDispatch} from 'react-redux';
 import styled, {  } from 'styled-components';
 import DeleteButton from '../../../../components/DeleteButton';
@@ -13,15 +13,9 @@ const StyledRow = styled.div`
     align-items:center;
 `;
 
-const Row = ({top=false, rowId, rowIndex, changeRefsRow}) =>{
-    // console.log("rowRender",top,rowId,itemsRef);
+const Row = forwardRef(({top=false, rowId, rowIndex},inputRefs) =>{
+    console.log("row.js");
     const dispatch = useDispatch();
-
-    // const setEle = (rowIdx,colIdx,element) =>{
-    //     const ele = changeRefsRow(rowIdx,colIdx,element);
-    //     // console.log(ele.current);
-    //     return ele;
-    // }
 
     const handleDeleteButton = useCallback( (id) => {
             dispatch(phoneDataUpdate.Delete(id));
@@ -40,16 +34,16 @@ const Row = ({top=false, rowId, rowIndex, changeRefsRow}) =>{
 
     );
     return( 
-        <StyledRow >
+        <StyledRow ref={el=>inputRefs.current[rowIndex]=el}>
             <DeleteButton onClick={()=>handleDeleteButton(rowId)}> delete </DeleteButton>
             {columnPhoneInfo.map((column, colIndex)=>
                 <Column key={`row_${rowId}_${column.name}`} width={column.width} textalign={column.textalign}>
-                    <Input ref={((ele)=>changeRefsRow(rowIndex,colIndex,ele))()} colIndex={colIndex} id={rowId} column={column} />
+                    <Input colIndex={colIndex} id={rowId} column={column} />
                 </Column>   
             )}
         </StyledRow>
     );
-}
+});
 
 export default React.memo(Row, 
     (prev,next)=>{
