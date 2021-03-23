@@ -92,8 +92,10 @@ function Contents(){
 
     // const itemsRef = useRef([]);
     const refs = useMemo( ()=> new Array(rows.length).fill().map(()=>new Array(8).fill().map(()=>createRef())),[rows.length]);
-
-
+    const changeRefsRow = (rowIdx,colIdx,ele) =>{
+        refs[rowIdx][colIdx].current = ele;
+        return refs[rowIdx][colIdx];
+    }
     useEffect(()=>{
         //NOTE - 화면이 로딩될 때 데이터들을 받아와줌.
         dispatch(phoneDataFetchAsync());
@@ -131,6 +133,7 @@ function Contents(){
                             && notRequired.every(colName => colName !== key )) {
                         //포커싱 해줌
                         // refData[rowIdx].refs[colIdx].current.focus();
+                        console.log(refs);
                         refs[rowIdx][colIdx].current.focus();
                         return true;
                     }else return false;
@@ -157,7 +160,7 @@ function Contents(){
                         <CButton onClick={ handleAdd } width="60px" height="40px" font_size="13px" font_weight="bold" border>Add</CButton>
                         <CButton onClick={ handleApply } width="60px" height="40px" font_size="13px" font_weight="bold" border>Apply</CButton>
                     </ContentsTopButtons>
-                    {!loading && !error && <Tables itemsRef={refs}/>}
+                    {!loading && !error && <Tables itemsRef={refs} changeRefsRow={changeRefsRow}/>}
                     {/* {!loading && !error && <Tables/>} */}
                 </ContentsBottom>
             </ContentsBox>

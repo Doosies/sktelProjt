@@ -1,4 +1,4 @@
-import React, {forwardRef, useCallback,  useRef } from 'react';
+import React, {forwardRef, useCallback,  useEffect,  useRef } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import styled, { css } from 'styled-components';
 import { phoneDataUpdateList, phoneDataUpdate} from '../../../../modules/phoneData';
@@ -22,8 +22,10 @@ const commaValues = [
 ]
 
 
-const Input = forwardRef(({colIndex, id,},inputRef) =>{
+const Input = forwardRef(({colIndex, id,},ref) =>{
+    // console.log(ref());
     // const inputRef = useRef('');
+    // const ref = inputRef();
     const dispatch = useDispatch();
     // alert 두번 나오는거 방지 위한 ref
     const didShowAlert = useRef(false);
@@ -79,7 +81,8 @@ const Input = forwardRef(({colIndex, id,},inputRef) =>{
         // 값이 빈값이고, 필수값일 경우
         || (deletedWord ==="" && notRequired.every(val=>val !== nowColumnInfo.colname))){
             // 포커싱이 바뀌어도 다시 포커싱해줌.
-            inputRef.current.focus();
+            // console.log(ref);
+            ref.current.focus();
             // alert 두번 나오는거 버그 수정 위한 if문
             if ( !didShowAlert.current) {
                 //안내문 출력
@@ -108,7 +111,7 @@ const Input = forwardRef(({colIndex, id,},inputRef) =>{
             inputChange(modifiedValue);
         }
         
-    },[firstVal, id, inputChange, inputRef, isAddedRow, nowColumnInfo.colname, nowColumnValidCheck.deleteWord, nowColumnValidCheck.error, nowColumnValidCheck.reg, updateListChange, updateListDelete]);
+    },[firstVal, id, inputChange, isAddedRow, nowColumnInfo.colname, nowColumnValidCheck.deleteWord, nowColumnValidCheck.error, nowColumnValidCheck.reg, ref, updateListChange, updateListDelete]);
 
     return( 
         <StyledInput 
@@ -119,7 +122,7 @@ const Input = forwardRef(({colIndex, id,},inputRef) =>{
             onBlur={handleBlur}
             // notRequired에 있는 배열에 포함되면 필수항목이 아님.
             required={notRequired.every(val => val !== nowColumnInfo.colname) ? true : false}
-            ref={inputRef}
+            ref={ref}
             // placeholder={}
         />
     );

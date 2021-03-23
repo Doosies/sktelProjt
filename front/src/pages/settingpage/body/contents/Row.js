@@ -13,9 +13,15 @@ const StyledRow = styled.div`
     align-items:center;
 `;
 
-const Row = ({top=false, rowId, itemsRef=''}) =>{
-    console.log("rowRender");
+const Row = ({top=false, rowId, rowIndex, changeRefsRow}) =>{
+    // console.log("rowRender",top,rowId,itemsRef);
     const dispatch = useDispatch();
+
+    // const setEle = (rowIdx,colIdx,element) =>{
+    //     const ele = changeRefsRow(rowIdx,colIdx,element);
+    //     // console.log(ele.current);
+    //     return ele;
+    // }
 
     const handleDeleteButton = useCallback( (id) => {
             dispatch(phoneDataUpdate.Delete(id));
@@ -36,9 +42,9 @@ const Row = ({top=false, rowId, itemsRef=''}) =>{
     return( 
         <StyledRow >
             <DeleteButton onClick={()=>handleDeleteButton(rowId)}> delete </DeleteButton>
-            {columnPhoneInfo.map((column, index)=>
+            {columnPhoneInfo.map((column, colIndex)=>
                 <Column key={`row_${rowId}_${column.name}`} width={column.width} textalign={column.textalign}>
-                    <Input ref={itemsRef[index]} colIndex={index} id={rowId} column={column} />
+                    <Input ref={((ele)=>changeRefsRow(rowIndex,colIndex,ele))()} colIndex={colIndex} id={rowId} column={column} />
                 </Column>   
             )}
         </StyledRow>
@@ -47,6 +53,5 @@ const Row = ({top=false, rowId, itemsRef=''}) =>{
 
 export default React.memo(Row, 
     (prev,next)=>{
-        return prev.itemsRef  !== next.itemsRef
-        || prev.top === next.top
+        return prev.top === next.top
     });
