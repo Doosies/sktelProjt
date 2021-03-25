@@ -11,8 +11,6 @@ const PHONE_DATA_ADD = 'phoneData/PHONE_DATA_ADD';
 const PHONE_DATA_DELETE = 'phoneData/PHONE_DATA_DELETE';
 const PHONE_DATA_CHANGE = 'phoneData/PHONE_DATA_CHANGE';
 ////////////////////////////////////////////////////////
-// const PHONE_DATA_ADD_REF = 'phoneData/PHONE_DATA_ADD_REF';
-////////////////////////////////////////////////////////
 const PHONE_DATA_UPDATE_LIST_CHANGE = 'phoneData/PHONE_DATA_UPDATE_LIST_CHANGE';
 const PHONE_DATA_UPDATE_LIST_DELETE = 'phoneData/PHONE_DATA_UPDATE_LIST_DELETE';
 
@@ -68,10 +66,6 @@ const phoneDataUpdate =({
         value: value,
     }),
 });
-// const phoneDataAddRef=(length) =>({
-//     type:PHONE_DATA_ADD_REF,
-//     length,
-// });
 
 const phoneDataUpdateList = ({
     Change:(id,colName, value) => ({
@@ -83,13 +77,13 @@ const phoneDataUpdateList = ({
     Delete:(id, colName) => ({
         type:PHONE_DATA_UPDATE_LIST_DELETE,
         id: id,
+        colName:colName,
     }),
 });
 
 ////////////////////////////////////////////////////////
 
 export default function phoneData(state = initialState, action){
-    // console.log(`add: ${state.dataChangeList.dataAddList}, delete: ${state.dataChangeList.dataDeleteList}, change: ${state.dataChangeList.dataUpdateList}`);
     switch(action.type){
         case PHONE_DATA_LOADING:
         case PHONE_DATA_SUCCESS:
@@ -112,15 +106,6 @@ export default function phoneData(state = initialState, action){
                     dataAddList: state.dataChangeList.dataAddList.concat( state.data.lastId +1),
                 }
             };
-            // return produce(state, draft=>{
-            //     let init = {...dataInitRow};
-            //     draft.data.lastId ++;
-            //     init.id = draft.data.lastId;
-            //     draft.data.rows.push(init);
-
-            //     // 추가 리스트에 추가.
-            //     draft.dataChangeList.dataAddList.push(init.id);
-            // });
         case PHONE_DATA_DELETE:
             const dataAddListIdx = state.dataChangeList.dataAddList.findIndex( val => val === action.id);
             // console.log("deleteRow",action);
@@ -143,62 +128,12 @@ export default function phoneData(state = initialState, action){
                                  : state.dataChangeList.dataDeleteList,
                     },
             };
-            // return produce(state, draft=>{
-            //     console.log(action);
-            //     //렌더 배열에서 제거함.
-            //     // console.log(state.data.rows.filter(row =>row.id !== action.id));
-
-            //     // const refIdx = action.refData.findIndex(row => row.id === action.id);
-            //     // draft.refData.splice(refIdx,1);
-
-            //     const idx = state.dataChangeList.dataAddList.findIndex( val => val === action.id);
-            //     // 제거할 row가 추가된 row가 아닐 경우 deleteList에 추가
-            //     if(  idx === -1 )
-            //         draft.dataChangeList.dataDeleteList.push(action.id);
-            //     // 제거할 row가 추가된 row일 경우 addList에서 해당 배열 제거
-            //     else
-            //         draft.dataChangeList.dataAddList.splice(idx,1);
-
-
-            //     draft.refData = state.refData.filter(row => row.id !== action.id);
-            //     draft.data.rows = state.data.rows.filter(row =>row.id !== action.id);
-
-            //     // const rowsIdx = state.data.rows.findIndex(row => row.id === action.id);
-            //     // draft.data.rows.splice(rowsIdx,1);
-            // });
 
         case PHONE_DATA_CHANGE:
             return produce(state, draft=>{
                 const row = draft.data.rows.find( row => row.id === action.id);
                 row[action.colName] = action.value;
             });
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // case PHONE_DATA_ADD_REF:
-        //     return {
-        //         ...state,
-        //         refData: state.refData.concat(
-        //             {
-        //                 id:action.id,
-        //                 refs:action.ref,
-        //             }
-        //         ),
-        //     };
-        // case PHONE_DATA_ADD_REF:
-        //     // console.log("ref추가");
-        //     return produce(state, draft=>{
-        //         draft.refData.push({id:action.id, refs:action.ref});
-
-                
-        //         // const refIdx = state.refData.findIndex(row=>row.id===action.id);
-        //         // // row가 존재하지 않을 경우
-        //         // if( refIdx === -1 ){
-        //         //     draft.refData.push({id:action.id, refs:[action.ref]});
-        //         // //row가 존재할 경우
-        //         // }else{
-        //         //     draft.refData[refIdx].refs.push(action.ref);
-        //         // }
-                
-        //     });
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////
         case PHONE_DATA_UPDATE_LIST_CHANGE:
             return produce(state, draft =>{
@@ -216,24 +151,25 @@ export default function phoneData(state = initialState, action){
 
             });
         case PHONE_DATA_UPDATE_LIST_DELETE:
-            // const idx = state.dataChangeList.dataUpdateList.findIndex( row => row.id === action.id);
-            // return{
-            //     ...state,
-            //     dataChangeList:{
-            //         ...state.dataChangeList,
-            //         dataUpdateList: idx !== 1 && st
-            //     }
-            // };
-            return produce(state,draft=>{
-                const idx = state.dataChangeList.dataUpdateList.findIndex( row => row.id === action.id);
-                // row에 1개이상 값이 들어있을 떄
-                if( idx !== -1){
-                    // 안에남은 원소가 하나도 없으면 row를 삭제함.
-                    if( Object.keys(draft.dataChangeList.dataUpdateList[idx]).length <= 1  ){
-                        draft.dataChangeList.dataUpdateList.splice(idx,1);
-                    }
+            const idx = state.dataChangeList.dataUpdateList.findIndex( row => row.id === action.id);
+            return{
+                ...state,
+                dataChangeList:{
+                    ...state.dataChangeList,
+                    dataUpdateList: idx !== 1 && state.dataChangeList.dataUpdateList[idx].length <= 1
+                                    && state.dataChangeList.dataUpdateList.filter()
                 }
-            });
+            };
+            // return produce(state,draft=>{
+            //     const idx = state.dataChangeList.dataUpdateList.findIndex( row => row.id === action.id);
+            //     // row에 1개이상 값이 들어있을 떄
+            //     if( idx !== -1){
+            //         // 안에남은 원소가 하나도 없으면 row를 삭제함.
+            //         if( Object.keys(draft.dataChangeList.dataUpdateList[idx]).length <= 1  ){
+            //             draft.dataChangeList.dataUpdateList.splice(idx,1);
+            //         }
+            //     }
+            // });
         default:
             return state;
     }

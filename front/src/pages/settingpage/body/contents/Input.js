@@ -24,8 +24,6 @@ const commaValues = [
 
 const Input = ({colIndex, id,}) =>{
     // console.log("input.js");
-    // console.log(ref());
-    // const inputRef = useRef('');
     const ref = useRef();
     const dispatch = useDispatch();
     // alert 두번 나오는거 방지 위한 ref
