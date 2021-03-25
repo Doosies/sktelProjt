@@ -2,7 +2,7 @@ import React, {useCallback,  useRef } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import styled, { css } from 'styled-components';
 import { phoneDataChangedList, phoneDataUpdate} from '../../../../modules/phoneData';
-import { columnPhoneInfo, inputValidCheck } from '../../../../utils/propertyInfo';
+import { columnPhoneInfo } from '../../../../utils/propertyInfo';
 import * as utils from '../../../../utils/utils';
 
 
@@ -30,7 +30,7 @@ const Input = ({colIndex, id}) =>{
     const didShowAlert = useRef(false);
     // 현재 data의 column 정보와 검증값
     const nowColumnInfo = columnPhoneInfo[colIndex];
-    const nowColumnValidCheck = inputValidCheck[colIndex];
+    const nowColumnValidCheck = columnPhoneInfo[colIndex];
     
     // console.log(nowRow);
     const { nowVal, firstVal, isAddedRow } = useSelector(state =>({
