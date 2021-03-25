@@ -104,81 +104,41 @@ function Contents(){
 
     //NOTE - 적용버튼 클릭시
     const handleApply = () =>{
-        const data = {
-            addList:[{
-                id:"1",
-                model_name:"model1",
-                machine_name:"모델1",
-                shipping_price:"1",
-                maker:"samsung1",
-                created:"2010-10-10",
-                battery:"",
-                screen_size:"",
-                storage:"",
-            }],
-            updateList:[{
-                id:"2",
-                model_name:"model2",
-                machine_name:"모델2",
-                shipping_price:"1234",
-                maker:"samsung",
-                created:"2010-10-10",
-                battery:"",
-                screen_size:"",
-                storage:"",
-            }],
-            deleteList:[{
-                id:"3",
-                model_name:"model3",
-                machine_name:"모델3",
-                shipping_price:"123",
-                maker:"samsung3",
-                created:"2010-10-10",
-                battery:"",
-                screen_size:"",
-                storage:"",
-            }],
-        }
-        RESTAPI.patchPhoneInfo(data);
-        // const sendList = {
-        //     addList:[],
-        //     deleteList:[],
-        //     updateList:[],
-        // }
-        // const addList = dataChangeList.dataAddList;
-        // const deleteList = dataChangeList.dataDeleteList;
-        // const updateList = dataChangeList.dataUpdateList;
-        // // 만약 추가버튼을 눌러서 추가한 데이터가 있으면
-        // if( isFilledList(addList) === true){
-        //     //adlist 모두 순환
-        //     addList.some( addedRowId => {
-        //         const rowIdx = rows.findIndex(originalRow=>originalRow.id === addedRowId);
-        //         // 추가된 row를 맨 앞 id를 자르고서 키와 값을 rowEntires에 넣음
-        //         const rowEntries = Object.entries(rows[rowIdx]).splice(1);
+        const addList = dataChangeList.dataAddList;
+        const deleteList = dataChangeList.dataDeleteList;
+        const updateList = dataChangeList.dataUpdateList;
+        // 만약 추가버튼을 눌러서 추가한 데이터가 있으면
+        if( isFilledList(addList) === true){
+            //adlist 모두 순환
+            addList.some( addedRowId => {
+                const rowIdx = rows.findIndex(originalRow=>originalRow.id === addedRowId);
+                // 추가된 row를 맨 앞 id를 자르고서 키와 값을 rowEntires에 넣음
+                const rowEntries = Object.entries(rows[rowIdx]).splice(1);
                 
-        //         // 빈칸이 있거나 정규식을 통과 못하면 TRUE 아니면 FALSE
-        //         const isPass = rowEntries.some((ele,colIdx) => {
-        //             const key = ele[0];
-        //             const val = commaValues.some(val=>val === key) ? utils.uncomma(ele[1]) : ele[1];
-        //             // 빈칸이거나 정규식을 통과하지 못했을 때 포커싱 후 true 리턴
-        //             if( ( !val || val === " "|| inputValidCheck[colIdx].reg.test(val)===false ) 
-        //                     && notRequired.every(colName => colName !== key )) {
-        //                 // 아래 주석은 해당 컴포넌트임.
-        //                 //   테이블   Row        Column           Input
-        //                 refs.current[rowIdx].children[colIdx+1].children[0].focus();
-        //                 return true;
-        //             }else return false;
-        //         });
-        //         if( isPass )return true;
-        //         else return false;
-        //     });// addList.forEach() 끝
-        // }
-        // if( isFilledList(deleteList) === true){
+                // 빈칸이 있거나 정규식을 통과 못하면 TRUE 아니면 FALSE
+                const isPass = rowEntries.some((ele,colIdx) => {
+                    const key = ele[0];
+                    const val = commaValues.some(val=>val === key) ? utils.uncomma(ele[1]) : ele[1];
+                    // 빈칸이거나 정규식을 통과하지 못했을 때 포커싱 후 true 리턴
+                    if( ( !val || val === " "|| inputValidCheck[colIdx].reg.test(val)===false ) 
+                            && notRequired.every(colName => colName !== key )) {
+                        // 아래 주석은 해당 컴포넌트임.
+                        //   테이블   Row        Column           Input
+                        refs.current[rowIdx].children[colIdx+1].children[0].focus();
+                        return true;
+                    }else return false;
+                });
+                if( isPass )return true;
+                else return false;
+            });// addList.forEach() 끝
+        }
+        if( isFilledList(deleteList) === true){
+            
+        }
+        if( isFilledList(updateList) === true){
 
-        // }
-        // if( isFilledList(updateList) === true){
-
-        // }
+        }
+        RESTAPI.patchPhoneInfo({addList,deleteList,updateList});
     };
 
     if( loading ) return null;

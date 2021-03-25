@@ -57,24 +57,25 @@ public class PhoneInfoController {
     // @RequestMapping(value="/api/phoneinfo/a", method=RequestMethod.PATCH)
     // @PatchMapping(value = "/api/phoneinfo/a")
     @RequestMapping(value = "api/phoneinfo/a", method = RequestMethod.PATCH, consumes="application/json")
-    public  ResponseEntity<String> patchData(@RequestBody Map<String,List<PhoneInfo>> object) {
-        System.out.println(object);
+    public  ResponseEntity<String> patchData(@RequestBody Map<String,List<Object>> object) {
+        System.out.println("------데이터받음------");
 
         object.forEach((key,val)->{
+            System.out.println(key);
             val.forEach(list->{
-                System.out.println(list.getId());
-                System.out.println(list.getModel_name());
-                System.out.println(list.getMachine_name());
-                System.out.println(list.getShipping_price());
-                System.out.println(list.getMaker());
-                System.out.println(list.getCreated());
-                System.out.println(list.getBattery());
-                System.out.println(list.getScreen_size());
-                System.out.println(list.getStorage());
+                System.out.println(list);
+                // System.out.println(list.getId());
+                // System.out.println(list.getModel_name());
+                // System.out.println(list.getMachine_name());
+                // System.out.println(list.getShipping_price());
+                // System.out.println(list.getMaker());
+                // System.out.println(list.getCreated());
+                // System.out.println(list.getBattery());
+                // System.out.println(list.getScreen_size());
+                // System.out.println(list.getStorage());
             });
         });
+
         return ResponseEntity.ok("ok!!");
     }
-    
-    
 }

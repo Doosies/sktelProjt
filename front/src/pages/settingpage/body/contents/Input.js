@@ -1,7 +1,7 @@
 import React, {useCallback,  useRef } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import styled, { css } from 'styled-components';
-import { phoneDataUpdateList, phoneDataUpdate} from '../../../../modules/phoneData';
+import { phoneDataChangedList, phoneDataUpdate} from '../../../../modules/phoneData';
 import { columnPhoneInfo, inputValidCheck } from '../../../../utils/propertyInfo';
 import * as utils from '../../../../utils/utils';
 
@@ -60,9 +60,11 @@ const Input = ({colIndex, id}) =>{
     
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // state를 바꿔주는 dispatch* change,delete //
-    // const updateListInsert = callbackDispatch(phoneDataUpdateList.Insert);
-    const updateListChange = callbackDispatch(phoneDataUpdateList.Change);
-    const updateListDelete = callbackDispatch(phoneDataUpdateList.Delete);
+    // const updateListInsert = callbackDispatch(phoneDataChangedList.Insert);
+    const updateListUpdateChange = callbackDispatch(phoneDataChangedList.Update.Change);
+    const updateListUpdateDelete = callbackDispatch(phoneDataChangedList.Update.Delete);
+    const updateListAddChange = callbackDispatch(phoneDataChangedList.Add.Change);
+    const updateListAddDelete = callbackDispatch(phoneDataChangedList.Add.Delete);
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     const handleChange = useCallback( (e) => {
@@ -109,12 +111,17 @@ const Input = ({colIndex, id}) =>{
             if( !isAddedRow ) 
                 modifiedValue === firstValue   
                 // 새로 추가한 row가 아닐경우           
-                ? updateListDelete(id, nowColumnInfo.colname)                // 최초값과 수정한 값이 같을경우, delete
+                ? updateListUpdateDelete(id, nowColumnInfo.colname)                // 최초값과 수정한 값이 같을경우, delete
                 // 새로 추가한 row일 경우
-                : updateListChange(id, nowColumnInfo.colname, modifiedValue);// 최초값과 수정한 값이 다를경우, change
+                : updateListUpdateChange(id, nowColumnInfo.colname, modifiedValue);// 최초값과 수정한 값이 다를경우, change
+            else if( isAddedRow ){
+                modifiedValue === firstValue   
+                ?updateListAddDelete(id, nowColumnInfo.colname)
+                :updateListAddChange(id, nowColumnInfo.colname, modifiedValue);
+            }
         }
         
-    },[nowColumnValidCheck.deleteWord, nowColumnValidCheck.reg, nowColumnValidCheck.error, nowColumnInfo.colname, updateInputCompo, firstVal, nowVal, isAddedRow, updateListDelete, id, updateListChange]);
+    },[nowColumnValidCheck.deleteWord, nowColumnValidCheck.reg, nowColumnValidCheck.error, nowColumnInfo.colname, updateInputCompo, firstVal, nowVal, isAddedRow, updateListUpdateDelete, id, updateListUpdateChange, updateListAddDelete, updateListAddChange]);
 
     return( 
         <StyledInput 
