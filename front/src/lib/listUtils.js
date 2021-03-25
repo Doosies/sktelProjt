@@ -15,9 +15,10 @@ export const handleListActions = (type) =>{
 
     return (state, action) =>{
         return produce( state,draft=>{
-            console.log(action.type);
+            // console.log(action.type);
             let dataState;
             let dataDraft;
+            // 액션 타입에 따라 state, draft를 구분지음
             if(action.type === UPDATE_LIST_CHANGE || action.type === UPDATE_LIST_DELETE ){
                 dataState = state.dataChangeList.dataUpdateList;
                 dataDraft = draft.dataChangeList.dataUpdateList;
@@ -26,7 +27,9 @@ export const handleListActions = (type) =>{
                 dataState = state.dataChangeList.dataAddList;
                 dataDraft = draft.dataChangeList.dataAddList;
             }
+            // 데이터가 리스트에 있는지 확인
             const dataListIndex = dataState.findIndex( row => row.id === action.id);
+            // 리스트에 없을시 넣을 값
             const updateData = {
                 id : action.id,
                 [action.colName] : action.value
@@ -35,7 +38,7 @@ export const handleListActions = (type) =>{
             switch( action.type ){
                 case ADD_LIST_CHANGE:
                 case UPDATE_LIST_CHANGE:
-                    // 아이다가 없으면
+                    // 아이디가 없으면
                     if( dataListIndex === -1)
                         dataDraft.push(updateData);
                     //update 리스트에 해당 id가 존재할 경우 column만 추가해줌.

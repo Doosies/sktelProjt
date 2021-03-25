@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import CButton from '../../../../components/Button';
 import { phoneDataUpdate, phoneDataFetchAsync } from '../../../../modules/phoneData';
 import * as RESTAPI from '../../../../utils/api';
-import { inputValidCheck } from '../../../../utils/propertyInfo';
+import { columnPhoneInfo, inputValidCheck } from '../../../../utils/propertyInfo';
 import * as utils from '../../../../utils/utils';
 
 // import * as restAPI from '../../../../utils/api';
@@ -61,9 +61,9 @@ const ContentsBottom = styled.form`
     padding-top:7px;
 `;
 
-// 필수 입력 항목이 아닌것들
-const notRequired = [
-    "battery", "screen_size", "storage"
+// 필수 입력 항목
+const notRequiredInputValue = [
+    "battery", "screen_size", "storage",
 ];
 const commaValues = [
     "shipping_price", "battery",  "storage"
@@ -108,37 +108,66 @@ function Contents(){
         const deleteList = dataChangeList.dataDeleteList;
         const updateList = dataChangeList.dataUpdateList;
         // 만약 추가버튼을 눌러서 추가한 데이터가 있으면
-        if( isFilledList(addList) === true){
-            //adlist 모두 순환
-            addList.some( addedRowId => {
-                const rowIdx = rows.findIndex(originalRow=>originalRow.id === addedRowId);
-                // 추가된 row를 맨 앞 id를 자르고서 키와 값을 rowEntires에 넣음
-                const rowEntries = Object.entries(rows[rowIdx]).splice(1);
-                
-                // 빈칸이 있거나 정규식을 통과 못하면 TRUE 아니면 FALSE
-                const isPass = rowEntries.some((ele,colIdx) => {
-                    const key = ele[0];
-                    const val = commaValues.some(val=>val === key) ? utils.uncomma(ele[1]) : ele[1];
-                    // 빈칸이거나 정규식을 통과하지 못했을 때 포커싱 후 true 리턴
-                    if( ( !val || val === " "|| inputValidCheck[colIdx].reg.test(val)===false ) 
-                            && notRequired.every(colName => colName !== key )) {
-                        // 아래 주석은 해당 컴포넌트임.
+        // if( isFilledList(addList) === true){
+            // adlist 모두 순환하다가 빈 값이 있으면 멈춤.
+        const isPassAddList = isFilledList(addList) && addList.some( row => {
+            const rowIdx = rows.findIndex(originalRow=>originalRow.id === row.id);
+            // 추가된 row를 맨 앞 id를 자르고서 키와 값을 rowEntires에 넣음
+            const rowEntries = Object.entries(rows[rowIdx]).splice(1);
+            // 빈칸이 있거나 정규식을 통과 못하면 TRUE 아니면 FALSE
+            // eslint-disable-next-line array-callback-return
+            const isNotPassReg = rowEntries.some((ele,colIdx) => {
+                console.log("123123123");
+                const key = ele[0];
+                const val = commaValues.some(val=>val === key) 
+                            ? utils.uncomma(ele[1]) 
+                            : ele[1];
+                // 빈칸이거나 정규식을 통과하지 못하면
+                if(( !val || val === " " || columnPhoneInfo[colIdx].reg.test(val)===false )){
+                    // 필수 입력값이 맞을경우
+                    if(notRequiredInputValue.every(colName => colName !== key )) {
                         //   테이블   Row        Column           Input
                         refs.current[rowIdx].children[colIdx+1].children[0].focus();
                         return true;
                     }else return false;
-                });
-                if( isPass )return true;
-                else return false;
-            });// addList.forEach() 끝
-        }
+                }
+            });
+            if (isNotPassReg) return false;
+            else return true;
+        });
+        // }
+        
+        // const pass = isFilledList(addList) && addList.every((addedRow,rowIndex)=>{
+        //     //맨 앞 id 부분을 자름
+        //     const nowRow = rows.find(row=>row.id === addedRow.id);
+        //     let colIndex = 0;
+        //     delete nowRow.id;
+
+        //     for( let key in nowRow){
+        //         const columnInfo = columnPhoneInfo.find(row => row.colName === key);
+        //         const commaedValue = commaValues.some(val=>val === key) 
+        //                 ? utils.uncomma(nowRow[key]) 
+        //                 : nowRow[key];
+        //         // 빈칸이거나 정규식을 통과하지 못했을 때 포커싱 후 true 리턴
+        //         if(( !commaedValue || commaedValue === " "|| columnInfo.reg.test(commaedValue)===false ) 
+        //           && requiredInputValue.every(colName => colName !== key )){
+        //             refs.current[rowIndex].children[colIndex+1].children[0].focus();
+        //             colIndex++;
+        //               return false;
+        //         }else return true;
+                
+        //     }
+        // });
+        
+        
         if( isFilledList(deleteList) === true){
             
         }
         if( isFilledList(updateList) === true){
 
         }
-        RESTAPI.patchPhoneInfo({addList,deleteList,updateList});
+        if(isPassAddList)
+            RESTAPI.patchPhoneInfo({addList,deleteList,updateList});
     };
 
     if( loading ) return null;

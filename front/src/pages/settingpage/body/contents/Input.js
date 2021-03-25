@@ -12,6 +12,14 @@ const StyledInput = styled.input`
         text-align:${textalign};
     `}
 `;
+// {name:"기기명", width:"200px", colName:"model_name", textalign:"left"},
+// {name:"모델명", width:"180px", colName:"machine_name", textalign:"left"},
+// {name:"출고가", width:"70px", colName:"shipping_price", textalign:"right"},
+// {name:"브랜드", width:"100px", colName:"maker", textalign:"center"},
+// {name:"출시일", width:"100px", colName:"created", textalign:"center"}
+const required = [
+    "model_name", "machine_name", "shipping_price", "maker", "created",
+]
 // 필수 입력 항목이 아닌것들
 const notRequired = [
     "battery", "screen_size", "storage"
@@ -30,7 +38,8 @@ const Input = ({colIndex, id}) =>{
     const didShowAlert = useRef(false);
     // 현재 data의 column 정보와 검증값
     const nowColumnInfo = columnPhoneInfo[colIndex];
-    const nowColumnValidCheck = columnPhoneInfo[colIndex];
+    // const nowColumnValidCheck = columnPhoneInfo[colIndex];
+    // console.log(nowColumnInfo, nowColumnValidCheck);
     
     // console.log(nowRow);
     const { nowVal, firstVal, isAddedRow } = useSelector(state =>({
@@ -78,17 +87,20 @@ const Input = ({colIndex, id}) =>{
      ///////////////////////////////////////////////////////// 포커싱이 벗어났을 때
     const handleBlur = useCallback( (e) =>{
         //최종 수정값
-        const deletedWord = e.target.value.replace(nowColumnValidCheck.deleteWord,"");
+        const deletedWord = e.target.value.replace(nowColumnInfo.deleteWord,"");
+        // const uncommaWord = utils.uncomma(deletedWord);
         // 해당 column에 해당하는 정규식 통과 못 할 경우(올바르지 않은 값일 경우)
-        if( nowColumnValidCheck.reg.test(deletedWord) === false 
-        // 또는 값이 빈값이고, 필수값일 경우
-        || (deletedWord ==="" && notRequired.every(val=>val !== nowColumnInfo.colName))){
+            // 또는 값이 빈값이고, 필수값일 경우
+        if( (nowColumnInfo.reg.test(deletedWord) === false )
+        || ( (deletedWord ==="") && notRequired.every(val=>val !== nowColumnInfo.colName)))
+        
+        {
             // 포커싱이 바뀌어도 다시 포커싱해줌.
             ref.current.focus();
             // alert 두번 나오는거 버그 수정 위한 if문
             if ( !didShowAlert.current) {
                 //안내문 출력
-                alert(nowColumnValidCheck.error);
+                alert(nowColumnInfo.error);
                 //처음값으로 되돌려버림
                 updateInputCompo(firstVal);
                 didShowAlert.current = false;
@@ -121,13 +133,13 @@ const Input = ({colIndex, id}) =>{
             }
         }
         
-    },[nowColumnValidCheck.deleteWord, nowColumnValidCheck.reg, nowColumnValidCheck.error, nowColumnInfo.colName, updateInputCompo, firstVal, nowVal, isAddedRow, updateListUpdateDelete, id, updateListUpdateChange, updateListAddDelete, updateListAddChange]);
+    },[nowColumnInfo.deleteWord, nowColumnInfo.reg, nowColumnInfo.colName, nowColumnInfo.error, updateInputCompo, firstVal, nowVal, isAddedRow, updateListUpdateDelete, id, updateListUpdateChange, updateListAddDelete, updateListAddChange]);
 
     return( 
         <StyledInput 
             textalign={nowColumnInfo.textalign} 
             width={nowColumnInfo.width} 
-            value={nowVal === null ? '': nowVal }
+            value={nowVal === null ? "" : nowVal }
             onChange={handleChange}
             onBlur={handleBlur}
             // notRequired에 있는 배열에 포함되면 필수항목이 아님.
