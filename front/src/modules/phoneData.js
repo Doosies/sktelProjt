@@ -11,6 +11,7 @@ const PHONE_DATA_ADD = 'phoneData/PHONE_DATA_ADD';
 const PHONE_DATA_DELETE = 'phoneData/PHONE_DATA_DELETE';
 const PHONE_DATA_CHANGE = 'phoneData/PHONE_DATA_CHANGE';
 ////////////////////////////////////////////////////////
+// const PHONE_DATA_UPDATE_LIST_INSERT = 'phoneData/PHONE_DATA_UPDATE_LIST_INSERT';
 const PHONE_DATA_UPDATE_LIST_CHANGE = 'phoneData/PHONE_DATA_UPDATE_LIST_CHANGE';
 const PHONE_DATA_UPDATE_LIST_DELETE = 'phoneData/PHONE_DATA_UPDATE_LIST_DELETE';
 
@@ -68,6 +69,12 @@ const phoneDataUpdate =({
 });
 
 const phoneDataUpdateList = ({
+    // Insert:(id, colName, value)=>({
+    //     type:PHONE_DATA_UPDATE_LIST_INSERT,
+    //     id: id,
+    //     colName: colName,
+    //     value: value,
+    // }),
     Change:(id,colName, value) => ({
         type:PHONE_DATA_UPDATE_LIST_CHANGE,
         id: id,
@@ -135,14 +142,27 @@ export default function phoneData(state = initialState, action){
                 row[action.colName] = action.value;
             });
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // case PHONE_DATA_UPDATE_LIST_INSERT:
+        //     return{
+        //         ...state,
+        //         dataChangeList:{
+        //             ...state.dataChangeList,
+        //             dataUpdateList:{
+        //                 ...state.dataChangeList.dataUpdateList,
+        //                 id : action.id,
+        //                 [action.colName] : action.value,
+        //             }
+        //         }
+        //     };
         case PHONE_DATA_UPDATE_LIST_CHANGE:
             return produce(state, draft =>{
                 const idx = state.dataChangeList.dataUpdateList.findIndex( row => row.id === action.id);
                 // update 리스트에 해당 id가 존재하지 않을경우 추가해줌
                 if( idx === -1 ){
-                    let initRow = {};
-                    initRow.id = action.id;
-                    initRow[action.colName] = action.value;
+                    let initRow = {
+                        id : action.id,
+                        [action.colName] : action.value
+                    };
                     draft.dataChangeList.dataUpdateList.push(initRow);
                 //update 리스트에 해당 id가 존재할 경우 column만 추가해줌.
                 }else if( action.value !== state.dataChangeList.dataUpdateList[idx][action.colName]){
@@ -151,25 +171,18 @@ export default function phoneData(state = initialState, action){
 
             });
         case PHONE_DATA_UPDATE_LIST_DELETE:
-            const idx = state.dataChangeList.dataUpdateList.findIndex( row => row.id === action.id);
-            return{
-                ...state,
-                dataChangeList:{
-                    ...state.dataChangeList,
-                    dataUpdateList: idx !== 1 && state.dataChangeList.dataUpdateList[idx].length <= 1
-                                    && state.dataChangeList.dataUpdateList.filter()
+            return produce(state,draft=>{
+                const idx = state.dataChangeList.dataUpdateList.findIndex( row => row.id === action.id);
+                // row에 1개이상 값이 들어있을 떄
+                if( idx !== -1){
+                    // 해당 column 제거
+                    delete draft.dataChangeList.dataUpdateList[idx][action.colName];
+                    // 안에남은 원소가 하나도 없으면 row를 삭제함.
+                    if( Object.keys(draft.dataChangeList.dataUpdateList[idx]).length<= 1  )
+                        draft.dataChangeList.dataUpdateList.splice(idx,1);
+                    
                 }
-            };
-            // return produce(state,draft=>{
-            //     const idx = state.dataChangeList.dataUpdateList.findIndex( row => row.id === action.id);
-            //     // row에 1개이상 값이 들어있을 떄
-            //     if( idx !== -1){
-            //         // 안에남은 원소가 하나도 없으면 row를 삭제함.
-            //         if( Object.keys(draft.dataChangeList.dataUpdateList[idx]).length <= 1  ){
-            //             draft.dataChangeList.dataUpdateList.splice(idx,1);
-            //         }
-            //     }
-            // });
+            });
         default:
             return state;
     }

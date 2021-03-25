@@ -22,7 +22,7 @@ const commaValues = [
 ]
 
 
-const Input = ({colIndex, id,}) =>{
+const Input = ({colIndex, id}) =>{
     // console.log("input.js");
     const ref = useRef();
     const dispatch = useDispatch();
@@ -45,6 +45,7 @@ const Input = ({colIndex, id,}) =>{
         isAddedRow : state.phoneData.firstData.lastId < id
                      ? true
                      : false,
+
     }),shallowEqual);
 
     const callbackDispatch = useCallback((dispatchFunc) =>{
@@ -53,12 +54,13 @@ const Input = ({colIndex, id,}) =>{
         }
     },[dispatch]);
     //////////////////////
-    const inputChange = useCallback( (value) => 
+    const updateInputCompo = useCallback( (value) => 
         dispatch(phoneDataUpdate.Change(id,nowColumnInfo.colname, value))
     ,[nowColumnInfo.colname, dispatch, id]);
     
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // state를 바꿔주는 dispatch* change,delete //
+    // const updateListInsert = callbackDispatch(phoneDataUpdateList.Insert);
     const updateListChange = callbackDispatch(phoneDataUpdateList.Change);
     const updateListDelete = callbackDispatch(phoneDataUpdateList.Delete);
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -68,8 +70,8 @@ const Input = ({colIndex, id,}) =>{
         const val = commaValues.some(val => val === nowColumnInfo.colname)
                     ? utils.inputNumberFormat(e.target.value) // 콤마를 적어줌
                     : e.target.value; // 그냥 그대로 입력
-        inputChange(val);
-    },[nowColumnInfo.colname, inputChange]);
+        updateInputCompo(val);
+    },[nowColumnInfo.colname, updateInputCompo]);
 
      ///////////////////////////////////////////////////////// 포커싱이 벗어났을 때
     const handleBlur = useCallback( (e) =>{
@@ -77,17 +79,16 @@ const Input = ({colIndex, id,}) =>{
         const deletedWord = e.target.value.replace(nowColumnValidCheck.deleteWord,"");
         // 해당 column에 해당하는 정규식 통과 못 할 경우(올바르지 않은 값일 경우)
         if( nowColumnValidCheck.reg.test(deletedWord) === false 
-        // 값이 빈값이고, 필수값일 경우
+        // 또는 값이 빈값이고, 필수값일 경우
         || (deletedWord ==="" && notRequired.every(val=>val !== nowColumnInfo.colname))){
             // 포커싱이 바뀌어도 다시 포커싱해줌.
-            // console.log(ref);
             ref.current.focus();
             // alert 두번 나오는거 버그 수정 위한 if문
             if ( !didShowAlert.current) {
                 //안내문 출력
                 alert(nowColumnValidCheck.error);
                 //처음값으로 되돌려버림
-                inputChange(firstVal);
+                updateInputCompo(firstVal);
                 didShowAlert.current = false;
             } 
             didShowAlert.current = !didShowAlert.current;
@@ -100,17 +101,20 @@ const Input = ({colIndex, id,}) =>{
             : deletedWord;
             // const firstValue = firstVal || '';
             const firstValue = firstVal === null ? '': firstVal;
+            //만약 수정을 거친 값이 내가 입력한 값과 다르면 
+            // input 태그를 업데이트 해준다.
+            if (modifiedValue !== nowVal) updateInputCompo(modifiedValue);
             
-            // NOTE - 이 if문은 column값이 수정 됐는지 확인한다.
-            // 새로 추가한 row가 아닐경우
-            if( !isAddedRow ) modifiedValue === firstValue              
-            ?updateListDelete(id, nowColumnInfo.colname)                // 최초값과 수정한 값이 같을경우, delete
-            :updateListChange(id, nowColumnInfo.colname, modifiedValue);// 최초값과 수정한 값이 다를경우, change
-            
-            inputChange(modifiedValue);
+            // 추가한 행이 아니라면
+            if( !isAddedRow ) 
+                modifiedValue === firstValue   
+                // 새로 추가한 row가 아닐경우           
+                ? updateListDelete(id, nowColumnInfo.colname)                // 최초값과 수정한 값이 같을경우, delete
+                // 새로 추가한 row일 경우
+                : updateListChange(id, nowColumnInfo.colname, modifiedValue);// 최초값과 수정한 값이 다를경우, change
         }
         
-    },[firstVal, id, inputChange, isAddedRow, nowColumnInfo.colname, nowColumnValidCheck.deleteWord, nowColumnValidCheck.error, nowColumnValidCheck.reg, ref, updateListChange, updateListDelete]);
+    },[nowColumnValidCheck.deleteWord, nowColumnValidCheck.reg, nowColumnValidCheck.error, nowColumnInfo.colname, updateInputCompo, firstVal, nowVal, isAddedRow, updateListDelete, id, updateListChange]);
 
     return( 
         <StyledInput 

@@ -55,14 +55,11 @@ public class PhoneInfoController {
     }
 
     // @RequestMapping(value="/api/phoneinfo/a", method=RequestMethod.PATCH)
-    @PatchMapping(value = "/api/phoneinfo/a")
+    // @PatchMapping(value = "/api/phoneinfo/a")
+    @RequestMapping(value = "api/phoneinfo/a", method = RequestMethod.PATCH, consumes="application/json")
     public  ResponseEntity<String> patchData(@RequestBody Map<String,List<PhoneInfo>> object) {
-        // Set<String>keys = object.keySet();
-        // keys.forEach(key -> System.out.print(key));
-        // Set<Entry<String, List<PhoneInfo>>> entries = object.entrySet();
-        // entries.forEach((key,val)->{
-            
-        // });
+        System.out.println(object);
+
         object.forEach((key,val)->{
             val.forEach(list->{
                 System.out.println(list.getId());
@@ -76,7 +73,7 @@ public class PhoneInfoController {
                 System.out.println(list.getStorage());
             });
         });
-        return ResponseEntity.ok("ok");
+        return ResponseEntity.ok("ok!!");
     }
     
     

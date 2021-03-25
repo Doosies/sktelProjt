@@ -14,7 +14,7 @@ const StyledRow = styled.div`
 `;
 
 const Row = forwardRef(({top=false, rowId, rowIndex},inputRefs) =>{
-    console.log("row.js");
+    // console.log("row.js");
     const dispatch = useDispatch();
 
     const handleDeleteButton = useCallback( (id) => {

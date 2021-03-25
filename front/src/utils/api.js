@@ -7,15 +7,15 @@ export async function getAllPhoneInfo(){
     return response.data;
     // const data = [
     //   {
-    //     id:"1",
-    //     model_name:"model1",
-    //     machine_name:"모델1",
-    //     shipping_price:"1000000",
-    //     maker:"lg",
-    //     created:"2010-10-10",
-    //     battery:"",
-    //     screen_size:"",
-    //     storage:"",
+        // id:"1",
+        // model_name:"model1",
+        // machine_name:"모델1",
+        // shipping_price:"1000000",
+        // maker:"lg",
+        // created:"2010-10-10",
+        // battery:"",
+        // screen_size:"",
+        // storage:"",
     //   },
     //   {
     //     id:"2",
