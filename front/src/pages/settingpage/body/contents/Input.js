@@ -92,7 +92,7 @@ const Input = ({colIndex, id}) =>{
         // 해당 column에 해당하는 정규식 통과 못 할 경우(올바르지 않은 값일 경우)
             // 또는 값이 빈값이고, 필수값일 경우
         if( (nowColumnInfo.reg.test(deletedWord) === false )
-        || ( (deletedWord ==="") && notRequired.every(val=>val !== nowColumnInfo.colName)))
+        || ( (deletedWord=== " " || deletedWord ==="") && notRequired.every(val=>val !== nowColumnInfo.colName)))
         
         {
             // 포커싱이 바뀌어도 다시 포커싱해줌.
@@ -100,12 +100,12 @@ const Input = ({colIndex, id}) =>{
             // alert 두번 나오는거 버그 수정 위한 if문
             if ( !didShowAlert.current) {
                 //안내문 출력
-                alert(nowColumnInfo.error);
+                // alert(nowColumnInfo.error);
                 //처음값으로 되돌려버림
+                // didShowAlert.current = true;
                 updateInputCompo(firstVal);
-                didShowAlert.current = false;
+                didShowAlert.current = !didShowAlert.current;
             } 
-            didShowAlert.current = !didShowAlert.current;
         }
         //정규식을 통과할 경우(올바른 값일경우)
         else{
@@ -117,7 +117,7 @@ const Input = ({colIndex, id}) =>{
             const firstValue = firstVal === null ? '': firstVal;
             //만약 수정을 거친 값이 내가 입력한 값과 다르면 
             // input 태그를 업데이트 해준다.
-            if (modifiedValue !== nowVal) updateInputCompo(modifiedValue);
+            // if (modifiedValue !== nowVal) updateInputCompo(modifiedValue);
             
             // 추가한 행이 아니라면
             if( !isAddedRow ) 
@@ -133,7 +133,7 @@ const Input = ({colIndex, id}) =>{
             }
         }
         
-    },[nowColumnInfo.deleteWord, nowColumnInfo.reg, nowColumnInfo.colName, nowColumnInfo.error, updateInputCompo, firstVal, nowVal, isAddedRow, updateListUpdateDelete, id, updateListUpdateChange, updateListAddDelete, updateListAddChange]);
+    },[nowColumnInfo.deleteWord, nowColumnInfo.reg, nowColumnInfo.colName, updateInputCompo, firstVal, isAddedRow, updateListUpdateDelete, id, updateListUpdateChange, updateListAddDelete, updateListAddChange]);
 
     return( 
         <StyledInput 
