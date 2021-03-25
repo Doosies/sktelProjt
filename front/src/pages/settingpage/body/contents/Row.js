@@ -1,4 +1,4 @@
-import React, { forwardRef, useCallback, useEffect, useRef } from 'react'
+import React, { forwardRef, useCallback } from 'react'
 import { useDispatch} from 'react-redux';
 import styled, {  } from 'styled-components';
 import DeleteButton from '../../../../components/DeleteButton';
@@ -14,7 +14,7 @@ const StyledRow = styled.div`
 `;
 
 const Row = forwardRef(({top=false, rowId, rowIndex},inputRefs) =>{
-    console.log("row.js");
+    // console.log("row.js");
     const dispatch = useDispatch();
 
     const handleDeleteButton = useCallback( (id) => {

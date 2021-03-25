@@ -1,4 +1,4 @@
-import React, {forwardRef, useCallback,  useEffect,  useRef } from 'react';
+import React, {useCallback,  useRef } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import styled, { css } from 'styled-components';
 import { phoneDataUpdateList, phoneDataUpdate} from '../../../../modules/phoneData';
@@ -23,7 +23,7 @@ const commaValues = [
 
 
 const Input = ({colIndex, id,}) =>{
-    console.log("input.js");
+    // console.log("input.js");
     // console.log(ref());
     // const inputRef = useRef('');
     const ref = useRef();
