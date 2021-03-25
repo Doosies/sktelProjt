@@ -1,20 +1,20 @@
 
 //핸드폰 정보 수정의 column정보
 // export const columnPhoneInfo = [
-    // {name:"기기명", width:"200px", colname:"model_name", textalign:"left"},
-    // {name:"모델명", width:"180px", colname:"machine_name", textalign:"left"},
-    // {name:"출고가", width:"70px", colname:"shipping_price", textalign:"right"},
-    // {name:"브랜드", width:"100px", colname:"maker", textalign:"center"},
-    // {name:"출시일", width:"100px", colname:"created", textalign:"center"},
-    // {name:"배터리 용량", width:"80px", colname:"battery", textalign:"right"},
-    // {name:"스크린 사이즈", width:"100px", colname:"screen_size", textalign:"right"},
-    // {name:"저장 용량", width:"100px", colname:"storage", textalign:"right"},
+    // {name:"기기명", width:"200px", colName:"model_name", textalign:"left"},
+    // {name:"모델명", width:"180px", colName:"machine_name", textalign:"left"},
+    // {name:"출고가", width:"70px", colName:"shipping_price", textalign:"right"},
+    // {name:"브랜드", width:"100px", colName:"maker", textalign:"center"},
+    // {name:"출시일", width:"100px", colName:"created", textalign:"center"},
+    // {name:"배터리 용량", width:"80px", colName:"battery", textalign:"right"},
+    // {name:"스크린 사이즈", width:"100px", colName:"screen_size", textalign:"right"},
+    // {name:"저장 용량", width:"100px", colName:"storage", textalign:"right"},
 // ];
 
 export const columnPhoneInfo = [
     // 기기명
     {
-        name:"기기명", width:"200px", colname:"model_name", textalign:"left",
+        name:"기기명", width:"200px", colName:"model_name", textalign:"left",
         deleteWord:/^ +/g,
         reg:/^/g,
         error:`값이 공백입니다. 다시 입력해주세요`,
@@ -22,7 +22,7 @@ export const columnPhoneInfo = [
     },
     // 모델명
     {
-        name:"모델명", width:"180px", colname:"machine_name", textalign:"left",
+        name:"모델명", width:"180px", colName:"machine_name", textalign:"left",
         deleteWord:/^ +/g,
         reg:/^/g,
         error:`값이 공백입니다. 다시 입력해주세요`,
@@ -30,7 +30,7 @@ export const columnPhoneInfo = [
     },
     // 출고가
     {
-        name:"출고가", width:"70px", colname:"shipping_price", textalign:"right",
+        name:"출고가", width:"70px", colName:"shipping_price", textalign:"right",
         deleteWord:/[^\d]+/g,
         reg:/^(0|[1-9][0-9]+|[1-9])$/,
         error:`
@@ -41,7 +41,7 @@ export const columnPhoneInfo = [
     },
     // 브랜드
     {
-        name:"브랜드", width:"100px", colname:"maker", textalign:"center",
+        name:"브랜드", width:"100px", colName:"maker", textalign:"center",
         deleteWord:/^ +/g,
         reg:/^(samsung|lg|apple|etc)$/,
         error:`
@@ -52,7 +52,7 @@ export const columnPhoneInfo = [
     },
     // 출시일
     {
-        name:"출시일", width:"100px", colname:"created", textalign:"center",
+        name:"출시일", width:"100px", colName:"created", textalign:"center",
         deleteWord:/^ +/g,
         reg:/^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/,
         error:`
@@ -63,7 +63,7 @@ export const columnPhoneInfo = [
     },
     // 배터리
     {
-        name:"배터리 용량", width:"80px", colname:"battery", textalign:"right",
+        name:"배터리 용량", width:"80px", colName:"battery", textalign:"right",
         deleteWord:/^/g,
         reg:/^$|^\d$/g,
         error:`숫자가 아닌 값이 입력되었습니다. 확인해주세요.`,
@@ -71,7 +71,7 @@ export const columnPhoneInfo = [
     },
     // 스크린 사이즈
     {
-        name:"스크린 사이즈", width:"100px", colname:"screen_size", textalign:"right",
+        name:"스크린 사이즈", width:"100px", colName:"screen_size", textalign:"right",
         deleteWord:/^ /g,
         reg:/(^[1-9]{1}[[1-9]{0,1}]+$)|(^\d{1,}\.\d{0,2}$)|^[1-9]$|^$/,
         error:`
@@ -83,7 +83,7 @@ export const columnPhoneInfo = [
     },
     // 저장용량
     {
-        name:"저장 용량", width:"100px", colname:"storage", textalign:"right",
+        name:"저장 용량", width:"100px", colName:"storage", textalign:"right",
         deleteWord:/^/g,
         reg:/^$|^\d$/g,
         error:`숫자가 아닌 값이 입력되었습니다. 확인해주세요.`,
