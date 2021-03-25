@@ -76,6 +76,6 @@ public class PhoneInfoController {
             });
         });
 
-        return ResponseEntity.ok("ok!!");
+        return ResponseEntity.ok("ok!!I got a message");
     }
 }

@@ -111,7 +111,7 @@ const Input = ({colIndex, id}) =>{
         else{
             // NOTE - commaValues에 포함될경우 콤마를 찍어줌
             const modifiedValue = commaValues.some(val => val === nowColumnInfo.colName)
-            ? utils.comma(deletedWord)
+            ? utils.uncomma(deletedWord)
             : deletedWord;
             // const firstValue = firstVal || '';
             const firstValue = firstVal === null ? '': firstVal;

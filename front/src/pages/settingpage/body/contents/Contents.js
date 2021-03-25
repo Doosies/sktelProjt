@@ -103,71 +103,43 @@ function Contents(){
     };
 
     //NOTE - 적용버튼 클릭시
-    const handleApply = () =>{
+    const handleApply = async() =>{
         const addList = dataChangeList.dataAddList;
         const deleteList = dataChangeList.dataDeleteList;
         const updateList = dataChangeList.dataUpdateList;
         // 만약 추가버튼을 눌러서 추가한 데이터가 있으면
+        let canSendData = false;
         // if( isFilledList(addList) === true){
             // adlist 모두 순환하다가 빈 값이 있으면 멈춤.
-        const isPassAddList = isFilledList(addList) && addList.some( row => {
-            const rowIdx = rows.findIndex(originalRow=>originalRow.id === row.id);
-            // 추가된 row를 맨 앞 id를 자르고서 키와 값을 rowEntires에 넣음
-            const rowEntries = Object.entries(rows[rowIdx]).splice(1);
-            // 빈칸이 있거나 정규식을 통과 못하면 TRUE 아니면 FALSE
-            // eslint-disable-next-line array-callback-return
-            const isNotPassReg = rowEntries.some((ele,colIdx) => {
-                console.log("123123123");
-                const key = ele[0];
-                const val = commaValues.some(val=>val === key) 
-                            ? utils.uncomma(ele[1]) 
-                            : ele[1];
-                // 빈칸이거나 정규식을 통과하지 못하면
-                if(( !val || val === " " || columnPhoneInfo[colIdx].reg.test(val)===false )){
-                    // 필수 입력값이 맞을경우
-                    if(notRequiredInputValue.every(colName => colName !== key )) {
-                        //   테이블   Row        Column           Input
-                        refs.current[rowIdx].children[colIdx+1].children[0].focus();
-                        return true;
-                    }else return false;
-                }
+        if(isFilledList(addList)){
+            addList.some( row => {
+                const rowIdx = rows.findIndex(originalRow=>originalRow.id === row.id);
+                // 추가된 row를 맨 앞 id를 자르고서 키와 값을 rowEntires에 넣음
+                const rowEntries = Object.entries(rows[rowIdx]).splice(1);
+                // 빈칸이 있거나 정규식을 통과 못하면 TRUE 아니면 FALSE
+                // eslint-disable-next-line array-callback-return
+                const isNotPassReg = rowEntries.some((ele,colIdx) => {
+                    console.log("123123123");
+                    const key = ele[0];
+                    const val = commaValues.some(val=>val === key) 
+                                ? utils.uncomma(ele[1]) 
+                                : ele[1];
+                    // 빈칸이거나 정규식을 통과하지 못하면
+                    if(( !val || val === " " || columnPhoneInfo[colIdx].reg.test(val)===false )){
+                        // 필수 입력값이 맞을경우
+                        if(notRequiredInputValue.every(colName => colName !== key )) {
+                            //   테이블   Row        Column           Input
+                            refs.current[rowIdx].children[colIdx+1].children[0].focus();
+                            return true;
+                        }else return false;
+                    }
+                });
+                if (isNotPassReg) canSendData = false;
+                else canSendData = true;
             });
-            if (isNotPassReg) return false;
-            else return true;
-        });
-        // }
+        }else canSendData = true;
         
-        // const pass = isFilledList(addList) && addList.every((addedRow,rowIndex)=>{
-        //     //맨 앞 id 부분을 자름
-        //     const nowRow = rows.find(row=>row.id === addedRow.id);
-        //     let colIndex = 0;
-        //     delete nowRow.id;
-
-        //     for( let key in nowRow){
-        //         const columnInfo = columnPhoneInfo.find(row => row.colName === key);
-        //         const commaedValue = commaValues.some(val=>val === key) 
-        //                 ? utils.uncomma(nowRow[key]) 
-        //                 : nowRow[key];
-        //         // 빈칸이거나 정규식을 통과하지 못했을 때 포커싱 후 true 리턴
-        //         if(( !commaedValue || commaedValue === " "|| columnInfo.reg.test(commaedValue)===false ) 
-        //           && requiredInputValue.every(colName => colName !== key )){
-        //             refs.current[rowIndex].children[colIndex+1].children[0].focus();
-        //             colIndex++;
-        //               return false;
-        //         }else return true;
-                
-        //     }
-        // });
-        
-        
-        if( isFilledList(deleteList) === true){
-            
-        }
-        if( isFilledList(updateList) === true){
-
-        }
-        if(isPassAddList)
-            RESTAPI.patchPhoneInfo({addList,deleteList,updateList});
+        if( canSendData) RESTAPI.patchPhoneInfo({addList,deleteList,updateList});
     };
 
     if( loading ) return null;
