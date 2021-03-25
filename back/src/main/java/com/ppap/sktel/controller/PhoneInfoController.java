@@ -60,22 +60,17 @@ public class PhoneInfoController {
     public  ResponseEntity<String> patchData(@RequestBody Map<String,List<Object>> object) {
         System.out.println("------데이터받음------");
 
-        object.forEach((key,val)->{
-            System.out.println(key);
-            val.forEach(list->{
-                System.out.println(list);
-                // System.out.println(list.getId());
-                // System.out.println(list.getModel_name());
-                // System.out.println(list.getMachine_name());
-                // System.out.println(list.getShipping_price());
-                // System.out.println(list.getMaker());
-                // System.out.println(list.getCreated());
-                // System.out.println(list.getBattery());
-                // System.out.println(list.getScreen_size());
-                // System.out.println(list.getStorage());
-            });
-        });
+        List<Integer> deleteList = new ArrayList<Integer>();
 
-        return ResponseEntity.ok("ok!!I got a message");
+        object.forEach((key,val)->{
+            if( key == "deleteList"){
+                val.forEach(lists->{
+                    deleteList.add((Integer) lists);
+                });
+            }
+        });
+        phoneInfoService.infoDelete(deleteList);
+
+        return ResponseEntity.ok("delete success");
     }
 }

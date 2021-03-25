@@ -71,9 +71,8 @@ const commaValues = [
 
 //리스트가 1개 이상인지 확인하는 함수
 function isFilledList(list){
-    // console.log(list );
     if(list !== null)
-        if(list.length > 0 )
+        if(list.length >= 1 )
             return true;
         else   
             return false;
@@ -108,10 +107,9 @@ function Contents(){
         const deleteList = dataChangeList.dataDeleteList;
         const updateList = dataChangeList.dataUpdateList;
         // 만약 추가버튼을 눌러서 추가한 데이터가 있으면
-        let canSendData = false;
-        // if( isFilledList(addList) === true){
-            // adlist 모두 순환하다가 빈 값이 있으면 멈춤.
+        let canSendAddData = false;
         if(isFilledList(addList)){
+            // adlist 모두 순환하다가 빈 값이 있으면 멈춤.
             addList.some( row => {
                 const rowIdx = rows.findIndex(originalRow=>originalRow.id === row.id);
                 // 추가된 row를 맨 앞 id를 자르고서 키와 값을 rowEntires에 넣음
@@ -119,7 +117,6 @@ function Contents(){
                 // 빈칸이 있거나 정규식을 통과 못하면 TRUE 아니면 FALSE
                 // eslint-disable-next-line array-callback-return
                 const isNotPassReg = rowEntries.some((ele,colIdx) => {
-                    console.log("123123123");
                     const key = ele[0];
                     const val = commaValues.some(val=>val === key) 
                                 ? utils.uncomma(ele[1]) 
@@ -134,12 +131,14 @@ function Contents(){
                         }else return false;
                     }
                 });
-                if (isNotPassReg) canSendData = false;
-                else canSendData = true;
+                if (isNotPassReg) canSendAddData = false;
+                else canSendAddData = true;
             });
-        }else canSendData = true;
+        }else canSendAddData = true;
         
-        if( canSendData) RESTAPI.patchPhoneInfo({addList,deleteList,updateList});
+        // 추가, 제거, 수정 중 하나의 리스트라도 차있어야 전송함.
+        if( canSendAddData && (isFilledList(deleteList) || isFilledList(updateList))) 
+            RESTAPI.patchPhoneInfo({addList,deleteList,updateList});
     };
 
     if( loading ) return null;

@@ -1,5 +1,6 @@
 package com.ppap.sktel.phoneInfo.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.ppap.sktel.phoneInfo.PhoneInfo;
@@ -37,9 +38,10 @@ public class PhoneInfoService implements IPhoneInfoService {
     }
 
     @Override
-    public void infoDelete(int id) {
+    public void infoDelete(List<Integer> id){
         // TODO 폰 정보 삭제
-
+        System.out.print("infoDelete");
+        phoneInfoDao.phoneInfoDelete(id);
     }
 
 }
