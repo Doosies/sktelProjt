@@ -10,7 +10,6 @@ const StyledTable = styled.div`
 
 // function Tables({changeRefsRow}){
 const Tables = forwardRef((props,ref) => {
-    console.log("table.js");
     const rows = useSelector( state =>state.phoneData.data.rows);
     
     return(

@@ -123,7 +123,7 @@ export default function phoneData(state = initialState, action){
             // });
         case PHONE_DATA_DELETE:
             const dataAddListIdx = state.dataChangeList.dataAddList.findIndex( val => val === action.id);
-            console.log("deleteRow",action);
+            // console.log("deleteRow",action);
             return{
                 ...state,
                 // refData:state.refData.filter(row => row.id !== action.id),
