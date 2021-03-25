@@ -147,7 +147,7 @@ export default function phoneData(state = initialState, action){
                                  : state.dataChangeList.dataAddList.filter(id => id !== action.id),
                     // 제거할 row가 추가된 row가 아닐 경우 deleteList에 추가
                     dataDeleteList: dataAddListIdx === -1
-                                 ? state.dataChangeList.dataDeleteList.concat(action.id)
+                                 ? state.dataChangeList.dataDeleteList.concat({id:action.id})
                                  : state.dataChangeList.dataDeleteList,
                     // 수정을 했는데 지웠을 경우, updateList에서 지워줌
                     dataUpdateList: dataUpdateListIdx === -1
