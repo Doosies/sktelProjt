@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import CButton from '../../../../components/Button';
-import { phoneDataUpdate, phoneDataFetchAsync } from '../../../../modules/phoneData';
+import { phoneDataUpdate, phoneDataFetchAsync, phoneDataChangedList } from '../../../../modules/phoneData';
 import * as RESTAPI from '../../../../utils/api';
 import { columnPhoneInfo, inputValidCheck } from '../../../../utils/propertyInfo';
 import * as utils from '../../../../utils/utils';
@@ -88,9 +88,10 @@ function Contents(){
         error:state.phoneData.state.error,
     }), shallowEqual);
 
+    //focus 이동을 위한 refs
     const refs = useRef(new Array(rows.length).fill());
+
     useEffect(()=>{
-        console.log("contentl.js");
         //NOTE - 화면이 로딩될 때 데이터들을 받아와줌.
         dispatch(phoneDataFetchAsync());
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -134,11 +135,21 @@ function Contents(){
                 if (isNotPassReg) canSendAddData = false;
                 else canSendAddData = true;
             });
-        }else canSendAddData = true;
+        }else canSendAddData = false;
         
+        // console.log(canSendAddData , isFilledList(deleteList),  isFilledList(updateList));
         // 추가, 제거, 수정 중 하나의 리스트라도 차있어야 전송함.
-        if( canSendAddData && (isFilledList(deleteList) || isFilledList(updateList))) 
-            RESTAPI.patchPhoneInfo({addList,deleteList,updateList});
+        if( canSendAddData || (isFilledList(deleteList) || isFilledList(updateList))){
+            const response = await RESTAPI.patchPhoneInfo({addList,deleteList,updateList});
+            if( response === "ok"){
+                //관련 리스트를 전부 비움
+                // dispatch(phoneDataChangedList.Init());
+                //데이터를 다시 받아옴.
+                // dispatch(phoneDataFetchAsync());
+            }else {
+                alert("데이터 전송에 실패했습니다.");
+            }
+        }
     };
 
     if( loading ) return null;
