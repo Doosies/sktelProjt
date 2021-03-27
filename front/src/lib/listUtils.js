@@ -41,7 +41,7 @@ export const handleListActions = (type) =>{
                     // 아이디가 없으면
                     if( dataListIndex === -1)
                         dataDraft.push(updateData);
-                    //update 리스트에 해당 id가 존재할 경우 column만 추가해줌.
+                    //update 리스트에 해당 id가 존재할 경우 column만 추가 or 변경
                     else if( action.value !== dataState[dataListIndex][action.colName])
                         dataDraft[dataListIndex][action.colName] = action.value;
                     break;
