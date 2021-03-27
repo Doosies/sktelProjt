@@ -19,6 +19,7 @@ const PHONE_DATA_UPDATE_LIST_DELETE = 'phoneData/PHONE_DATA_UPDATE_LIST_DELETE';
 // const PHONE_DATA_LIST= 'phoneData/PHONE_DATA_ADD_LIST';
 const PHONE_DATA_ADD_LIST_CHANGE = 'phoneData/PHONE_DATA_ADD_LIST_CHANGE';
 const PHONE_DATA_ADD_LIST_DELETE = 'phoneData/PHONE_DATA_ADD_LIST_DELETE';
+const PHONE_DATA_UPDATE_N_ADD_LIST_INIT = 'phoneData/PHONE_DATA_UPDATE_N_ADD_LIST_INIT';
 
 // const PHONE_DATA_LIST = 'phoneData/PHONE_DATA_UPDATE_LIST';
 
@@ -101,7 +102,11 @@ const phoneDataChangedList = ({
             id: id,
             colName:colName,
         }),
-    }
+    },
+    Init:()=>({
+        type:PHONE_DATA_UPDATE_N_ADD_LIST_INIT,
+
+    })
 });
 
 ////////////////////////////////////////////////////////
@@ -130,7 +135,7 @@ export default function phoneData(state = initialState, action){
                 }
             };
         case PHONE_DATA_DELETE:
-            const dataAddListIdx = state.dataChangeList.dataAddList.findIndex( val => val === action.id);
+            const dataAddListIdx = state.dataChangeList.dataAddList.findIndex( row => row.id === action.id);
             const dataUpdateListIdx = state.dataChangeList.dataUpdateList.findIndex( row => row.id === action.id);
             return{
                 ...state,
@@ -144,7 +149,7 @@ export default function phoneData(state = initialState, action){
                     // 제거할 row가 추가된 row일 경우 addList에서 해당 배열 제거
                     dataAddList: dataAddListIdx === -1
                                  ? state.dataChangeList.dataAddList
-                                 : state.dataChangeList.dataAddList.filter(id => id !== action.id),
+                                 : state.dataChangeList.dataAddList.filter(row => row.id !== action.id),
                     // 제거할 row가 추가된 row가 아닐 경우 deleteList에 추가
                     dataDeleteList: dataAddListIdx === -1
                                  ? state.dataChangeList.dataDeleteList.concat({id:action.id})
@@ -181,6 +186,15 @@ export default function phoneData(state = initialState, action){
         case PHONE_DATA_UPDATE_LIST_CHANGE:
         case PHONE_DATA_UPDATE_LIST_DELETE:
             return handleListActions(PHONE_DATA)(state,action);
+        case PHONE_DATA_UPDATE_N_ADD_LIST_INIT:
+            return{
+                ...state,
+                dataChangeList:{
+                    dataAddList:[],
+                    dataDeleteList:[],
+                    dataUpdateList:[],
+                }
+            };
         default:
             return state;
     }
