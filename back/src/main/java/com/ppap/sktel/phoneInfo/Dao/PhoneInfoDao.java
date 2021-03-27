@@ -21,6 +21,7 @@ public class PhoneInfoDao implements IPhoneInfoDao {
 
     @Override
     public void phoneInfoInsert(List<PhoneInfo> insertList) {
+        System.out.println("data insert");
         this.jdbcTemplate.batchUpdate("insert into PHN_INFO_TB(id, model_name, machine_name, shipping_price, maker, created, battery, screen_size, storage) values(?,?,?,?,?,?,?,?,?)",
             new BatchPreparedStatementSetter(){
                 @Override
@@ -45,6 +46,7 @@ public class PhoneInfoDao implements IPhoneInfoDao {
 
     @Override
     public void phoneInfoUpdate(List<PhoneInfo> updateList) {
+        System.out.println("data update");
         this.jdbcTemplate.batchUpdate(
             "UPDATE phn_info_tb "
                 +"SET model_name=ifnull(?,model_name), machine_name=ifnull(?,machine_name), shipping_price=ifnull(?,shipping_price), "
@@ -72,12 +74,14 @@ public class PhoneInfoDao implements IPhoneInfoDao {
 
     @Override
     public void phoneInfoDelete(List<Integer>id) {
+        System.out.println("data delete");
         List<Object[]> ts = id.stream().map(i -> new Object[]{i}).collect(Collectors.toList());
         this.jdbcTemplate.batchUpdate("delete from PHN_INFO_TB where ID in(?);", ts);
     }
 
     @Override
     public List<PhoneInfo> phoneInfoSelect() {
+        System.out.println("data select");
         String sql = "SELECT id, model_name, machine_name, FORMAT(shipping_price, 0)as shipping_price, maker, created, if(isnull(battery),'',FORMAT(battery,0))as battery , if(isnull(screen_size),'',FORMAT(screen_size,0))as screen_size, if(isnull(storage),'',FORMAT(storage,0))as storage FROM phn_info_tb;";
         return jdbcTemplate.query(sql,
             (rs, rowNum) -> new PhoneInfo(

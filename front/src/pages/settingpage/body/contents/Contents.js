@@ -146,7 +146,7 @@ function Contents(){
                 //관련 리스트를 전부 비움
                 dispatch(phoneDataChangedList.Init());
                 //데이터를 다시 받아옴.
-                // dispatch(phoneDataFetchAsync());
+                dispatch(phoneDataFetchAsync());
             }else {
                 alert("데이터 전송에 실패했습니다.");
             }
