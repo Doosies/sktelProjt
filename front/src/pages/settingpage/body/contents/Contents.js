@@ -142,8 +142,9 @@ function Contents(){
         if( canSendAddData || (isFilledList(deleteList) || isFilledList(updateList))){
             const response = await RESTAPI.patchPhoneInfo({addList,deleteList,updateList});
             if( response === "ok"){
+                
                 //관련 리스트를 전부 비움
-                // dispatch(phoneDataChangedList.Init());
+                dispatch(phoneDataChangedList.Init());
                 //데이터를 다시 받아옴.
                 // dispatch(phoneDataFetchAsync());
             }else {

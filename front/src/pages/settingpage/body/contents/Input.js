@@ -100,7 +100,7 @@ const Input = ({colIndex, id}) =>{
             // alert 두번 나오는거 버그 수정 위한 if문
             if ( !didShowAlert.current) {
                 //안내문 출력
-                // alert(nowColumnInfo.error);
+                alert(nowColumnInfo.error);
                 //처음값으로 되돌려버림
                 // didShowAlert.current = true;
                 updateInputCompo(firstVal);
