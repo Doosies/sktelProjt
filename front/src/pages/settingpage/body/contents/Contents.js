@@ -61,6 +61,9 @@ const ContentsBottom = styled.form`
     padding-top:7px;
 `;
 
+const requiredInputValue = [
+    "model_name", "machine_name", "shipping_price", "maker", "created",
+]
 // 필수 입력 항목
 const notRequiredInputValue = [
     "battery", "screen_size", "storage",
@@ -79,7 +82,7 @@ function isFilledList(list){
 }
 
 function Contents(){
-    // console.log("contents!!"); 
+    console.log("contents!!"); 
     const dispatch = useDispatch();
     const {dataChangeList, rows, error,loading} = useSelector( state =>({
         dataChangeList: state.phoneData.dataChangeList,
@@ -108,41 +111,30 @@ function Contents(){
         const deleteList = dataChangeList.dataDeleteList;
         const updateList = dataChangeList.dataUpdateList;
         // 만약 추가버튼을 눌러서 추가한 데이터가 있으면
-        let canSendAddData = false;
-        if(isFilledList(addList)){
-            // adlist 모두 순환하다가 빈 값이 있으면 멈춤.
-            addList.some( row => {
-                const rowIdx = rows.findIndex(originalRow=>originalRow.id === row.id);
-                // 추가된 row를 맨 앞 id를 자르고서 키와 값을 rowEntires에 넣음
-                const rowEntries = Object.entries(rows[rowIdx]).splice(1);
-                // 빈칸이 있거나 정규식을 통과 못하면 TRUE 아니면 FALSE
-                // eslint-disable-next-line array-callback-return
-                const isNotPassReg = rowEntries.some((ele,colIdx) => {
-                    const key = ele[0];
-                    const val = commaValues.some(val=>val === key) 
-                                ? utils.uncomma(ele[1]) 
-                                : ele[1];
-                    // 빈칸이거나 정규식을 통과하지 못하면
-                    if(( !val || val === " " || columnPhoneInfo[colIdx].reg.test(val)===false )){
-                        // 필수 입력값이 맞을경우
-                        if(notRequiredInputValue.every(colName => colName !== key )) {
-                            //   테이블   Row        Column           Input
-                            refs.current[rowIdx].children[colIdx+1].children[0].focus();
-                            return true;
-                        }else return false;
-                    }
+        const canSendAddData =  isFilledList(addList) && !addList.some( row => {
+            const rowIdx = rows.findIndex(originalRow=>originalRow.id === row.id);
+            // 추가된 row를 맨 앞 id를 자르고서 키와 값을 rowEntires에 넣음
+            const rowEntries = Object.entries(rows[rowIdx]).splice(1);
+            // 빈칸이 있거나 정규식을 통과 못하면 TRUE 아니면 FALSE
+            return rowEntries.some((ele,colIdx) => {
+                const key = ele[0];
+                const val = commaValues.some(val=>val === key) 
+                            ? utils.uncomma(ele[1]) 
+                            : ele[1];
+                // 필수값인지 확인함. 맞을시 그 값을 포커싱해줌
+                return requiredInputValue.some(colName =>{
+                    if( colName === key && (( !val || val === " " || columnPhoneInfo[colIdx].reg.test(val)===false ))){
+                        refs.current[rowIdx].children[colIdx+1].children[0].focus();
+                        return true;
+                    }else return false;
                 });
-                if (isNotPassReg) canSendAddData = false;
-                else canSendAddData = true;
             });
-        }else canSendAddData = false;
+        });
         
-        // console.log(canSendAddData , isFilledList(deleteList),  isFilledList(updateList));
         // 추가, 제거, 수정 중 하나의 리스트라도 차있어야 전송함.
         if( canSendAddData || (isFilledList(deleteList) || isFilledList(updateList))){
             const response = await RESTAPI.patchPhoneInfo({addList,deleteList,updateList});
             if( response === "ok"){
-                
                 //관련 리스트를 전부 비움
                 dispatch(phoneDataChangedList.Init());
                 //데이터를 다시 받아옴.
