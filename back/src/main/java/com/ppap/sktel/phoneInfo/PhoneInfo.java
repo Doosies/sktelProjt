@@ -39,4 +39,16 @@ public class PhoneInfo{
         this.screen_size = screen_size;
         this.storage = storage;
     }
+
+    // public PhoneInfo(PhoneInfo phoneinfo){
+    //     this.id = phoneinfo.getId();
+    //     this.model_name=phoneinfo.getModel_name();
+    //     this.machine_name = phoneinfo.getMachine_name();
+    //     this.shipping_price = phoneinfo.getShipping_price();
+    //     this.maker = phoneinfo.getMaker();
+    //     this.created = phoneinfo.getCreated();
+    //     this.battery = phoneinfo.getBattery();
+    //     this.screen_size = phoneinfo.getScreen_size();
+    //     this.storage = phoneinfo.getStorage();
+    // }
 }

@@ -21,9 +21,11 @@ public class PhoneInfoService implements IPhoneInfoService {
     }
 
     @Override
-    public void infoAdd(PhoneInfo phoneInfo) {
+    public void infoAdd(List<PhoneInfo> addList) {
         // TODO 폰 정보 추가
-
+        if( addList.size() > 0){
+            phoneInfoDao.phoneInfoInsert(addList);
+        }
     }
 
     @Override
@@ -32,15 +34,19 @@ public class PhoneInfoService implements IPhoneInfoService {
     }
 
     @Override
-    public void infoChange(int id, PhoneInfo phoneInfo) {
+    public void infoUpdate(List<PhoneInfo> updateList) {
         // TODO 폰 정보 수정
+        if( updateList.size() > 0){
+            phoneInfoDao.phoneInfoUpdate(updateList);
+        }
 
     }
 
     @Override
-    public void infoDelete(List<Integer> id){
+    public void infoDelete(List<Integer> deleteListId){
         // TODO 폰 정보 삭제
-        phoneInfoDao.phoneInfoDelete(id);
+        if( deleteListId.size() > 0)
+            phoneInfoDao.phoneInfoDelete(deleteListId);
     }
 
 }
