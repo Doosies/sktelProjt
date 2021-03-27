@@ -50,7 +50,7 @@ public class PhoneInfoDao implements IPhoneInfoDao {
         this.jdbcTemplate.batchUpdate(
             "UPDATE phn_info_tb "
                 +"SET model_name=ifnull(?,model_name), machine_name=ifnull(?,machine_name), shipping_price=ifnull(?,shipping_price), "
-                +"maker=ifnull(?,maker), created=ifnull(?,created), battery=if(?='',null,ifnull(?,battery)), screen_size=ifnull(?,screen_size), storage=ifnull(?,storage) "
+                +"maker=ifnull(?,maker), created=ifnull(?,created), battery=if(?='',null,ifnull(?,battery)), screen_size=if(?='',null,ifnull(?,screen_size)), storage=if(?='',null,ifnull(?,storage)) "
                 +"WHERE id = ?",
                 new BatchPreparedStatementSetter(){
                     @Override
