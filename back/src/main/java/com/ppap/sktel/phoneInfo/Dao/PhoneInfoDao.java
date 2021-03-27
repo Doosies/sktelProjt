@@ -64,9 +64,12 @@ public class PhoneInfoDao implements IPhoneInfoDao {
                         ps.setString(7, updateList.get(i).getBattery());
 
                         ps.setString(8, updateList.get(i).getScreen_size());
-                        ps.setString(9, updateList.get(i).getStorage());
-                        ps.setInt(10, updateList.get(i).getId());
-                        System.out.println(ps);
+                        ps.setString(9, updateList.get(i).getScreen_size());
+
+                        ps.setString(10, updateList.get(i).getStorage());
+                        ps.setString(11, updateList.get(i).getStorage());
+
+                        ps.setInt(12, updateList.get(i).getId());
                     }
                     @Override
                     public int getBatchSize() {
