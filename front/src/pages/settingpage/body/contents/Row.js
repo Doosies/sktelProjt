@@ -35,7 +35,7 @@ const Row = forwardRef(({top=false, rowId, rowIndex},inputRefs) =>{
     );
     return( 
         <StyledRow ref={el=>inputRefs.current[rowIndex]=el}>
-            <DeleteButton onClick={()=>handleDeleteButton(rowId)}> delete </DeleteButton>
+            <DeleteButton onClick={()=>handleDeleteButton(rowId)}> 삭제 </DeleteButton>
             {columnPhoneInfo.map((column, colIndex)=>
                 <Column key={`row_${rowId}_${column.name}`} width={column.width} textalign={column.textalign}>
                     <Input colIndex={colIndex} id={rowId} column={column} />

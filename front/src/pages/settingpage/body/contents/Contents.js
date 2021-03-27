@@ -166,8 +166,8 @@ function Contents(){
                 </ContentsTop>
                 <ContentsBottom>
                     <ContentsTopButtons>
-                        <CButton onClick={ handleAdd } width="60px" height="40px" font_size="13px" font_weight="bold" border>Add</CButton>
-                        <CButton onClick={ handleApply } width="60px" height="40px" font_size="13px" font_weight="bold" border>Apply</CButton>
+                        <CButton onClick={ handleAdd } width="60px" height="40px" font_size="13px" font_weight="bold" border>추가</CButton>
+                        <CButton onClick={ handleApply } width="60px" height="40px" font_size="13px" font_weight="bold" border>적용</CButton>
                     </ContentsTopButtons>
                     {!loading && !error && <Tables  ref={refs}/>}
                     {/* {!loading && !error && <Tables/>} */}

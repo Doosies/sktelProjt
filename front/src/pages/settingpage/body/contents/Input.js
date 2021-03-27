@@ -1,6 +1,6 @@
 import React, {useCallback,  useRef } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
-import styled, { css } from 'styled-components';
+import styled, { createGlobalStyle, css } from 'styled-components';
 import { phoneDataChangedList, phoneDataUpdate} from '../../../../modules/phoneData';
 import { columnPhoneInfo } from '../../../../utils/propertyInfo';
 import * as utils from '../../../../utils/utils';
@@ -86,26 +86,22 @@ const Input = ({colIndex, id}) =>{
 
      ///////////////////////////////////////////////////////// 포커싱이 벗어났을 때
     const handleBlur = useCallback( (e) =>{
+        console.log("onblur");
         //최종 수정값
         const deletedWord = e.target.value.replace(nowColumnInfo.deleteWord,"");
-        // const uncommaWord = utils.uncomma(deletedWord);
-        // 해당 column에 해당하는 정규식 통과 못 할 경우(올바르지 않은 값일 경우)
-            // 또는 값이 빈값이고, 필수값일 경우
-        if( (nowColumnInfo.reg.test(deletedWord) === false )
-        || ( (deletedWord=== " " || deletedWord ==="") && notRequired.every(val=>val !== nowColumnInfo.colName)))
-        
+        //              정규식을 통과 못함                 && 변경된 값이 공백이 아님 ( 공백을 입력해도 되는 input을 위해)
+        if( (nowColumnInfo.reg.test(deletedWord) === false && deletedWord !== ''&& !didShowAlert.current )
+        //   (    빈칸이거나     ||    공백임        )  &&  필수값임
+        ||( (deletedWord=== " " || deletedWord ==="") && required.some(val=>val === nowColumnInfo.colName) ))
         {
             // 포커싱이 바뀌어도 다시 포커싱해줌.
             ref.current.focus();
-            // alert 두번 나오는거 버그 수정 위한 if문
-            if ( !didShowAlert.current) {
-                //안내문 출력
-                alert(nowColumnInfo.error);
-                //처음값으로 되돌려버림
-                // didShowAlert.current = true;
-                updateInputCompo(firstVal);
-                didShowAlert.current = !didShowAlert.current;
-            } 
+            //안내문 출력
+            alert(nowColumnInfo.error);
+            //처음값으로 되돌려버림
+            updateInputCompo(firstVal);
+            // didShowAlert 는 alert 두번 나오는 버그 고치기 위해 넣어줌.
+            didShowAlert.current = !didShowAlert.current;
         }
         //정규식을 통과할 경우(올바른 값일경우)
         else{
@@ -115,9 +111,6 @@ const Input = ({colIndex, id}) =>{
             : deletedWord;
             // const firstValue = firstVal || '';
             const firstValue = firstVal === null ? '': firstVal;
-            //만약 수정을 거친 값이 내가 입력한 값과 다르면 
-            // input 태그를 업데이트 해준다.
-            // if (modifiedValue !== nowVal) updateInputCompo(modifiedValue);
             
             // 추가한 행이 아니라면
             if( !isAddedRow ) 
@@ -133,7 +126,7 @@ const Input = ({colIndex, id}) =>{
             }
         }
         
-    },[nowColumnInfo.deleteWord, nowColumnInfo.reg, nowColumnInfo.colName, updateInputCompo, firstVal, isAddedRow, updateListUpdateDelete, id, updateListUpdateChange, updateListAddDelete, updateListAddChange]);
+    },[nowColumnInfo.deleteWord, nowColumnInfo.reg, nowColumnInfo.colName, nowColumnInfo.error, updateInputCompo, firstVal, isAddedRow, updateListUpdateDelete, id, updateListUpdateChange, updateListAddDelete, updateListAddChange]);
 
     return( 
         <StyledInput 
@@ -144,6 +137,8 @@ const Input = ({colIndex, id}) =>{
             onBlur={handleBlur}
             // notRequired에 있는 배열에 포함되면 필수항목이 아님.
             required={notRequired.every(val => val !== nowColumnInfo.colName) ? true : false}
+            onClickCapture={()=>{console.log("capture input");}}
+            onClick={()=>{console.log("onclick input")}}
             ref={ref}
             // placeholder={}
         />

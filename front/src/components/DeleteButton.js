@@ -17,7 +17,8 @@ const StyledDeleteButton = styled(Button)`
 
 const DeleteButton = ({onClick, top, children}) =>{
     return(
-        <StyledDeleteButton onClick={onClick} top={top}>
+        // deletebutton을 누르면이전에 발생한 모든 이벤트를 취소함.
+        <StyledDeleteButton onClick={onClick} top={top} onMouseDown={(e)=>{e.preventDefault()}}>
             {children}
         </StyledDeleteButton>
     );
