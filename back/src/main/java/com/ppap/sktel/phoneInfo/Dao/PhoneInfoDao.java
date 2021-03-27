@@ -50,7 +50,7 @@ public class PhoneInfoDao implements IPhoneInfoDao {
         this.jdbcTemplate.batchUpdate(
             "UPDATE phn_info_tb "
                 +"SET model_name=ifnull(?,model_name), machine_name=ifnull(?,machine_name), shipping_price=ifnull(?,shipping_price), "
-                +"maker=ifnull(?,maker), created=ifnull(?,created), battery=ifnull(?,battery), screen_size=ifnull(?,screen_size), storage=ifnull(?,storage) "
+                +"maker=ifnull(?,maker), created=ifnull(?,created), battery=if(?='',null,ifnull(?,battery)), screen_size=ifnull(?,screen_size), storage=ifnull(?,storage) "
                 +"WHERE id = ?",
                 new BatchPreparedStatementSetter(){
                     @Override
@@ -61,9 +61,12 @@ public class PhoneInfoDao implements IPhoneInfoDao {
                         ps.setString(4, updateList.get(i).getMaker());
                         ps.setDate(5, updateList.get(i).getCreated());
                         ps.setString(6, updateList.get(i).getBattery());
-                        ps.setString(7, updateList.get(i).getScreen_size());
-                        ps.setString(8, updateList.get(i).getStorage());
-                        ps.setInt(9, updateList.get(i).getId());
+                        ps.setString(7, updateList.get(i).getBattery());
+
+                        ps.setString(8, updateList.get(i).getScreen_size());
+                        ps.setString(9, updateList.get(i).getStorage());
+                        ps.setInt(10, updateList.get(i).getId());
+                        System.out.println(ps);
                     }
                     @Override
                     public int getBatchSize() {
