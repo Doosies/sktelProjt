@@ -90,18 +90,21 @@ const Input = ({colIndex, id}) =>{
         //최종 수정값
         const deletedWord = e.target.value.replace(nowColumnInfo.deleteWord,"");
         //              정규식을 통과 못함                 && 변경된 값이 공백이 아님 ( 공백을 입력해도 되는 input을 위해)
-        if( (nowColumnInfo.reg.test(deletedWord) === false && deletedWord !== ''&& !didShowAlert.current )
+        if( (nowColumnInfo.reg.test(deletedWord) === false && deletedWord !== '')
         //   (    빈칸이거나     ||    공백임        )  &&  필수값임
         ||( (deletedWord=== " " || deletedWord ==="") && required.some(val=>val === nowColumnInfo.colName) ))
         {
-            // 포커싱이 바뀌어도 다시 포커싱해줌.
-            ref.current.focus();
-            //안내문 출력
-            alert(nowColumnInfo.error);
-            //처음값으로 되돌려버림
-            updateInputCompo(firstVal);
             // didShowAlert 는 alert 두번 나오는 버그 고치기 위해 넣어줌.
-            didShowAlert.current = !didShowAlert.current;
+            if( didShowAlert.current === false ){
+                // 포커싱이 바뀌어도 다시 포커싱해줌.
+                ref.current.focus();
+                //안내문 출력
+                alert(nowColumnInfo.error);
+                //처음값으로 되돌려버림
+                updateInputCompo(firstVal);
+                didShowAlert.current = !didShowAlert.current;
+
+            }
         }
         //정규식을 통과할 경우(올바른 값일경우)
         else{
