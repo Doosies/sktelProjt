@@ -6,8 +6,8 @@ import java.util.List;
 import com.ppap.sktel.phoneInfo.PhoneInfo;
 
 public interface IPhoneInfoService{
-    void infoAdd(PhoneInfo phoneInfo);
+    void infoAdd(List<PhoneInfo> phoneInfoList);
     List<PhoneInfo> getAllInfo();
-    void infoChange(int id, PhoneInfo phoneInfo);
+    void infoUpdate(List<PhoneInfo> phoneInfoList);
     void infoDelete(List<Integer> id);
 }
