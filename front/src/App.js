@@ -13,7 +13,7 @@ const GlobalStyle = createGlobalStyle`
     body{
         @import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap');
         font-family: 'Nanum Gothic', sans-serif;
-        height:100vh;
+        height:100%;
         width:100vw;
         
         border:0;
@@ -51,7 +51,7 @@ function App(){
                 <Route path="/setting" component = {Setting}/>
                 <Route path="/test" component = {Test}/>
             </BrowserRouter>
-            <Footer/>
+            {/* <Footer/> */}
         </StyledApp>
         // </Provider>
     );
