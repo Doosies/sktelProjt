@@ -63,7 +63,7 @@ export const columnPhoneInfo = [
     },
     // 배터리
     {
-        name:"배터리 용량", width:"80px", colName:"battery", textalign:"right",
+        name:"배터리 용량", width:"85px", colName:"battery", textalign:"right",
         deleteWord:/[^\d]+/g,
         reg:/^[\d]{1,10}$|\s{0,}/g,
         error:`숫자가 아닌 값이 입력되었습니다. 확인해주세요.`,
