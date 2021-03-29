@@ -16,18 +16,21 @@ const StyledContents = styled.div`
     width:100%;
     box-sizing:border-box;
 
+    justify-content:center;
+    align-items:center;
+
+    position:relative;
+`;
+
+const ContentsBox= styled.div`
     padding-top: 30px;
     padding-left: 30px;
     padding-right: 30px;
     padding-bottom: 30px;
 
-    display:flex;
-    justify-content:center;
-    align-items:center;
-`;
+    position:absolute;
+    left:0;
 
-const ContentsBox= styled.div`
-    width:100%;
     height:100%;
 `;
 
@@ -37,22 +40,25 @@ const ContentsTop = styled.div`
     display:flex;
     width:100%;
 
-    border-bottom: solid 1px #707070;; 
+    /* border-bottom: solid 1px #707070;;  */
 `;
 const ContentsTopName = styled.div`
     font-size:19px;
     font-weight:bold;
 `;
 const ContentsTopButtons = styled.div`
+    position:absolute;
+    right:0;
     /* padding-top:13px; */
-    padding-right:13px;
+    /* padding-right:13px; */
     /* padding-left:13px; */
-    padding-bottom: 13px;
-    height:35px;
+    /* padding-bottom: 13px; */
+    /* height:35px; */
     display:flex;
 
     font-size:15px;
     font-weight:500; 
+    /* right:0; */
 `;
 
 const ContentsBottom = styled.form`
@@ -129,7 +135,7 @@ function Contents(){
                     }else return false;
                 });
             });
-        });
+        });// handleApply()
         
         // 추가, 제거, 수정 중 하나의 리스트라도 차있어야 전송함.
         if( canSendAddData || (isFilledList(deleteList) || isFilledList(updateList))){
@@ -140,10 +146,27 @@ function Contents(){
                 //데이터를 다시 받아옴.
                 dispatch(phoneDataFetchAsync());
             }else {
-                alert("데이터 전송에 실패했습니다.");
+                alert("데이터 전송에 실패했습니다. 로그 확인바람.");
             }
         }
     };
+    // 37 왼쪽 ,38 위쪽
+    // 현재 커서의 위치가 문자의 맨 앞 혹은 맨 뒤일경우
+    const handleKeyUp = (e) =>{
+        const nowUpKey = e.keyCode;
+        if( nowUpKey === 37 || nowUpKey === 39 )
+            if(e.target.selectionEnd === 0 || e.target.selectionEnd === e.target.value.length){
+                console.log(false);
+            } else console.log(true);
+
+    }
+    // 39 오른쪽, 40 아래쪽
+    // 맨뒤 혹은 맨앞으로 가려는 이벤트 중지
+    const handleKeyDown = (e)=>{
+        const nowDownKey = e.keyCode;
+        if( nowDownKey === 38 || nowDownKey === 40)
+            e.preventDefault();
+    }
 
     if( loading ) return null;
     if( error ) return <div>에러 발생 자세한건 로그 참조</div>;
@@ -151,17 +174,19 @@ function Contents(){
     
 
     return(
-        <StyledContents className="contents" onKeyDown={(e)=>console.log(e)}>
+        <StyledContents onMouseDown={(e)=>console.log(e)} onKeyUp={handleKeyUp} onKeyDown={handleKeyDown}>
             <ContentsBox>
                 <ContentsTop>
                     <ContentsTopName>핸드폰 정보 수정</ContentsTopName>
-                </ContentsTop>
-                <ContentsBottom>
                     <ContentsTopButtons>
                         <CButton onClick={ handleAdd } width="60px" height="40px" font_size="13px" font_weight="bold" border>추가</CButton>
                         <CButton onClick={ handleApply } width="60px" height="40px" font_size="13px" font_weight="bold" border>적용</CButton>
                     </ContentsTopButtons>
-                    {!loading && !error && <Tables  ref={refs}/>}
+                </ContentsTop>
+                <ContentsBottom >
+                    {!loading && !error && 
+                        <Tables  ref={refs}/>
+                    }
                     {/* {!loading && !error && <Tables/>} */}
                 </ContentsBottom>
             </ContentsBox>

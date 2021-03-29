@@ -1,6 +1,6 @@
 import React, { forwardRef, useCallback } from 'react'
 import { useDispatch} from 'react-redux';
-import styled, {  } from 'styled-components';
+import styled, { css } from 'styled-components';
 import DeleteButton from '../../../../components/DeleteButton';
 import {  phoneDataUpdate } from '../../../../modules/phoneData';
 import { columnPhoneInfo } from '../../../../utils/propertyInfo';
@@ -11,6 +11,12 @@ const StyledRow = styled.div`
     text-align:center;
     display:flex;
     align-items:center;
+    border-bottom: solid 1px;
+
+    ${({top})=>top && 
+        css`
+            border-top: solid 2px;
+    `}
 `;
 
 const Row = forwardRef(({top=false, rowId, rowIndex},inputRefs) =>{
@@ -22,7 +28,7 @@ const Row = forwardRef(({top=false, rowId, rowIndex},inputRefs) =>{
     },[]);
 
     if( top ) return(
-        <StyledRow>
+        <StyledRow top>
         {/* {testRefs.map(val=>val.id)} */}
             <DeleteButton top/>
             {columnPhoneInfo.map((column)=>

@@ -4,7 +4,7 @@ import styled, { css } from 'styled-components';
 const StyledLeftMainMenu = styled.div`
     width:100%;
     /* box-sizing:border-box; */
-
+    /* position:relative; */
     padding-left: 20px;
     padding-right: 20px;
     padding-top: 30px;

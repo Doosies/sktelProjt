@@ -2,15 +2,12 @@ import React from 'react';
 import styled, { css } from 'styled-components';
 
 const StyledColumn = styled.div`
-    border-bottom: solid 1px;
     padding-top:10px;
     padding-bottom:10px;
     padding-left:5px;
     padding-right:5px;
     font-size:12px;
     height:20px;
-
-    width: 100px;
     ${props=>css` 
         width: ${props.width}; 
         text-align:${props.textalign};
