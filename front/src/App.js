@@ -14,9 +14,12 @@ const GlobalStyle = createGlobalStyle`
         @import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap');
         font-family: 'Nanum Gothic', sans-serif;
         height:100vh;
-        ${'' /* width:100%; */}
+        width:100vw;
+        
         border:0;
         margin:0;
+
+        overflow-x:auto;
 
         @media (min-width: 1920px) {
             width:100%;
