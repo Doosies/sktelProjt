@@ -38,10 +38,7 @@ const Input = ({colIndex, id}) =>{
     const didShowAlert = useRef(false);
     // 현재 data의 column 정보와 검증값
     const nowColumnInfo = columnPhoneInfo[colIndex];
-    // const nowColumnValidCheck = columnPhoneInfo[colIndex];
-    // console.log(nowColumnInfo, nowColumnValidCheck);
     
-    // console.log(nowRow);
     const { nowVal, firstVal, isAddedRow } = useSelector(state =>({
         // 현재 input값
         nowVal     : state.phoneData.data.rows.find(val=>val.id === id)[nowColumnInfo.colName],
@@ -84,9 +81,12 @@ const Input = ({colIndex, id}) =>{
         updateInputCompo(val);
     },[nowColumnInfo.colName, updateInputCompo]);
 
+     ///////////////////////////////////////////////////////// 키 눌렀을 때
+    // const handleKeyDown = useCallback((e)=>{   
+    //     console.log(e);
+    // },[])
      ///////////////////////////////////////////////////////// 포커싱이 벗어났을 때
     const handleBlur = useCallback( (e) =>{
-        console.log("onblur");
         //최종 수정값
         const deletedWord = e.target.value.replace(nowColumnInfo.deleteWord,"");
         //              정규식을 통과 못함                 && 변경된 값이 공백이 아님 ( 공백을 입력해도 되는 input을 위해)
@@ -140,8 +140,6 @@ const Input = ({colIndex, id}) =>{
             onBlur={handleBlur}
             // notRequired에 있는 배열에 포함되면 필수항목이 아님.
             required={notRequired.every(val => val !== nowColumnInfo.colName) ? true : false}
-            onClickCapture={()=>{console.log("capture input");}}
-            onClick={()=>{console.log("onclick input")}}
             ref={ref}
             // placeholder={}
         />

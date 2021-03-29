@@ -151,7 +151,7 @@ function Contents(){
     
 
     return(
-        <StyledContents className="contents">
+        <StyledContents className="contents" onKeyDown={(e)=>console.log(e)}>
             <ContentsBox>
                 <ContentsTop>
                     <ContentsTopName>핸드폰 정보 수정</ContentsTopName>
