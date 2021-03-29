@@ -13,6 +13,7 @@ import Tables from './Tables';
 
 
 const StyledContents = styled.div`
+
     width:100%;
     box-sizing:border-box;
 
@@ -20,6 +21,9 @@ const StyledContents = styled.div`
     align-items:center;
 
     position:relative;
+
+    overflow:auto;
+    /* overflow-y:auto; */
 `;
 
 const ContentsBox= styled.div`
@@ -49,11 +53,6 @@ const ContentsTopName = styled.div`
 const ContentsTopButtons = styled.div`
     position:absolute;
     right:0;
-    /* padding-top:13px; */
-    /* padding-right:13px; */
-    /* padding-left:13px; */
-    /* padding-bottom: 13px; */
-    /* height:35px; */
     display:flex;
 
     font-size:15px;

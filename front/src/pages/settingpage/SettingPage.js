@@ -13,9 +13,10 @@ const StyledSettingPage = styled.div`
         grid-column: 1/4;
         grid-row:1/2
     } */
-    border-bottom: solid 1px;
+    overflow-y:hidden;
+    position:absolute;
     width:100%;
-    height:100%;
+    height:100%
 `;
 
 

@@ -8,6 +8,7 @@ import LeftMenu from './leftmenu/LeftMenu';
 const StyledBody = styled.div`
     display:flex;
     width:100%;
+    height:100%;
     /* display: grid; */
     /* grid-template-columns: 200px 1fr; */
     /* grid-template-rows: 1fr 1fr; */
