@@ -15,14 +15,14 @@ const StyledBody = styled.div`
     grid-template-columns: 200px 1fr;
     grid-template-rows: 1fr 1fr;
     grid-column-start: 1/3; */
-    /* display:flex; */
+    display:flex;
     border-top: solid 1px;
 `;
 
 function Body(){
     return(
         <StyledBody>
-            {/* <LeftMenu/> */}
+            <LeftMenu/>
             <PhoneInfoProvider>
                 <PhoneChangeProvider>
                     <Contents/>

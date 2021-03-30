@@ -13,33 +13,23 @@ const StyledContents = styled.div`
 
     width:100%;
     height:100%;
+    position:relative;
 
-    /* box-sizing:border-box; */
-
-    /* justify-content:center;
-    align-items:center; */
-    /* overflow-y:scroll; */
-    background-clip:black;
+    overflow-y:hidden;
+    background-color:hsl(0, 0%, 99%);
 `;
 
 const ContentsPadding= styled.div`
+    
     width:100%;
     height:100%;
+    position:absolute;
     box-sizing:border-box;
-    /* padding: 10px 5%; */
-
 
     padding-top: 30px;
     padding-left: 30px;
     padding-right: 30px;
-    padding-bottom: 30px;
-
-    /* position:relative; */
-    background-color:red;
-    /* left:0; */
-
-    /* height:100%; */
-    /* width:100%; */
+    padding-bottom: 80px;
 `;
 
 const ContentsTop = styled.div`
@@ -70,14 +60,9 @@ const ContentsTopButtons = styled.div`
     font-weight:500; 
 `;
 
-const ContentsBottom = styled.form`
+const ContentsBottom = styled.div`
     width:100%;
     height:100%;
-    box-sizing:border-box;
-    /* width:100%; */
-    /* display:flex; */
-    padding-top:7px;
-    display:flex;
 `;
 
 
@@ -190,8 +175,7 @@ function Contents(){
     return(
         <StyledContents onMouseDown={(e)=>console.log(e)} onKeyUp={handleKeyUp} onKeyDown={handleKeyDown}>
             <ContentsPadding>
-            qBODy
-                {/* <ContentsTop>
+                <ContentsTop>
                     <ContentsTopName>핸드폰 정보 수정</ContentsTopName>
                     <ContentsTopButtons>
                         <CButton onClick={ handleAdd } width="60px" height="40px" font_size="13px" font_weight="bold" border>추가</CButton>
@@ -202,7 +186,7 @@ function Contents(){
                     {!loading && !error && 
                         <Tables  ref={refs}/>
                     }
-                </ContentsBottom> */}
+                </ContentsBottom>
             </ContentsPadding>
         </StyledContents>
     );

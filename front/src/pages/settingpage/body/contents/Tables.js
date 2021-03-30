@@ -5,21 +5,43 @@ import Row from './Row';
 
 const StyledTable = styled.div`
     width:100%;
-    /* height:100%; */
-    /* overflow-x:scroll; */
+    height:100%;
     /* flex:1; */
+    overflow-x:auto;
+
+`;
+
+const TableHead = styled.div`
+    background-color:hsl(0, 0%, 99%);
+    padding-top:0;
+    margin-bottom:50px;
+    position:fixed;
+    border-bottom: solid 1px;
+`;
+
+const TableBody = styled.div`
+    /* width:100%;
+    height:100%; */
+    padding-top:50px;
+    overflow-x:auto;
+    overflow-y:auto;
 `;
 
 
-const Tables = forwardRef((props,ref) => {
+
+const Tables = forwardRef((_,ref) => {
     const rows = useSelector( state =>state.phoneData.data.rows);
     
     return(
         <StyledTable>
-            <Row key={`top_row_head`} top />
-            {rows.map( (row,i) =>
-                <Row ref={ref} rowIndex={i} key={`row_body_${row.id}`} rowId={row.id}/>
-            )}
+            <TableHead>
+                <Row key={`top_row_head`} top />
+            </TableHead>
+            <TableBody>
+                {rows.map( (row,i) =>
+                    <Row ref={ref} rowIndex={i} key={`row_body_${row.id}`} rowId={row.id}/>
+                )}
+            </TableBody>
         </StyledTable>
     );
 });

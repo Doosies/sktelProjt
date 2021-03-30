@@ -11,6 +11,7 @@ const StyledLeftMenu = styled.div`
     justify-content:center;
 
     border-right: solid 1px;
+    background-color:hsl(0, 0%, 96%);
     /* align-items:center; */
 
 `;

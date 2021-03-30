@@ -13,11 +13,11 @@ const StyledSettingPage = styled.div`
         grid-column: 1/4;
         grid-row:1/2
     } */
-    overflow:hidden;
+    /* overflow:hidden; */
     position:absolute;
     width:100%;
     height:100%;
-    
+
     display:flex;
     flex-direction:column;
 `;

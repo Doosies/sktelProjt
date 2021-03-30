@@ -8,18 +8,18 @@ import Column from './Column';
 import Input from './Input';
 
 const StyledRow = styled.div`
-    box-sizing:border-box;
+    /* box-sizing:border-box; */
     text-align:center;
     display:flex;
     align-items:center;
-    /* flex:1; */
     align-items:center;
+    /* width:100%;
+    height:100%; */
+    /* flex:1; */
     /* border-bottom: solid 1px; */
+    /* padding-top:50px; */
+   
 
-    ${({top})=>top && 
-        css`
-            ${'' /* border-top: solid 2px; */}
-    `}
 `;
 
 const Row = forwardRef(({top=false, rowId, rowIndex},inputRefs) =>{
@@ -37,8 +37,6 @@ const Row = forwardRef(({top=false, rowId, rowIndex},inputRefs) =>{
             {columnPhoneInfo.map((column)=>
                 <Column  key={`head_${column.name}`} width={column.width} top>
                     {column.name}
-                    {/* <Input colIndex={0} id={rowId} column={column} /> */}
-                    {/* <input wvalue="11"/> */}
                 </Column>
             )}
         </StyledRow>
@@ -49,7 +47,7 @@ const Row = forwardRef(({top=false, rowId, rowIndex},inputRefs) =>{
             <DeleteButton onClick={()=>handleDeleteButton(rowId)}> 삭제 </DeleteButton>
             {columnPhoneInfo.map((column, colIndex)=>
                 <Column key={`row_${rowId}_${column.name}`} width={column.width} textalign={column.textalign}>
-                    <Input colIndex={colIndex} id={rowId} width={column.width}column={column} />
+                    <Input colIndex={colIndex} id={rowId} width={column.width} column={column} />
                 </Column>   
             )}
         </StyledRow>

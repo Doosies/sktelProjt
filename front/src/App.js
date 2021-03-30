@@ -8,16 +8,12 @@ import Test from './test/Test';
 
 const StyledApp = styled.div`
 `;
-
+// ,
 const GlobalStyle = createGlobalStyle`
-    html, body, #root, .App{
-        @import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap');
-        font-family: 'Nanum Gothic', sans-serif;
-        height:100vh;
-        width:100vw;
+    html, body{
+        height:100%;
+        width:100%;
         
-        border:0;
-        margin:0;
 
         ${'' /* overflow-x:auto; */}
 
@@ -38,6 +34,15 @@ const GlobalStyle = createGlobalStyle`
         } */}
         
     }
+    #root, .App{
+        @import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap');
+        font-family: 'Nanum Gothic', sans-serif;
+        height:100%;
+        width:100%;
+        border:0;
+        margin:0;
+
+    }
 `;
 
 function App(){
@@ -46,7 +51,7 @@ function App(){
         <>
         <GlobalStyle/>
         <BrowserRouter>
-            <Route path="/" component={Main} exact/>
+            <Route path="/" component={Main} exact />
             <Route path="/setting" component = {Setting}/>
             <Route path="/test" component = {Test}/>
         </BrowserRouter>
