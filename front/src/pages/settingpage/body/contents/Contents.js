@@ -77,14 +77,6 @@ const commaValues = [
     "shipping_price", "battery",  "storage"
 ]
 
-//리스트가 1개 이상인지 확인하는 함수
-function isFilledList(list){
-    if(list !== null)
-        if(list.length >= 1 )
-            return true;
-        else   
-            return false;
-}
 
 function Contents(){
     console.log("contents!!"); 
@@ -116,7 +108,7 @@ function Contents(){
         const deleteList = dataChangeList.dataDeleteList;
         const updateList = dataChangeList.dataUpdateList;
         // 만약 추가버튼을 눌러서 추가한 데이터가 있으면
-        const canSendAddData =  isFilledList(addList) && !addList.some( row => {
+        const canSendAddData =  utils.isFilledList(addList) && !addList.some( row => {
             const rowIdx = rows.findIndex(originalRow=>originalRow.id === row.id);
             // 추가된 row를 맨 앞 id를 자르고서 키와 값을 rowEntires에 넣음
             const rowEntries = Object.entries(rows[rowIdx]).splice(1);
@@ -137,7 +129,7 @@ function Contents(){
         });// handleApply()
         
         // 추가, 제거, 수정 중 하나의 리스트라도 차있어야 전송함.
-        if( canSendAddData || (isFilledList(deleteList) || isFilledList(updateList))){
+        if( canSendAddData || (utils.isFilledList(deleteList) || utils.isFilledList(updateList))){
             const response = await RESTAPI.patchPhoneInfo({addList,deleteList,updateList});
             if( response === "ok"){
                 //관련 리스트를 전부 비움
