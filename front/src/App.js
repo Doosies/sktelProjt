@@ -10,18 +10,18 @@ const StyledApp = styled.div`
 `;
 
 const GlobalStyle = createGlobalStyle`
-    body{
+    html, body, #root, .App{
         @import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap');
         font-family: 'Nanum Gothic', sans-serif;
-        height:100%;
+        height:100vh;
         width:100vw;
         
         border:0;
         margin:0;
 
-        overflow-x:auto;
+        ${'' /* overflow-x:auto; */}
 
-        @media (min-width: 1920px) {
+        ${'' /* @media (min-width: 1920px) {
             width:100%;
         }
         @media (min-width: 1680px) and (max-width:1919px){
@@ -35,7 +35,7 @@ const GlobalStyle = createGlobalStyle`
         }
         @media (min-width: 1025px) and (max-width: 1279px) {
             width:1025px;
-        }
+        } */}
         
     }
 `;
@@ -43,17 +43,14 @@ const GlobalStyle = createGlobalStyle`
 function App(){
 
     return(
-        // <Provider store={store}>
-        <StyledApp>
-            <GlobalStyle/>
-            <BrowserRouter>
-                <Route path="/" component={Main} exact/>
-                <Route path="/setting" component = {Setting}/>
-                <Route path="/test" component = {Test}/>
-            </BrowserRouter>
-            {/* <Footer/> */}
-        </StyledApp>
-        // </Provider>
+        <>
+        <GlobalStyle/>
+        <BrowserRouter>
+            <Route path="/" component={Main} exact/>
+            <Route path="/setting" component = {Setting}/>
+            <Route path="/test" component = {Test}/>
+        </BrowserRouter>
+        </>
     );
 }
 export default App

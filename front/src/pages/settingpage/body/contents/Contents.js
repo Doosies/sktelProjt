@@ -1,70 +1,85 @@
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import CButton from '../../../../components/Button';
 import { phoneDataUpdate, phoneDataFetchAsync, phoneDataChangedList } from '../../../../modules/phoneData';
 import * as RESTAPI from '../../../../utils/api';
-import { columnPhoneInfo, inputValidCheck } from '../../../../utils/propertyInfo';
+import { columnPhoneInfo } from '../../../../utils/propertyInfo';
 import * as utils from '../../../../utils/utils';
-
-// import * as restAPI from '../../../../utils/api';
-// import { inputValidCheck } from '../../../../utils/propertyInfo';
 import Tables from './Tables';
 
 
 const StyledContents = styled.div`
 
     width:100%;
-    box-sizing:border-box;
+    height:100%;
 
-    justify-content:center;
-    align-items:center;
+    /* box-sizing:border-box; */
 
-    position:relative;
-
-    overflow:auto;
-    /* overflow-y:auto; */
+    /* justify-content:center;
+    align-items:center; */
+    /* overflow-y:scroll; */
+    background-clip:black;
 `;
 
-const ContentsBox= styled.div`
+const ContentsPadding= styled.div`
+    width:100%;
+    height:100%;
+    box-sizing:border-box;
+    /* padding: 10px 5%; */
+
+
     padding-top: 30px;
     padding-left: 30px;
     padding-right: 30px;
     padding-bottom: 30px;
 
-    position:absolute;
-    left:0;
+    /* position:relative; */
+    background-color:red;
+    /* left:0; */
 
-    height:100%;
+    /* height:100%; */
+    /* width:100%; */
 `;
 
 const ContentsTop = styled.div`
     position:relative;
-    height:50px;
     display:flex;
-    width:100%;
+    
+    /* width:100%; */
+    height:50px;
 
-    /* border-bottom: solid 1px #707070;;  */
+    border-bottom: solid 2px #707070;; 
 `;
 const ContentsTopName = styled.div`
+    height:100%;
     font-size:19px;
     font-weight:bold;
 `;
 const ContentsTopButtons = styled.div`
+    height:100%;
     position:absolute;
     right:0;
-    display:flex;
+    bottom:1;
 
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    
     font-size:15px;
     font-weight:500; 
-    /* right:0; */
 `;
 
 const ContentsBottom = styled.form`
     width:100%;
-    display:flex;
+    height:100%;
+    box-sizing:border-box;
+    /* width:100%; */
+    /* display:flex; */
     padding-top:7px;
+    display:flex;
 `;
+
 
 const requiredInputValue = [
     "model_name", "machine_name", "shipping_price", "maker", "created",
@@ -174,8 +189,9 @@ function Contents(){
 
     return(
         <StyledContents onMouseDown={(e)=>console.log(e)} onKeyUp={handleKeyUp} onKeyDown={handleKeyDown}>
-            <ContentsBox>
-                <ContentsTop>
+            <ContentsPadding>
+            qBODy
+                {/* <ContentsTop>
                     <ContentsTopName>핸드폰 정보 수정</ContentsTopName>
                     <ContentsTopButtons>
                         <CButton onClick={ handleAdd } width="60px" height="40px" font_size="13px" font_weight="bold" border>추가</CButton>
@@ -186,9 +202,8 @@ function Contents(){
                     {!loading && !error && 
                         <Tables  ref={refs}/>
                     }
-                    {/* {!loading && !error && <Tables/>} */}
-                </ContentsBottom>
-            </ContentsBox>
+                </ContentsBottom> */}
+            </ContentsPadding>
         </StyledContents>
     );
 }

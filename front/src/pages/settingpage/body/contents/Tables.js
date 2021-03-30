@@ -4,7 +4,10 @@ import { useSelector } from "react-redux";
 import Row from './Row';
 
 const StyledTable = styled.div`
-    width:auto;
+    width:100%;
+    /* height:100%; */
+    /* overflow-x:scroll; */
+    /* flex:1; */
 `;
 
 

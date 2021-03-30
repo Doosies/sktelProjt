@@ -8,8 +8,10 @@ const StyledColumn = styled.div`
     padding-right:5px;
     font-size:12px;
     height:20px;
+
     ${props=>css` 
-        width: ${props.width}; 
+        min-width: ${props.width}; 
+        /* max-width:200px; */
         text-align:${props.textalign};
     `}
 

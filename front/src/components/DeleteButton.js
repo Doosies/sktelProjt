@@ -6,7 +6,7 @@ const StyledDeleteButton = styled(Button)`
     background-color: #ff7787;
     margin-right:5px;
     color:white;
-    width:40px;
+    min-width:40px;
 
     ${({top}) => top && css`
         background-color:white;

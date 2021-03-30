@@ -1,12 +1,13 @@
 import React, {useCallback,  useRef } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
-import styled, { createGlobalStyle, css } from 'styled-components';
+import styled, { css } from 'styled-components';
 import { phoneDataChangedList, phoneDataUpdate} from '../../../../modules/phoneData';
 import { columnPhoneInfo } from '../../../../utils/propertyInfo';
 import * as utils from '../../../../utils/utils';
 
 
 const StyledInput = styled.input`
+    box-sizing:border-box;
     ${({ width, textalign })=>css`
         width:${width};
         text-align:${textalign};
@@ -30,7 +31,7 @@ const commaValues = [
 ]
 
 
-const Input = ({colIndex, id}) =>{
+const Input = ({colIndex, id, width}) =>{
     // console.log("input.js");
     const ref = useRef();
     const dispatch = useDispatch();
@@ -134,7 +135,7 @@ const Input = ({colIndex, id}) =>{
     return( 
         <StyledInput 
             textalign={nowColumnInfo.textalign} 
-            width={nowColumnInfo.width} 
+            width={width} 
             value={nowVal === null ? "" : nowVal }
             onChange={handleChange}
             onBlur={handleBlur}
