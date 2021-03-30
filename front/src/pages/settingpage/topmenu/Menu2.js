@@ -5,6 +5,7 @@ import CButton from '../../../components/Button';
 const StyledMenu2 = styled.div`
     height:40px;
     display:flex;
+    background-color:hsl(0, 0%, 96%);
     /* background-color:rgb(200, 200, 200); */
 `;
 

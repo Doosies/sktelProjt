@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import CButton from '../../../../components/Button';
 import { phoneDataUpdate, phoneDataFetchAsync, phoneDataChangedList } from '../../../../modules/phoneData';
 import * as RESTAPI from '../../../../utils/api';
-import { columnPhoneInfo } from '../../../../utils/propertyInfo';
+import { columnPhoneInfo, requiredInputValue, commaValues, notRequiredInputValue } from '../../../../utils/propertyInfo';
 import * as utils from '../../../../utils/utils';
 import Tables from './Tables';
 
@@ -16,7 +16,6 @@ const StyledContents = styled.div`
     position:relative;
 
     overflow-y:hidden;
-    background-color:hsl(0, 0%, 99%);
 `;
 
 const ContentsPadding= styled.div`
@@ -66,36 +65,18 @@ const ContentsBottom = styled.div`
 `;
 
 
-const requiredInputValue = [
-    "model_name", "machine_name", "shipping_price", "maker", "created",
-]
-// 필수 입력 항목
-const notRequiredInputValue = [
-    "battery", "screen_size", "storage",
-];
-const commaValues = [
-    "shipping_price", "battery",  "storage"
-]
 
 
 function Contents(){
     console.log("contents!!"); 
     const dispatch = useDispatch();
-    const {dataChangeList, rows, error,loading} = useSelector( state =>({
+    const {dataChangeList, rows} = useSelector( state =>({
         dataChangeList: state.phoneData.dataChangeList,
         rows: state.phoneData.data.rows,
-        loading:state.phoneData.state.loading,
-        error:state.phoneData.state.error,
     }), shallowEqual);
 
     //focus 이동을 위한 refs
     const refs = useRef(new Array(rows.length).fill());
-
-    useEffect(()=>{
-        //NOTE - 화면이 로딩될 때 데이터들을 받아와줌.
-        dispatch(phoneDataFetchAsync());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[]);
 
     //NOTE - 추가버튼 클릭시
     const handleAdd =  ()=>{
@@ -159,13 +140,10 @@ function Contents(){
             e.preventDefault();
     }
 
-    if( loading ) return null;
-    if( error ) return <div>에러 발생 자세한건 로그 참조</div>;
-    if( !rows ) return <div>서버로부터 데이터 로딩 실패!</div>;
     
 
     return(
-        <StyledContents onMouseDown={(e)=>console.log(e)} onKeyUp={handleKeyUp} onKeyDown={handleKeyDown}>
+        <StyledContents onMouseDown={console.log} onKeyUp={handleKeyUp} onKeyDown={handleKeyDown}>
             <ContentsPadding>
                 <ContentsTop>
                     <ContentsTopName>핸드폰 정보 수정</ContentsTopName>
@@ -175,9 +153,7 @@ function Contents(){
                     </ContentsTopButtons>
                 </ContentsTop>
                 <ContentsBottom >
-                    {!loading && !error && 
-                        <Tables  ref={refs}/>
-                    }
+                    <Tables  ref={refs}/>
                 </ContentsBottom>
             </ContentsPadding>
         </StyledContents>

@@ -90,3 +90,17 @@ export const columnPhoneInfo = [
         beforValue:'',
     },
 ];
+
+
+
+
+export const requiredInputValue = [
+    "model_name", "machine_name", "shipping_price", "maker", "created",
+]
+// 필수 입력 항목
+export const notRequiredInputValue = [
+    "battery", "screen_size", "storage",
+];
+export const commaValues = [
+    "shipping_price", "battery",  "storage"
+]
