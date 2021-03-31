@@ -32,7 +32,7 @@ const commaValues = [
 
 
 const Input = ({colIndex, id, width}) =>{
-    console.log("input.js");
+    // console.log("input.js");
     const ref = useRef();
     const dispatch = useDispatch();
     // alert 두번 나오는거 방지 위한 ref
@@ -128,7 +128,7 @@ const Input = ({colIndex, id, width}) =>{
             updateInputCompo(modifiedValue);
         }
         
-    },[colIndex, nowVal, nowColumnInfo.deleteWord, nowColumnInfo.reg, nowColumnInfo.colName, nowColumnInfo.error, updateInputCompo, firstVal, isAddedRow, updateListUpdateDelete, id, updateListUpdateChange, updateListAddDelete, updateListAddChange]);
+    },[nowVal, nowColumnInfo.deleteWord, nowColumnInfo.reg, nowColumnInfo.colName, nowColumnInfo.error, updateInputCompo, firstVal, isAddedRow, updateListUpdateDelete, id, updateListUpdateChange, updateListAddDelete, updateListAddChange]);
 
     return( 
         <StyledInput 
