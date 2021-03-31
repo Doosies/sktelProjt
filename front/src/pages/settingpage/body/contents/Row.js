@@ -27,8 +27,10 @@ const Row = forwardRef(({top=false, rowId, rowIndex},inputRefs) =>{
     const dispatch = useDispatch();
 
     const handleDeleteButton = useCallback( (id) => {
-            dispatch(phoneDataUpdate.Delete(id));
-    },[]);
+        dispatch(phoneDataUpdate.Delete(id));
+        delete inputRefs.current[rowId];
+
+    },[dispatch, inputRefs, rowId]);
 
     if( top ) return(
         <StyledRow top>
@@ -43,7 +45,7 @@ const Row = forwardRef(({top=false, rowId, rowIndex},inputRefs) =>{
 
     );
     return( 
-        <StyledRow ref={el=>inputRefs.current[rowIndex]=el}>
+        <StyledRow ref={el=>inputRefs.current[rowId]=el}>
             <DeleteButton onClick={()=>handleDeleteButton(rowId)}> 삭제 </DeleteButton>
             {columnPhoneInfo.map((column, colIndex)=>
                 <Column key={`row_${rowId}_${column.name}`} width={column.width} textalign={column.textalign}>

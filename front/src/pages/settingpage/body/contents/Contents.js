@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { createRef, useEffect, useMemo, useRef } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import CButton from '../../../../components/Button';
@@ -68,7 +68,7 @@ const ContentsBottom = styled.div`
 
 
 function Contents(){
-    console.log("contents!!"); 
+    // console.log("contents!!"); 
     const dispatch = useDispatch();
     const {dataChangeList, rows} = useSelector( state =>({
         dataChangeList: state.phoneData.dataChangeList,
@@ -76,7 +76,7 @@ function Contents(){
     }), shallowEqual);
 
     //focus 이동을 위한 refs
-    const refs = useRef(new Array(rows.length).fill());
+    const refs = useRef({});
 
     //NOTE - 추가버튼 클릭시
     const handleAdd =  ()=>{
@@ -95,32 +95,49 @@ function Contents(){
             const rowEntries = Object.entries(rows[rowIdx]).splice(1);
             // 빈칸이 있거나 정규식을 통과 못하면 TRUE 아니면 FALSE
             return rowEntries.some((ele,colIdx) => {
-                const key = ele[0];
-                const val = commaValues.some(val=>val === key) 
-                            ? utils.uncomma(ele[1]) 
-                            : ele[1];
+                const columnKey = ele[0];
+                const columnValue = 
+                    commaValues.some(val=>val === columnKey) 
+                    ? utils.uncomma(ele[1]) 
+                    : ele[1];
+
+                const isPassRegTest = columnPhoneInfo[colIdx].reg.test(columnValue);
+                const isNullValue = !columnValue || columnValue === " ";
                 // 필수값인지 확인함. 맞을시 그 값을 포커싱해줌
-                return requiredInputValue.some(colName =>{
-                    if( colName === key && (( !val || val === " " || columnPhoneInfo[colIdx].reg.test(val)===false ))){
-                        refs.current[rowIdx].children[colIdx+1].children[0].focus();
+                return requiredInputValue.some(requiredValue =>{
+                    if( 
+                        columnKey === requiredValue
+                         &&( isNullValue || isPassRegTest === false )
+                    ){
+                        // console.log(refs.current[rowIdx-1], refs.current[rowIdx] , refs.current[rowIdx+1]);
+                        // refs.current[rowIdx].children[colIdx+1].children[0].focus();
+                        // refs.current.find(row => row)
+                        refs.current[row.id].children[colIdx+1].children[0].focus();
                         return true;
-                    }else return false;
-                });
-            });
+                    } else return false;
+                });// 필수값인지 확인
+            });// 정규식 통과 못하거나 빈칸있는지 확인
         });// handleApply()
         
         // 추가, 제거, 수정 중 하나의 리스트라도 차있어야 전송함.
-        if( canSendAddData || (utils.isFilledList(deleteList) || utils.isFilledList(updateList))){
+        if(
+            canSendAddData 
+            || utils.isFilledList(deleteList) 
+            || utils.isFilledList(updateList)
+        ){
             const response = await RESTAPI.patchPhoneInfo({addList,deleteList,updateList});
             if( response === "ok"){
                 //관련 리스트를 전부 비움
-                dispatch(phoneDataChangedList.Init());
                 //데이터를 다시 받아옴.
-                dispatch(phoneDataFetchAsync());
+                // dispatch(phoneDataFetchAsync());
+                alert("데이터 전송 성공");
             }else {
                 alert("데이터 전송에 실패했습니다. 로그 확인바람.");
             }
+            dispatch(phoneDataChangedList.Init());
         }
+
+        
     };
     // 37 왼쪽 ,38 위쪽
     // 현재 커서의 위치가 문자의 맨 앞 혹은 맨 뒤일경우
