@@ -1,4 +1,4 @@
-import React, { forwardRef, useCallback } from 'react'
+import React, { forwardRef, useCallback, useEffect } from 'react'
 import { useDispatch} from 'react-redux';
 import styled, { css } from 'styled-components';
 import DeleteButton from '../../../../components/DeleteButton';
@@ -22,8 +22,7 @@ const StyledRow = styled.div`
 
 `;
 
-const Row = forwardRef(({top=false, rowId, rowIndex},inputRefs) =>{
-    // console.log("row.js");
+const Row = forwardRef(({top=false, rowId},inputRefs) =>{
     const dispatch = useDispatch();
 
     const handleDeleteButton = useCallback( (id) => {
@@ -45,11 +44,11 @@ const Row = forwardRef(({top=false, rowId, rowIndex},inputRefs) =>{
 
     );
     return( 
-        <StyledRow ref={el=>inputRefs.current[rowId]=el}>
+        <StyledRow >
             <DeleteButton onClick={()=>handleDeleteButton(rowId)}> 삭제 </DeleteButton>
             {columnPhoneInfo.map((column, colIndex)=>
                 <Column key={`row_${rowId}_${column.name}`} width={column.width} textalign={column.textalign}>
-                    <Input colIndex={colIndex} id={rowId} width={column.width} column={column} />
+                    <Input ref={inputRefs} colIndex={colIndex} id={rowId} width={column.width} column={column} />
                 </Column>   
             )}
         </StyledRow>

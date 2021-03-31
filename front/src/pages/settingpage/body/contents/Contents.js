@@ -109,10 +109,7 @@ function Contents(){
                         columnKey === requiredValue
                          &&( isNullValue || isPassRegTest === false )
                     ){
-                        // console.log(refs.current[rowIdx-1], refs.current[rowIdx] , refs.current[rowIdx+1]);
-                        // refs.current[rowIdx].children[colIdx+1].children[0].focus();
-                        // refs.current.find(row => row)
-                        refs.current[row.id].children[colIdx+1].children[0].focus();
+                        refs.current[row.id][colIdx].focus();
                         return true;
                     } else return false;
                 });// 필수값인지 확인
@@ -125,19 +122,16 @@ function Contents(){
             || utils.isFilledList(deleteList) 
             || utils.isFilledList(updateList)
         ){
-            const response = await RESTAPI.patchPhoneInfo({addList,deleteList,updateList});
-            if( response === "ok"){
-                //관련 리스트를 전부 비움
-                //데이터를 다시 받아옴.
-                // dispatch(phoneDataFetchAsync());
-                alert("데이터 전송 성공");
-            }else {
+            try{
+                const response = await RESTAPI.patchPhoneInfo({addList,deleteList,updateList});
+                dispatch(phoneDataFetchAsync());
+                alert(response);
+            } catch(e){
                 alert("데이터 전송에 실패했습니다. 로그 확인바람.");
+                console.log(e)
             }
             dispatch(phoneDataChangedList.Init());
         }
-
-        
     };
     // 37 왼쪽 ,38 위쪽
     // 현재 커서의 위치가 문자의 맨 앞 혹은 맨 뒤일경우

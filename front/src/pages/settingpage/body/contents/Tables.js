@@ -56,8 +56,8 @@ const Tables = forwardRef((_,ref) => {
                 {/* { !rows && <div>서버로부터 데이터 로딩 실패!</div>} */}
                 {/* { error && <div>에러 발생 자세한건 로그 참조</div>} */}
 
-                { rows && rows.map( (row,i) =>
-                    <Row ref={ref} rowIndex={i} key={`row_body_${row.id}`} rowId={row.id}/>
+                { rows && rows.map( row =>
+                    <Row ref={ref} key={`row_body_${row.id}`} rowId={row.id}/>
                 )}
             </TableBody>
         </StyledTable>

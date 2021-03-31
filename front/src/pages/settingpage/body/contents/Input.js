@@ -1,6 +1,6 @@
-import React, {useCallback,  useRef } from 'react';
+import React, {forwardRef, useCallback,  useEffect,  useRef } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
-import styled, { css } from 'styled-components';
+import styled, { createGlobalStyle, css } from 'styled-components';
 import { phoneDataChangedList, phoneDataUpdate} from '../../../../modules/phoneData';
 import { columnPhoneInfo } from '../../../../utils/propertyInfo';
 import * as utils from '../../../../utils/utils';
@@ -31,9 +31,9 @@ const commaValues = [
 ]
 
 
-const Input = ({colIndex, id, width}) =>{
-    // console.log("input.js");
-    const ref = useRef();
+const Input = forwardRef(({colIndex, id, width},ref) =>{
+    // console.log(ref.current);
+    // const ref = useRef();
     const dispatch = useDispatch();
     // alert 두번 나오는거 방지 위한 ref
     const didShowAlert = useRef(false);
@@ -54,6 +54,10 @@ const Input = ({colIndex, id, width}) =>{
                      : false,
 
     }),shallowEqual);
+
+    // useEffect(()=>{
+    //     ref.current[id] = {};
+    // },[]);
 
     const callbackDispatch = useCallback((dispatchFunc) =>{
         return(...args)=>{
@@ -99,7 +103,7 @@ const Input = ({colIndex, id, width}) =>{
             // didShowAlert 는 alert 두번 나오는 버그 고치기 위해 넣어줌.
             if( didShowAlert.current === false ){
                 alert(nowColumnInfo.error);
-                ref.current.focus();
+                ref.current[id][colIndex].focus();
                 updateInputCompo(firstVal);
                 didShowAlert.current=true;
             }
@@ -128,20 +132,20 @@ const Input = ({colIndex, id, width}) =>{
             updateInputCompo(modifiedValue);
         }
         
-    },[nowVal, nowColumnInfo.deleteWord, nowColumnInfo.reg, nowColumnInfo.colName, nowColumnInfo.error, updateInputCompo, firstVal, isAddedRow, updateListUpdateDelete, id, updateListUpdateChange, updateListAddDelete, updateListAddChange]);
+    },[nowVal, nowColumnInfo.deleteWord, nowColumnInfo.reg, nowColumnInfo.colName, nowColumnInfo.error, ref, colIndex, updateInputCompo, firstVal, isAddedRow, updateListUpdateDelete, id, updateListUpdateChange, updateListAddDelete, updateListAddChange]);
 
     return( 
         <StyledInput 
+            ref={el=>ref.current[id] = {...ref.current[id], [colIndex]:el} }
             textalign={nowColumnInfo.textalign} 
             width={width} 
             value={nowVal === null ? "" : nowVal }
+            required={notRequired.every(val => val !== nowColumnInfo.colName) ? true : false}
             onChange={handleChange}
             onFocus={handleOnFocus}
             onBlur={handleBlur}
-            required={notRequired.every(val => val !== nowColumnInfo.colName) ? true : false}
-            ref={ref}
             // placeholder={}
         />
     );
-}
+});
 export default React.memo(Input);
