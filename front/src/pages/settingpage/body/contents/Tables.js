@@ -1,37 +1,34 @@
-import React, { forwardRef, useEffect } from 'react';
+import React, { forwardRef, useEffect, useLayoutEffect } from 'react';
 import styled, {  } from 'styled-components';
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import Row from './Row';
 import { phoneDataFetchAsync } from '../../../../modules/phoneData';
 
 const StyledTable = styled.div`
+    position:relative;
     width:100%;
     height:100%;
-    /* flex:1; */
-    overflow-x:auto;
+    
+    overflow-y:auto;
 
 `;
 
 const TableHead = styled.div`
+    position:absolute;
     background-color:hsl(0, 0%, 100%);
     padding-top:0;
     margin-bottom:50px;
-    position:fixed;
     border-bottom: solid 1px;
 `;
 
 const TableBody = styled.div`
-    /* width:100%;
-    height:100%; */
     padding-top:50px;
-    overflow-x:auto;
-    overflow-y:auto;
 `;
 
 
 
 const Tables = forwardRef((_,ref) => {
-    console.log("table");
+    // console.log("table");
     const { rows, error,loading} = useSelector( state =>({
         rows: state.phoneData.data.rows,
         loading:state.phoneData.state.loading,
@@ -56,8 +53,8 @@ const Tables = forwardRef((_,ref) => {
             </TableHead>
             <TableBody>
                 { loading && null}
-                { error && <div>에러 발생 자세한건 로그 참조</div>}
-                { !rows && <div>서버로부터 데이터 로딩 실패!</div>}
+                {/* { !rows && <div>서버로부터 데이터 로딩 실패!</div>} */}
+                {/* { error && <div>에러 발생 자세한건 로그 참조</div>} */}
 
                 { rows && rows.map( (row,i) =>
                     <Row ref={ref} rowIndex={i} key={`row_body_${row.id}`} rowId={row.id}/>
