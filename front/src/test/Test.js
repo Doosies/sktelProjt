@@ -1,15 +1,12 @@
 import React from 'react'
+import MenuController from './menu'
 
 export default function Test(){
+    return (
+        <header>
+            <MenuController/>
+            <h1>React Ally Hamburget Menu</h1>
+        </header>
 
-    for( let i=1; i <= 10; i++){
-        for( let j=1; j <= i; j++){
-            console.log(i);
-        }
-    }
-
-    
-    return(
-        <dib>ssfdfds</dib>
     );
 }
