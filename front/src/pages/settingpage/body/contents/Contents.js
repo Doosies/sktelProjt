@@ -1,7 +1,9 @@
-import React, { createRef, useEffect, useMemo, useRef } from 'react';
+import React, { createRef, useEffect, useMemo, useRef, useState } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import CButton from '../../../../components/Button';
+import Modal from '../../../../components/Modal';
+import Portal from '../../../../components/Portal';
 import { phoneDataUpdate, phoneDataFetchAsync, phoneDataChangedList } from '../../../../modules/phoneData';
 import * as RESTAPI from '../../../../utils/api';
 import { columnPhoneInfo, requiredInputValue, commaValues, notRequiredInputValue } from '../../../../utils/propertyInfo';
@@ -66,6 +68,11 @@ const ContentsBottom = styled.div`
 
 function Contents(){
     // console.log("contents!!"); 
+    const [modalState, setModalState] = useState({
+        showModal:false,
+        modalTitle:"",
+        modalText:"",
+    });
     const dispatch = useDispatch();
     const {dataChangeList, rows} = useSelector( state =>({
         dataChangeList: state.phoneData.dataChangeList,
@@ -120,11 +127,23 @@ function Contents(){
             || utils.isFilledList(updateList)
         ){
             try{
-                const response = await RESTAPI.patchPhoneInfo({addList,deleteList,updateList});
+                const response = await RESTAPI.patchPhoneInfo({
+                    addList : dataChangeList.dataAddList,
+                    deleteList : dataChangeList.dataDeleteList,
+                    updateList : dataChangeList.dataUpdateList
+                });
                 dispatch(phoneDataFetchAsync());
-                alert(response);
+                setModalState({...modalState, 
+                    modalTitle:"수정 완료", 
+                    modalText:"성공적으로 수정했습니다.", 
+                    showModal:true
+                });
             } catch(e){
-                alert("데이터 전송에 실패했습니다. 로그 확인바람.");
+                // setModalState({...modalState, 
+                //     modalTitle:"전송 실패", 
+                //     modalText:"왜때문인지 모름.", 
+                //     showModal:true
+                // });
                 console.log(e)
             }
             dispatch(phoneDataChangedList.Init());
@@ -147,17 +166,29 @@ function Contents(){
         if( nowDownKey === 38 || nowDownKey === 40)
             e.preventDefault();
     }
+    
+    const handleClickModalYes = async(e) =>{
+        setModalState({...modalState, 
+            showModal:false});
+    };
 
+    
     
 
     return(
-        <StyledContents onMouseDown={console.log} onKeyUp={handleKeyUp} onKeyDown={handleKeyDown}>
+        // <div>
+        <StyledContents onMouseDown={console.log} onKeyUp={handleKeyUp} onKeyDown={handleKeyDown} aria-hidden="true">
+        {modalState.showModal && 
+                <Modal truedal title={modalState.modalTitle} onClickYes={handleClickModalYes} noCancel>
+                    {modalState.modalText}
+                </Modal>
+        }
             <ContentsPadding>
                 <ContentsTop>
                     <ContentsTopName>핸드폰 정보 수정</ContentsTopName>
                     <ContentsTopButtons>
-                        <CButton onClick={ handleAdd } width="60px" height="40px" font_size="13px" font_weight="bold" border>추가</CButton>
-                        <CButton onClick={ handleApply } width="60px" height="40px" font_size="13px" font_weight="bold" border>적용</CButton>
+                        <CButton onClick={ handleAdd } background_color="#f5f5f5" normal>추가</CButton>
+                        <CButton onClick={ handleApply } background_color="#7abaff" normal>적용</CButton>
                     </ContentsTopButtons>
                 </ContentsTop>
                 <ContentsBottom >
@@ -165,6 +196,7 @@ function Contents(){
                 </ContentsBottom>
             </ContentsPadding>
         </StyledContents>
+        // </div>
     );
 }
 

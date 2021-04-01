@@ -1,11 +1,14 @@
-import React, {forwardRef, useCallback,  useEffect,  useRef } from 'react';
+import React, {forwardRef, useCallback,  useRef, useState } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
-import styled, { createGlobalStyle, css } from 'styled-components';
+import styled, {  css } from 'styled-components';
+import Modal from '../../../../components/Modal';
+import Portal from '../../../../components/Portal';
 import { phoneDataChangedList, phoneDataUpdate} from '../../../../modules/phoneData';
-import { columnPhoneInfo } from '../../../../utils/propertyInfo';
+import { columnPhoneInfo, commaValues, notRequiredInputValue, requiredInputValue } from '../../../../utils/propertyInfo';
 import * as utils from '../../../../utils/utils';
 
-
+const InputWrap = styled.div`
+`;
 const StyledInput = styled.input`
     box-sizing:border-box;
     ${({ width, textalign })=>css`
@@ -13,27 +16,29 @@ const StyledInput = styled.input`
         text-align:${textalign};
     `}
 `;
-// {name:"기기명", width:"200px", colName:"model_name", textalign:"left"},
-// {name:"모델명", width:"180px", colName:"machine_name", textalign:"left"},
-// {name:"출고가", width:"70px", colName:"shipping_price", textalign:"right"},
-// {name:"브랜드", width:"100px", colName:"maker", textalign:"center"},
-// {name:"출시일", width:"100px", colName:"created", textalign:"center"}
-const required = [
-    "model_name", "machine_name", "shipping_price", "maker", "created",
-]
-// 필수 입력 항목이 아닌것들
-const notRequired = [
-    "battery", "screen_size", "storage"
-];
-// 콤마 찍을 값들
-const commaValues = [
-    "shipping_price", "battery",  "storage"
-]
+
+// const required = [
+//     "model_name", "machine_name", "shipping_price", "maker", "created",
+// ]
+// // 필수 입력 항목이 아닌것들
+// const notRequired = [
+//     "battery", "screen_size", "storage"
+// ];
+// // 콤마 찍을 값들
+// const commaValues = [
+//     "shipping_price", "battery",  "storage"
+// ]
 
 
 const Input = forwardRef(({colIndex, id, width},ref) =>{
     // console.log(ref.current);
     // const ref = useRef();
+    const [modalState, setModalState] = useState({
+        showModal:false,
+        modalTitle:"",
+        modalText:"",
+    });
+
     const dispatch = useDispatch();
     // alert 두번 나오는거 방지 위한 ref
     const didShowAlert = useRef(false);
@@ -55,9 +60,6 @@ const Input = forwardRef(({colIndex, id, width},ref) =>{
 
     }),shallowEqual);
 
-    // useEffect(()=>{
-    //     ref.current[id] = {};
-    // },[]);
 
     const callbackDispatch = useCallback((dispatchFunc) =>{
         return(...args)=>{
@@ -92,21 +94,24 @@ const Input = forwardRef(({colIndex, id, width},ref) =>{
     const handleBlur = useCallback( () =>{
         const nowValue = nowVal === null ? '' : nowVal;
         const deletedWord = nowValue.replace(nowColumnInfo.deleteWord,"");
+
         const isPassRegTest = nowColumnInfo.reg.test(deletedWord);
         const isNullValue = deletedWord=== " " || deletedWord ==="";
-        const isRequiredValue = required.some(val=>val === nowColumnInfo.colName);
+        const isRequiredValue = requiredInputValue.some(val=>val === nowColumnInfo.colName);
         //    정규식 통과 못함   && 빈값이 아님.
         if( ( isPassRegTest === false && !isNullValue )
         //       필수값인데 빈칸일경우
         ||( isRequiredValue && deletedWord ==="")
         ){
             // didShowAlert 는 alert 두번 나오는 버그 고치기 위해 넣어줌.
-            if( didShowAlert.current === false ){
-                alert(nowColumnInfo.error);
-                ref.current[id][colIndex].focus();
-                updateInputCompo(firstVal);
-                didShowAlert.current=true;
-            }
+            // if( didShowAlert.current === false ){
+                // alert(nowColumnInfo.error);
+                setModalState({...modalState, 
+                    modalTitle:"잘못된 값입니다.", 
+                    modalText:nowColumnInfo.error, 
+                    showModal:true});
+                // didShowAlert.current = true;
+            // }
         }
         //정규식을 통과할 경우(올바른 값일경우)
         else{
@@ -129,23 +134,41 @@ const Input = forwardRef(({colIndex, id, width},ref) =>{
                 ?updateListAddDelete(id, nowColumnInfo.colName)
                 :updateListAddChange(id, nowColumnInfo.colName, modifiedValue);
             }
-            updateInputCompo(modifiedValue);
+            if( requiredInputValue.some(val=> val === nowColumnInfo.colName))
+                updateInputCompo(modifiedValue);
         }
         
-    },[nowVal, nowColumnInfo.deleteWord, nowColumnInfo.reg, nowColumnInfo.colName, nowColumnInfo.error, ref, colIndex, updateInputCompo, firstVal, isAddedRow, updateListUpdateDelete, id, updateListUpdateChange, updateListAddDelete, updateListAddChange]);
+    },[nowVal, nowColumnInfo, modalState, firstVal, isAddedRow, updateListUpdateDelete, id, updateListUpdateChange, updateInputCompo, updateListAddDelete, updateListAddChange]);
 
+    const handleOnclickYes = () =>{
+        setModalState({...modalState, 
+            showModal:false});
+        ref.current[id][colIndex].focus();
+        updateInputCompo(firstVal);
+        didShowAlert.current=true;
+    }
     return( 
-        <StyledInput 
-            ref={el=>ref.current[id] = {...ref.current[id], [colIndex]:el} }
-            textalign={nowColumnInfo.textalign} 
-            width={width} 
-            value={nowVal === null ? "" : nowVal }
-            required={notRequired.every(val => val !== nowColumnInfo.colName) ? true : false}
-            onChange={handleChange}
-            onFocus={handleOnFocus}
-            onBlur={handleBlur}
-            // placeholder={}
-        />
+        <InputWrap>
+            {modalState.showModal && 
+                <Portal elementId="modal-root">
+                    <Modal title={modalState.modalTitle} onClickYes={handleOnclickYes} noCancel>
+                        {modalState.modalText}
+                    </Modal>
+                </Portal>
+            }
+            <StyledInput 
+                ref={el=>ref.current[id] = {...ref.current[id], [colIndex]:el} }
+                textalign={nowColumnInfo.textalign} 
+                width={width} 
+                value={nowVal === null ? "" : nowVal }
+                required={notRequiredInputValue.every(val => val !== nowColumnInfo.colName) ? true : false}
+                onChange={handleChange}
+                onFocus={handleOnFocus}
+                onBlur={handleBlur}
+                // placeholder={}
+            />
+            
+        </InputWrap>
     );
 });
 export default React.memo(Input);
