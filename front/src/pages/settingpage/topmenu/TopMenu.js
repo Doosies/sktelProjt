@@ -14,7 +14,7 @@ function TopMenu(){
     return(
         <StyledTopMenu className="topMenu">
             <Menu1/>
-            <Menu2/>
+            {/* <Menu2/> */}
         </StyledTopMenu>
     );
 }

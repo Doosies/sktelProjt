@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import CButton from '../../../components/Button';
+import ClicakableDiv from '../../../components/ClicakableDiv';
 
 const StyledMenu2 = styled.div`
     height:40px;
@@ -16,7 +16,7 @@ function Menu2(){
 
     return(
         <StyledMenu2>
-            <CButton onClick={onClickModifyData} width="110px" font_size="14px" font_weight="bold" >데이터 수정</CButton>
+            <ClicakableDiv onClick={onClickModifyData} width="110px" font_size="14px" font_weight="bold" >데이터 수정</ClicakableDiv>
         </StyledMenu2>
     );
 }
