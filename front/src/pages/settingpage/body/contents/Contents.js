@@ -10,16 +10,13 @@ import Tables from './Tables';
 
 
 const StyledContents = styled.div`
-
     width:100%;
     height:100%;
     position:relative;
-
     overflow-y:hidden;
 `;
 
 const ContentsPadding= styled.div`
-    
     width:100%;
     height:100%;
     position:absolute;
@@ -38,7 +35,7 @@ const ContentsTop = styled.div`
     /* width:100%; */
     height:50px;
 
-    border-bottom: solid 2px #707070;; 
+    border-bottom: solid 2px #707070;
 `;
 const ContentsTopName = styled.div`
     height:100%;

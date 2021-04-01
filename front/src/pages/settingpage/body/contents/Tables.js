@@ -8,21 +8,18 @@ const StyledTable = styled.div`
     position:relative;
     width:100%;
     height:100%;
-    
     overflow-y:auto;
-
 `;
 
 const TableHead = styled.div`
-    position:absolute;
+    display:table;
+    position:sticky;
+    top:0;
     background-color:hsl(0, 0%, 100%);
-    padding-top:0;
-    margin-bottom:50px;
     border-bottom: solid 1px;
 `;
 
 const TableBody = styled.div`
-    padding-top:50px;
 `;
 
 
