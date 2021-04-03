@@ -23,12 +23,17 @@ const StyledButton = styled.button`
 
         :hover{
             ${'' /* border: 1px solid black; */}
-            background-color: ${lighten(0.05, props.background_color)};
+            background-color: ${darken(0.4, props.background_color)};
         }
         :active{
 
-            background-color: ${darken(0.4, props.background_color)};
+            ${'' /* background-color: ${darken(0.4, props.background_color)}; */}
+            box-shadow:3px 3px 3px 3px ${darken(0.5, props.background_color)} inset;
             outline:none;
+        }
+        ::after{
+            outline:none;
+            border:0;
         }
     `}
 
