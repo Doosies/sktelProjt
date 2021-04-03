@@ -1,8 +1,9 @@
 import React, {forwardRef, useCallback,  useRef, useState } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
-import styled, {  css } from 'styled-components';
+import styled, {  createGlobalStyle, css } from 'styled-components';
 import Modal from '../../../../components/Modal';
 import Portal from '../../../../components/Portal';
+import { useModal } from '../../../../hooks/useModal';
 import { phoneDataChangedList, phoneDataUpdate} from '../../../../modules/phoneData';
 import { columnPhoneInfo, commaValues, notRequiredInputValue, requiredInputValue } from '../../../../utils/propertyInfo';
 import * as utils from '../../../../utils/utils';
@@ -31,13 +32,17 @@ const StyledInput = styled.input`
 
 
 const Input = forwardRef(({colIndex, id, width},ref) =>{
-    // console.log(ref.current);
+    // console.log("input!", ref.current);
     // const ref = useRef();
-    const [modalState, setModalState] = useState({
-        showModal:false,
-        modalTitle:"",
-        modalText:"",
-    });
+    // const [modalState, setModalState] = useState({
+    //     showModal:false,
+    //     modalTitle:"",
+    //     modalText:"",
+    // });
+    const [modalState, showModal, hideModal] = useModal();
+
+    const [isEnd, setEnd] = useState(false);
+    // const keys = ref.current.
 
     const dispatch = useDispatch();
     // alert 두번 나오는거 방지 위한 ref
@@ -71,14 +76,12 @@ const Input = forwardRef(({colIndex, id, width},ref) =>{
         dispatch(phoneDataUpdate.Change(id,nowColumnInfo.colName, value))
     ,[nowColumnInfo.colName, dispatch, id]);
     
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // state를 바꿔주는 dispatch* change,delete //
     // const updateListInsert = callbackDispatch(phoneDataChangedList.Insert);
     const updateListUpdateChange = callbackDispatch(phoneDataChangedList.Update.Change);
     const updateListUpdateDelete = callbackDispatch(phoneDataChangedList.Update.Delete);
     const updateListAddChange = callbackDispatch(phoneDataChangedList.Add.Change);
     const updateListAddDelete = callbackDispatch(phoneDataChangedList.Add.Delete);
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     const handleChange = useCallback( (e) => {
         const val = commaValues.some(val => val === nowColumnInfo.colName)
@@ -103,15 +106,7 @@ const Input = forwardRef(({colIndex, id, width},ref) =>{
         //       필수값인데 빈칸일경우
         ||( isRequiredValue && deletedWord ==="")
         ){
-            // didShowAlert 는 alert 두번 나오는 버그 고치기 위해 넣어줌.
-            // if( didShowAlert.current === false ){
-                // alert(nowColumnInfo.error);
-                setModalState({...modalState, 
-                    modalTitle:"잘못된 값입니다.", 
-                    modalText:nowColumnInfo.error, 
-                    showModal:true});
-                // didShowAlert.current = true;
-            // }
+            showModal("잘못된 값입니다.", nowColumnInfo.error);
         }
         //정규식을 통과할 경우(올바른 값일경우)
         else{
@@ -138,25 +133,43 @@ const Input = forwardRef(({colIndex, id, width},ref) =>{
                 updateInputCompo(modifiedValue);
         }
         
-    },[nowVal, nowColumnInfo, modalState, firstVal, isAddedRow, updateListUpdateDelete, id, updateListUpdateChange, updateInputCompo, updateListAddDelete, updateListAddChange]);
+    },[nowVal, nowColumnInfo.deleteWord, nowColumnInfo.reg, nowColumnInfo.colName, nowColumnInfo.error, showModal, firstVal, isAddedRow, updateListUpdateDelete, id, updateListUpdateChange, updateInputCompo, updateListAddDelete, updateListAddChange]);
 
+    const handleKeyUp = (e) =>{
+        const nowUpKey = e.keyCode;
+        if( nowUpKey === 37 || nowUpKey === 39 )
+            if(e.target.selectionEnd === 0 || e.target.selectionEnd === e.target.value.length)
+                setEnd(true);
+            else   
+                setEnd(false);
+
+    }
+    // 39 오른쪽, 40 아래쪽
+    // 맨뒤 혹은 맨앞으로 가려는 이벤트 중지
+    const handleKeyDown = (e)=>{
+        // console.log(e.target.selectionEnd, e.target.selectionStart);
+        // const nowDownKey = e.keyCode;
+        // if( nowDownKey === 38 || nowDownKey === 40)
+        //     e.preventDefault();
+    }
     const handleOnclickYes = () =>{
-        setModalState({...modalState, 
-            showModal:false});
+        hideModal();
         ref.current[id][colIndex].focus();
+
+        // ref.current[refIdx].refs[colIndex].focus();
         updateInputCompo(firstVal);
         didShowAlert.current=true;
     }
     return( 
         <InputWrap>
-            {modalState.showModal && 
+            {modalState.isVisible && 
                 <Portal elementId="modal-root">
                     <Modal title={modalState.modalTitle} onClickYes={handleOnclickYes} noCancel>
                         {modalState.modalText}
                     </Modal>
                 </Portal>
             }
-            <StyledInput 
+            <StyledInput onKeyUpCapture={handleKeyUp} onKeyDown={handleKeyDown}
                 ref={el=>ref.current[id] = {...ref.current[id], [colIndex]:el} }
                 textalign={nowColumnInfo.textalign} 
                 width={width} 
@@ -165,9 +178,7 @@ const Input = forwardRef(({colIndex, id, width},ref) =>{
                 onChange={handleChange}
                 onFocus={handleOnFocus}
                 onBlur={handleBlur}
-                // placeholder={}
             />
-            
         </InputWrap>
     );
 });
