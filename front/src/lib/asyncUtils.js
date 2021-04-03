@@ -1,6 +1,6 @@
 import produce from 'immer';
 
-export const createPromiseThunk = (type, promiseCreator) =>{
+export const createPromiseThunk = (type, restAPIFunc) =>{
     const [LOADING, SUCCESS, ERROR] = [`${type}_LOADING`, `${type}_SUCCESS`, `${type}_ERROR`];
 
     return param => async dispatch =>{
@@ -8,7 +8,7 @@ export const createPromiseThunk = (type, promiseCreator) =>{
         dispatch({type:LOADING, param});
         try{
             // console.log(promiseCreator);
-            const payload = await promiseCreator(param);
+            const payload = await restAPIFunc(param);
             dispatch({type:SUCCESS, payload});
             // successCallBack();
         }catch(e){
