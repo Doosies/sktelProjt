@@ -3,6 +3,9 @@ import styled from 'styled-components';
 import TabTrap from '../lib/TabTrap';
 import Button from './Button';
 import Portal from './Portal';
+import Fade from 'react-reveal/Fade';
+
+
 
 const ModalWrapper = styled.div`
     position:fixed;
@@ -19,7 +22,7 @@ const ModalWrapper = styled.div`
 `;
 
 const ModalBox = styled.div`
-    position:absolute;
+    position:relative;
     padding-top:20px;
     padding-bottom:20px;
     padding-left:20px;
@@ -49,25 +52,29 @@ const InnerButtons = styled.div`
     display:flex;
 `;
 
-const Modal = ({title, text, children, onClickYes, OnClickNo, noCancel}) =>{
+const Modal = ({title, text, children, onClickYes, OnClickNo, noCancel, isShow}) =>{
     // const ref = useRef(null);
     // ref.current.focus();
-    var focusableElementsString = "a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, *[tabindex], *[contenteditable]";
+    // var focusableElementsString = "a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, *[tabindex], *[contenteditable]";
 
 
     return(
         <Portal elementId="modal-root">
             <TabTrap>
+            {isShow &&
                 <ModalWrapper>
-                    <ModalBox >
-                        <Title> {title} </Title>
-                        <InnerText>{children} </InnerText>
-                        <InnerButtons>
-                            <Button onClick={(e)=>{onClickYes(e)}} background_color="rgb(122, 186, 255)" small >확인</Button>
-                            { !noCancel && <Button onClick={(e)=>{OnClickNo(e)}} background_color="rgb(255, 120, 135)" small >취소</Button>}
-                        </InnerButtons>
-                    </ModalBox>
+                    <Fade bottom duration={400}>
+                        <ModalBox >
+                            <Title> {title} </Title>
+                            <InnerText>{children} </InnerText>
+                            <InnerButtons>
+                                <Button onClick={(e)=>{onClickYes(e)}} background_color="rgb(122, 186, 255)" small >확인</Button>
+                                { !noCancel && <Button onClick={(e)=>{OnClickNo(e)}} background_color="rgb(255, 120, 135)" small >취소</Button>}
+                            </InnerButtons>
+                        </ModalBox>
+                    </Fade>
                 </ModalWrapper>
+            }
             </TabTrap>
         </Portal>
     );
