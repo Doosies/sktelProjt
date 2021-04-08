@@ -17,9 +17,8 @@ export function useModal(){
 
     const hideModal = () =>{
         setModalState({
+            ...modalState,
             isVisible:false,
-            modalTitle:'',
-            modalText:'',
         })
     }
 

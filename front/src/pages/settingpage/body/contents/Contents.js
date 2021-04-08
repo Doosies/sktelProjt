@@ -89,8 +89,8 @@ function Contents(){
     return(
         // <div>
         <StyledContents onMouseDown={console.log} >
-            {modalState.isVisible && 
-                <Modal title={modalState.modalTitle} onClickYes={handleClickModalYes} noCancel>
+            {//modalState.isVisible && 
+                <Modal isVisible={modalState.isVisible} title={modalState.modalTitle} onClickYes={handleClickModalYes} noCancel>
                     {modalState.modalText}
                 </Modal>
             }
