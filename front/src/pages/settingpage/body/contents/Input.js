@@ -1,6 +1,6 @@
 import React, {forwardRef, useCallback,  useRef, useState } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
-import styled, {  createGlobalStyle, css } from 'styled-components';
+import styled, { css } from 'styled-components';
 import Modal from '../../../../components/Modal';
 import Portal from '../../../../components/Portal';
 import { useModal } from '../../../../hooks/useModal';
@@ -8,45 +8,12 @@ import { phoneDataChangedList, phoneDataUpdate} from '../../../../modules/phoneD
 import { columnPhoneInfo, commaValues, notRequiredInputValue, requiredInputValue } from '../../../../utils/propertyInfo';
 import * as utils from '../../../../utils/utils';
 
-const InputWrap = styled.div`
-`;
-const StyledInput = styled.input`
-    box-sizing:border-box;
-    ${({ width, textalign })=>css`
-        width:${width};
-        text-align:${textalign};
-    `}
-`;
-
-// const required = [
-//     "model_name", "machine_name", "shipping_price", "maker", "created",
-// ]
-// // 필수 입력 항목이 아닌것들
-// const notRequired = [
-//     "battery", "screen_size", "storage"
-// ];
-// // 콤마 찍을 값들
-// const commaValues = [
-//     "shipping_price", "battery",  "storage"
-// ]
-
-
 const Input = forwardRef(({colIndex, id, width},ref) =>{
-    // console.log("input!", ref.current);
-    // const ref = useRef();
-    // const [modalState, setModalState] = useState({
-    //     showModal:false,
-    //     modalTitle:"",
-    //     modalText:"",
-    // });
+    
     const [modalState, showModal, hideModal] = useModal();
-
-    const [isEnd, setEnd] = useState(false);
     // const keys = ref.current.
 
     const dispatch = useDispatch();
-    // alert 두번 나오는거 방지 위한 ref
-    const didShowAlert = useRef(false);
     // 현재 data의 column 정보와 검증값
     const nowColumnInfo = columnPhoneInfo[colIndex];
     
@@ -91,7 +58,6 @@ const Input = forwardRef(({colIndex, id, width},ref) =>{
     },[nowColumnInfo.colName, updateInputCompo]);
 
     const handleOnFocus = useCallback( () =>{
-        didShowAlert.current=false;
     },[]);
      ///////////////////////////////////////////////////////// 포커싱이 벗어났을 때
     const handleBlur = useCallback( () =>{
@@ -136,12 +102,12 @@ const Input = forwardRef(({colIndex, id, width},ref) =>{
     },[nowVal, nowColumnInfo.deleteWord, nowColumnInfo.reg, nowColumnInfo.colName, nowColumnInfo.error, showModal, firstVal, isAddedRow, updateListUpdateDelete, id, updateListUpdateChange, updateInputCompo, updateListAddDelete, updateListAddChange]);
 
     const handleKeyUp = (e) =>{
-        const nowUpKey = e.keyCode;
-        if( nowUpKey === 37 || nowUpKey === 39 )
-            if(e.target.selectionEnd === 0 || e.target.selectionEnd === e.target.value.length)
-                setEnd(true);
-            else   
-                setEnd(false);
+        // const nowUpKey = e.keyCode;
+        // if( nowUpKey === 37 || nowUpKey === 39 )
+        //     if(e.target.selectionEnd === 0 || e.target.selectionEnd === e.target.value.length)
+        //         setEnd(true);
+        //     else   
+        //         setEnd(false);
 
     }
     // 39 오른쪽, 40 아래쪽
@@ -155,10 +121,10 @@ const Input = forwardRef(({colIndex, id, width},ref) =>{
     const handleOnclickYes = () =>{
         hideModal();
         ref.current[id][colIndex].focus();
+        updateInputCompo(firstVal);
 
         // ref.current[refIdx].refs[colIndex].focus();
-        updateInputCompo(firstVal);
-        didShowAlert.current=true;
+        // didShowAlert.current=true;
     }
     return( 
         <InputWrap>
@@ -183,3 +149,14 @@ const Input = forwardRef(({colIndex, id, width},ref) =>{
     );
 });
 export default React.memo(Input);
+
+
+const InputWrap = styled.div`
+`;
+const StyledInput = styled.input`
+    box-sizing:border-box;
+    ${({ width, textalign })=>css`
+        width:${width};
+        text-align:${textalign};
+    `}
+`;
