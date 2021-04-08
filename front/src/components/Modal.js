@@ -3,17 +3,17 @@ import styled from 'styled-components';
 import TabTrap from '../lib/TabTrap';
 import Button from './Button';
 import Portal from './Portal';
-import {useSpring, animated, useTransition, Transition, config} from 'react-spring';
+import {useSpring, animated, useTransition, } from 'react-spring';
 
 
 
 
 const Modal = ({title, children, onClickYes, OnClickNo, noCancel, isVisible = false}) =>{
-    const wrapperAnimation = useSpring({
-        from:{opacity:0},
-        to:{opacity:1},
-        opacity: 0,
-    });
+    // const wrapperAnimation = useSpring({
+    //     from:{opacity:0},
+    //     to:{opacity:1},
+    //     opacity: 0,
+    // });
     
     const trasition = useTransition(isVisible,{
         config:{duration:300},
@@ -26,7 +26,7 @@ const Modal = ({title, children, onClickYes, OnClickNo, noCancel, isVisible = fa
             isVisible &&  
             <Portal elementId="modal-root">
                 <TabTrap>
-                    <ModalWrapper >
+                    <ModalWrapper>
                         <ModalBox style={style}>
                             <Title> {title} </Title>
                             <InnerText>{children} </InnerText>
@@ -50,7 +50,7 @@ const ModalWrapper = styled(animated.div)`
     top:0;bottom:0;
     z-index:1000;
 
-    background-color: rgba(0, 0, 0, 0.6);
+    background-color: rgba(0, 0, 0, 0.4);
     /* background-color: */
 
     display:flex;
