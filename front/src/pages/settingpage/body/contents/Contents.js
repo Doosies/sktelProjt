@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import CButton from '../../../../components/Button';
@@ -12,19 +12,13 @@ import Tables from './Tables';
 
 
 function Contents(){
-    // console.log("contents!!"); 
-    // const [modalState, setModalState] = useState({
-    //     showModal:false,
-    //     modalTitle:"",
-    //     modalText:"",
-    // });
     const [modalState, showModal, hideModl] = useModal();
 
-    const dispatch = useDispatch();
     const {dataChangeList, rows} = useSelector( state =>({
         dataChangeList: state.phoneData.dataChangeList,
         rows: state.phoneData.data.rows,
     }), shallowEqual);
+    const dispatch = useDispatch();
 
     //focus 이동을 위한 refs
     const refs = useRef({});
@@ -70,9 +64,7 @@ function Contents(){
         
         // 추가, 제거, 수정 중 하나의 리스트라도 차있어야 전송함.
         if(
-            canSendAddData 
-            || utils.isFilledList(deleteList) 
-            || utils.isFilledList(updateList)
+            canSendAddData || utils.isFilledList(deleteList) || utils.isFilledList(updateList)
         ){
             try{
                 const response = await RESTAPI.patchPhoneInfo({
@@ -81,11 +73,6 @@ function Contents(){
                     updateList : dataChangeList.dataUpdateList
                 });
                 dispatch(phoneDataFetchAsync());
-                // setModalState({...modalState, 
-                //     modalTitle:"수정 완료", 
-                //     modalText:"성공적으로 수정했습니다.", 
-                //     showModal:true
-                // });
                 showModal("수정완료", "성공적으로 수정했습니다");
             } catch(e){
                 console.log(e)
@@ -96,13 +83,8 @@ function Contents(){
     // 37 왼쪽 ,38 위쪽
     // 현재 커서의 위치가 문자의 맨 앞 혹은 맨 뒤일경우
     const handleClickModalYes = async(e) =>{
-        // setModalState({...modalState, 
-        //     showModal:false});
         hideModl();
     };
-
-    
-    
 
     return(
         // <div>
