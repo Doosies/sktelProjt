@@ -12,6 +12,7 @@ const StyledButton = styled.button`
     background-color:rgb(0,0,0,0);
     border:0;
     border-radius:5px;
+    min-width:40px;  
     
     ${props => css`
         width: ${props.width};
@@ -57,8 +58,7 @@ const StyledButton = styled.button`
     `}
     ${props=>
         props.deleteButton && css`
-            margin-right:5px;
-            min-width:40px;   
+            margin-right:5px; 
     `}
     ${({top}) => top && css`
         visibility:hidden;
