@@ -18,7 +18,7 @@ const hideModal = () =>({
 });
 
 export default function modal(state = initialModalState, action){
-    console.log("modal-> ", state, action);
+    // console.log("modal-> ", state, action);
     switch(action.type){
         case SHOW_MODAL:
             return{
