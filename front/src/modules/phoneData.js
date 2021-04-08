@@ -112,6 +112,7 @@ const phoneDataChangedList = ({
 ////////////////////////////////////////////////////////
 
 export default function phoneData(state = initialState, action){
+    // console.log("phone-> ",state,action);
     switch(action.type){
         case PHONE_DATA_LOADING:
         case PHONE_DATA_SUCCESS:
