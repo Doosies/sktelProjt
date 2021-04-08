@@ -1,39 +1,52 @@
-import { config, useSpring, useTransition } from '@react-spring/core';
-import { animated } from '@react-spring/web';
-import React, { useState } from 'react'
-import { useHeight } from './useHeight';
+import {useTransition, animated, config} from 'react-spring'
+import React, { useEffect, useRef } from 'react'
+import { useState } from 'react';
+import { current } from 'immer';
+import _default from 'react-bootstrap/esm/CardColumns';
 
 export default function Test(){
-  const [show, setShow] = useState(false);
-  const [showA, setShowA] = useState(false);
+    const [input, setInput] = useState("입력");
+    const id = useRef(5);
+    const ref = useRef();
+    const [items, setItems] = useState(
+      [
+        {id: "1", texts: "1"},
+        {id: "2", texts: "2"},
+        {id: "3", texts: "3"},
+        {id: "4", texts: "4"},
+      ]
+    );
 
-  const [heightRef, height] = useHeight();
-  const slideInStyles = useSpring({
-    config: {...config.stiff},
-    from: {opacity:0, height:0},
-    to: {
-      opacity: showA ? 1 : 0,
-      height: showA ? height : 0,
+    const transitions = useTransition(items, {
+      from: { opacity:0, transform: 'translate3d(0,-40px,0)' },
+      enter: { opacity:1, transform: 'translate3d(0,0,0)' },
+      leave: { opacity:0, color: 'red', },
+      });
+    const handleClick = () =>{
+      setItems(items.concat({
+        id: id,
+        texts: input,
+      }));
+      id.current += 1;
+      ref.current.focus();
+      setInput('');
     }
-  });
-  
-  // const fadeStyled = useSpring({
-  //   config: {...config.stiff},
-  //   from: { opacity: 0},
-  //   to:{ opacity: showA ? 1 : 0}
-  // });
+    const handleDelete = () =>{
+      setItems(items.splice(1));
+    }
 
-    // arr.
     return (
       <div>
-        <animated.div style = {{...slideInStyles, overflow:"hidden" }}>
-          <div ref={heightRef}>
-            이건 fade in and out 될거임.
-
-          </div>
-        </animated.div>
-        <button onClick={()=>{ setShowA( val => !val)}}> toggle </button>
-        <hr/>
+      <button onClick={handleClick}> 추가 </button>
+      <button onClick={handleDelete}> 제거 </button>
+        <div>
+          {transitions((styleeee,itemmm)=>{
+            return itemmm && <animated.div style={styleeee} key={itemmm.id}>
+                    {itemmm.texts}
+                    </animated.div>
+          })}
+        </div>
+        <input ref={ref} value={input} onChange={(e)=>{setInput(e.target.value)}}/>
       </div>
     );
 }
