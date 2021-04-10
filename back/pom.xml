@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.5.0-SNAPSHOT</version>
+		<version>2.4.4</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.ppap</groupId>
@@ -70,6 +70,16 @@
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency> -->
+		<dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-jasper</artifactId>
+            <scope>provided</scope>
+        </dependency>
+		<dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+            <scope>provided</scope>
+        </dependency>
 	</dependencies>
 
 	<build>
@@ -106,23 +116,25 @@
 			<plugin>
 				<groupId>com.github.eirslett</groupId>
 				<artifactId>frontend-maven-plugin</artifactId>
-				<version>1.11.0</version> <!-- frontend-maven-plugin Version -->
+				<version>1.11.3</version> <!-- frontend-maven-plugin Version -->
 				<configuration>
 					<workingDirectory>../front/</workingDirectory> <!-- React JS 가 설치된 디렉토리 -->
 					<installDirectory>target</installDirectory> <!-- war & jar 가 생성되는 메이븐 빌드의 타겟 디렉토리 -->
 				</configuration>
 				<executions>
 					<execution>
-						<id>install node and npm</id>
+						<id>install node and yarn</id>
 						<goals>
-							<goal>install-node-and-npm</goal> <!-- node & npm 설치 -->
+							<goal>install-node-and-yarn</goal> <!-- node & npm 설치 -->
 						</goals>
 						<configuration>
 							<nodeVersion>v15.12.0</nodeVersion> <!-- 설치할 nodeJs 의 버전 -->
-							<npmVersion>7.6.3</npmVersion>  <!-- 설치할 npm 의 버전 -->
+							<!-- <nVersion>7.6.3</nVersion> -->
+							<yarnVersion>v1.22.10</yarnVersion>
 						</configuration>
 					</execution>
-					<execution>
+					<!-- <execution> -->
+					<!-- <execution>
 						<id>npm install</id>
 						<goals>
 							<goal>npm</goal>
@@ -130,8 +142,26 @@
 						<configuration>
 							<arguments>install</arguments>
 						</configuration>
+					</execution> -->
+					<execution>
+						<id>yarn install</id>
+						<goals>
+							<goal>yarn</goal>
+						</goals>
+						<configuration>
+							<arguments>install</arguments>
+						</configuration>
 					</execution>
 					<execution>
+						<id>yarn run build</id>
+						<goals>
+							<goal>yarn</goal>
+						</goals>
+						<configuration>
+							<arguments>run build</arguments>
+						</configuration>
+					</execution>
+					<!-- <execution>
 						<id>npm run build</id>
 						<goals>
 							<goal>npm</goal>
@@ -139,7 +169,7 @@
 						<configuration>
 							<arguments>run build</arguments>
 						</configuration>
-					</execution>
+					</execution> -->
 				</executions>
 			</plugin>
 			<plugin>
