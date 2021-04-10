@@ -1,5 +1,6 @@
 import { animated } from '@react-spring/web';
-import React, {forwardRef, useCallback, useEffect } from 'react';
+import React, {forwardRef, useCallback, useEffect} from 'react';
+import { useRef } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import styled, { css } from 'styled-components';
 import Modal from '../../../../components/Modal';
@@ -10,6 +11,8 @@ import * as utils from '../../../../utils/utils';
 
 const Input = forwardRef(({colIndex, id, width},ref) =>{
     const dispatch = useDispatch();
+    
+    const isInvalid = useRef(false);
     const [modalState, showModal, hideModal] = useModal();
     const {colName,deleteWord,error,reg,textalign } = columnPhoneInfo[colIndex];
 
@@ -29,11 +32,10 @@ const Input = forwardRef(({colIndex, id, width},ref) =>{
 
     }),shallowEqual);
 
-    const callbackDispatch = useCallback((dispatchFunc) =>{
-        return(...args)=>{
-            dispatch(dispatchFunc(...args));
-        }
-    },[dispatch]);
+    useEffect(()=>{
+        return ref.current;
+    },[]);
+
     //////////////////////
     const updateInputCompo = useCallback( (value) => 
         dispatch(phoneDataUpdate.Change(id,colName, value))
@@ -41,10 +43,61 @@ const Input = forwardRef(({colIndex, id, width},ref) =>{
     
     // state를 바꿔주는 dispatch* change,delete //
     // const updateListInsert = callbackDispatch(phoneDataChangedList.Insert);
+
+
+
+    const callbackDispatch = useCallback((dispatchFunc) =>{
+        return(...args)=>{
+            dispatch(dispatchFunc(...args));
+        }
+    },[dispatch]);
     const updateListUpdateChange = callbackDispatch(phoneDataChangedList.Update.Change);
     const updateListUpdateDelete = callbackDispatch(phoneDataChangedList.Update.Delete);
     const updateListAddChange = callbackDispatch(phoneDataChangedList.Add.Change);
     const updateListAddDelete = callbackDispatch(phoneDataChangedList.Add.Delete);
+     ///////////////////////////////////////////////////////// 포커싱이 벗어났을 때
+    const handleBlur = useCallback( () =>{
+        const nowValue = nowVal || '';
+        const deletedWord = nowValue.replace(deleteWord,"");
+
+        const isPassRegTest = reg.test(deletedWord);
+        const isNullValue = deletedWord=== " " || deletedWord ==="";
+        const isRequiredValue = requiredInputValue.some(val=>val === colName);
+        
+        if( //    정규식 통과 못함   && 빈값이 아님.    ||   필수값인데 빈칸일경우
+            ( isPassRegTest === false && !isNullValue ) ||( isRequiredValue && deletedWord ==="")
+        ){
+            isInvalid.current = true;
+            showModal("잘못된 값입니다.", error);
+        }
+        //정규식을 통과할 경우(올바른 값일경우)
+        else{
+            isInvalid.current = false;
+            // NOTE - commaValues에 포함될경우 콤마를 찍어줌
+            const modifiedValue = commaValues.some(val => val === colName)
+            ? utils.comma(deletedWord)
+            : deletedWord;
+            // const firstValue = firstVal || '';
+            const firstValue = firstVal === null ? '': firstVal;
+            
+            // 최초값과 수정한 값을 비교
+            modifiedValue === firstValue   
+                // 비교한 값이 같을 떄
+                ? isAddedRow 
+                    ? updateListAddDelete(id, colName) 
+                    : updateListUpdateDelete(id, colName)    
+                //비교한 값이 다를 때
+                : isAddedRow 
+                    ? updateListAddChange(id, colName, modifiedValue) 
+                    : updateListUpdateChange(id, colName, modifiedValue)
+
+
+            if( requiredInputValue.some(val=> val === colName)){
+                updateInputCompo(modifiedValue);
+            }
+        }
+        
+    },[nowVal, deleteWord, reg, colName, showModal, error, firstVal, isAddedRow, updateListUpdateDelete, id, updateListUpdateChange, updateInputCompo, updateListAddDelete, updateListAddChange]);
 
     const handleChange = useCallback( (e) => {
         const val = commaValues.some(val => val === colName)
@@ -54,48 +107,8 @@ const Input = forwardRef(({colIndex, id, width},ref) =>{
     },[colName, updateInputCompo]);
 
     const handleOnFocus = useCallback( () =>{
+        console.log("focus");
     },[]);
-     ///////////////////////////////////////////////////////// 포커싱이 벗어났을 때
-    const handleBlur = useCallback( () =>{
-        const nowValue = nowVal || '';
-        const deletedWord = nowValue.replace(deleteWord,"");
-
-        const isPassRegTest = reg.test(deletedWord);
-        const isNullValue = deletedWord=== " " || deletedWord ==="";
-        const isRequiredValue = requiredInputValue.some(val=>val === colName);
-        //    정규식 통과 못함   && 빈값이 아님.
-        if( ( isPassRegTest === false && !isNullValue )
-        //       필수값인데 빈칸일경우
-        ||( isRequiredValue && deletedWord ==="")
-        ){
-            showModal("잘못된 값입니다.", error);
-        }
-        //정규식을 통과할 경우(올바른 값일경우)
-        else{
-            // NOTE - commaValues에 포함될경우 콤마를 찍어줌
-            const modifiedValue = commaValues.some(val => val === colName)
-            ? utils.uncomma(deletedWord)
-            : deletedWord;
-            // const firstValue = firstVal || '';
-            const firstValue = firstVal === null ? '': firstVal;
-            
-            // 추가한 행이 아니라면
-            if( !isAddedRow ) 
-                modifiedValue === firstValue   
-                // 새로 추가한 row가 아닐경우           
-                ? updateListUpdateDelete(id, colName)                // 최초값과 수정한 값이 같을경우, delete
-                // 새로 추가한 row일 경우
-                : updateListUpdateChange(id, colName, modifiedValue);// 최초값과 수정한 값이 다를경우, change
-            else if( isAddedRow ){
-                modifiedValue === firstValue   
-                ?updateListAddDelete(id, colName)
-                :updateListAddChange(id, colName, modifiedValue);
-            }
-            if( requiredInputValue.some(val=> val === colName))
-                updateInputCompo(modifiedValue);
-        }
-        
-    },[nowVal, deleteWord, reg, colName, showModal, error, firstVal, isAddedRow, updateListUpdateDelete, id, updateListUpdateChange, updateInputCompo, updateListAddDelete, updateListAddChange]);
 
     const handleKeyUp = (e) =>{
         // const nowUpKey = e.keyCode;
@@ -104,7 +117,6 @@ const Input = forwardRef(({colIndex, id, width},ref) =>{
         //         setEnd(true);
         //     else   
         //         setEnd(false);
-
     }
     // 39 오른쪽, 40 아래쪽
     // 맨뒤 혹은 맨앞으로 가려는 이벤트 중지
@@ -136,6 +148,7 @@ const Input = forwardRef(({colIndex, id, width},ref) =>{
                 onChange={handleChange}
                 onFocus={handleOnFocus}
                 onBlur={handleBlur}
+                isinvalid={+isInvalid.current}
             />
         </InputWrap>
     );
@@ -145,10 +158,12 @@ export default React.memo(Input);
 
 const InputWrap = styled.div`
 `;
+
 const StyledInput = styled(animated.input)`
     box-sizing:border-box;
-    ${({ width, textalign })=>css`
+    ${({ width, textalign,isinvalid })=> css`
         width:${width};
         text-align:${textalign};
+        outline-color:${isinvalid?"red":"black"};
     `}
 `;
