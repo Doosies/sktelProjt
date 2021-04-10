@@ -1,9 +1,10 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import CButton from '../../../../components/Button';
 import Modal from '../../../../components/Modal';
 import { useModal } from '../../../../hooks/useModal';
+import { useSendData } from '../../../../hooks/useSendData';
 import { phoneDataUpdate, phoneDataFetchAsync, phoneDataChangedList } from '../../../../modules/phoneData';
 import * as RESTAPI from '../../../../utils/api';
 import { columnPhoneInfo, requiredInputValue, commaValues } from '../../../../utils/propertyInfo';
@@ -12,6 +13,7 @@ import Tables from './Tables';
 
 
 function Contents(){
+    console.log("contents render");
     const [modalState, showModal, hideModl] = useModal();
 
     const {dataChangeList, rows} = useSelector( state =>({
@@ -22,11 +24,33 @@ function Contents(){
 
     //focus 이동을 위한 refs
     const refs = useRef({});
+    // console.log(refs.current);
+    
+    // useEffect(()=>{
+    //     const idKeys = Object.keys(refs.current);
+    //     console.log(idKeys);
+    //     const lastId = idKeys[idKeys.length - 1];
+    //     refs.current[lastId][0].focus();
+    //     // console.log(refs.current[lastId][0]);
+    //     // refs.current[lastId][1].focus();
+    // },[Object.keys(refs.current).length]);
 
+    // useEffect(() => {
+    //     // if (refs.current) {
+    //     //     refs.current.textContent = 'whats up';
+    //     // }
+    //     console.log(refs.current);
+    //   }, [refs]);
     //NOTE - 추가버튼 클릭시
-    const handleAdd =  ()=>{
+    const handleAdd = async ()=>{
         dispatch(phoneDataUpdate.Add());
-        // console.log(refs.current[53]);
+        // console.log(refs.current);
+        const idKeys = Object.keys(refs.current);
+        
+        const lastId = idKeys[idKeys.length-1];
+        // console.log(refs.current[lastId]);
+        // console.log(lastId);
+        // refs.current[lastId][0].focus();
     };
 
     //NOTE - 적용버튼 클릭시
@@ -48,14 +72,15 @@ function Contents(){
                     : ele[1];
 
                 const isPassRegTest = columnPhoneInfo[colIdx].reg.test(columnValue);
-                const isNullValue = !columnValue || columnValue === " ";
+                // const isNullValue = !columnValue || columnValue === " ";
                 // 필수값인지 확인함. 맞을시 그 값을 포커싱해줌
                 return requiredInputValue.some(requiredValue =>{
                     if( 
                         columnKey === requiredValue
-                         &&( isNullValue || isPassRegTest === false )
+                         &&( !columnValue || isPassRegTest === false )
                     ){
                         refs.current[row.id][colIdx].focus();
+                        refs.current[row.id][colIdx].style.outlineColor="red";
                         return true;
                     } else return false;
                 });// 필수값인지 확인
@@ -66,23 +91,26 @@ function Contents(){
         if(
             canSendAddData || utils.isFilledList(deleteList) || utils.isFilledList(updateList)
         ){
+            console.log(canSendAddData,  utils.isFilledList(deleteList),utils.isFilledList(updateList))
             try{
                 const response = await RESTAPI.patchPhoneInfo({
                     addList : dataChangeList.dataAddList,
                     deleteList : dataChangeList.dataDeleteList,
                     updateList : dataChangeList.dataUpdateList
                 });
+                console.log(response);
                 dispatch(phoneDataFetchAsync());
                 showModal("수정완료", "성공적으로 수정했습니다");
             } catch(e){
                 console.log(e)
+                showModal("수정실패", "실패!");
             }
             dispatch(phoneDataChangedList.Init());
         }
     };
     // 37 왼쪽 ,38 위쪽
     // 현재 커서의 위치가 문자의 맨 앞 혹은 맨 뒤일경우
-    const handleClickModalYes = async(e) =>{
+    const handleClickModalYes = () =>{
         hideModl();
     };
 
