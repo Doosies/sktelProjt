@@ -1,4 +1,3 @@
-import {  } from '@react-spring/core';
 import { animated } from '@react-spring/web';
 import React, { forwardRef, useCallback } from 'react'
 import { useDispatch} from 'react-redux';
@@ -10,10 +9,11 @@ import Column from './Column';
 import Input from './Input';
 
 
-const Row = forwardRef(({top=false, rowId, style},inputRefs) =>{
+const Row = forwardRef(({top=false, rowId, rowStyle},inputRefs) =>{
     const dispatch = useDispatch();
 
-    const handleDeleteButton = useCallback( (id) => {
+    const handleDeleteButton = useCallback( (e,id) => {
+        // console.log(id);\
         dispatch(phoneDataUpdate.Delete(id));
         delete inputRefs.current[rowId];
 
@@ -21,24 +21,32 @@ const Row = forwardRef(({top=false, rowId, style},inputRefs) =>{
 
 
     if( top ) return(
-        <StyledRow top>
+        <StyledRow>
+            <Button color="white" deleteButton top/>
             {columnPhoneInfo.map((column)=>
                 <Column  key={`head_${column.name}`} width={column.width} top>
                     {column.name}
                 </Column>
             )}
-            <Button color="white" deleteButton top/>
         </StyledRow>
 
     );
     return( 
-        <StyledRow>
+        <StyledRow style={rowStyle}>
+            <Button 
+                color="white" 
+                background_color="#ff7787" 
+                deleteButton 
+                onClick={(e)=>handleDeleteButton(e,rowId)} 
+                onMouseDown={(e)=>{e.preventDefault()}} 
+            > 
+                삭제 
+            </Button>
             {columnPhoneInfo.map((column, colIndex)=>
                 <Column key={`row_${rowId}_${column.name}`} width={column.width} textalign={column.textalign}>
                     <Input ref={inputRefs} colIndex={colIndex} id={rowId} width={column.width} column={column} />
                 </Column>   
             )}
-            <Button color="white" background_color="#ff7787" onClick={()=>handleDeleteButton(rowId)} deleteButton> 삭제 </Button>
         </StyledRow>
     );
 });
@@ -50,9 +58,9 @@ export default React.memo(Row,
 
 
 
-const StyledRow = styled.div`
-text-align:center;
-display:flex;
-align-items:center;
-align-items:center;
+const StyledRow = styled(animated.div)`
+    text-align:center;
+    display:flex;
+    align-items:center;
+    align-items:center;
 `;
