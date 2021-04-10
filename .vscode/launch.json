@@ -5,6 +5,13 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "type": "java",
+            "name": "Launch SktelApplication",
+            "request": "launch",
+            "mainClass": "com.ppap.sktel.SktelApplication",
+            "projectName": "sktel"
+        },
+        {
             "type": "edge",
             "version": "stable",
             "request": "launch",
