@@ -9,8 +9,9 @@ import { phoneDataChangedList, phoneDataUpdate} from '../../../../modules/phoneD
 import { columnPhoneInfo, commaValues, notRequiredInputValue, requiredInputValue } from '../../../../utils/propertyInfo';
 import * as utils from '../../../../utils/utils';
 
-const Input = forwardRef(({colIndex, id, width},ref) =>{
+const Input = forwardRef(({colIndex, rowIdx, id, width},ref) =>{
     const dispatch = useDispatch();
+    // console.log("input");
     
     const isInvalid = useRef(false);
     const [modalState, showModal, hideModal] = useModal();
@@ -75,8 +76,14 @@ const Input = forwardRef(({colIndex, id, width},ref) =>{
             isInvalid.current = false;
             // NOTE - commaValues에 포함될경우 콤마를 찍어줌
             const modifiedValue = commaValues.some(val => val === colName)
-            ? utils.comma(deletedWord)
+            ? utils.uncomma(deletedWord)
             : deletedWord;
+
+            if( requiredInputValue.some(val=> val === colName)){
+                commaValues.some(val => val === colName)
+                ? updateInputCompo(utils.comma(modifiedValue))
+                : updateInputCompo(modifiedValue)
+            }
             // const firstValue = firstVal || '';
             const firstValue = firstVal === null ? '': firstVal;
             
@@ -92,9 +99,6 @@ const Input = forwardRef(({colIndex, id, width},ref) =>{
                     : updateListUpdateChange(id, colName, modifiedValue)
 
 
-            if( requiredInputValue.some(val=> val === colName)){
-                updateInputCompo(modifiedValue);
-            }
         }
         
     },[nowVal, deleteWord, reg, colName, showModal, error, firstVal, isAddedRow, updateListUpdateDelete, id, updateListUpdateChange, updateInputCompo, updateListAddDelete, updateListAddChange]);
@@ -161,9 +165,13 @@ const InputWrap = styled.div`
 
 const StyledInput = styled(animated.input)`
     box-sizing:border-box;
+    /* outline:none; */
+    /* border:0; */
+    /* outline-color: #7abaff; */
+    border: 1px solid #a3a3a3;
     ${({ width, textalign,isinvalid })=> css`
         width:${width};
         text-align:${textalign};
-        outline-color:${isinvalid?"red":"black"};
+        outline-color:${isinvalid?"red":"#7abaff"};
     `}
 `;
