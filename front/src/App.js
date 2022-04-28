@@ -40,12 +40,7 @@ const GlobalStyle = createGlobalStyle`
 
 function App(){
     return(
-        <div>
-            <GlobalStyle/>
-            <BrowserRouter>
-                <Route path="/admin" component={Setting}/>
-            </BrowserRouter>
-        </div>
+        <Setting />
         // <>
         // <BrowserRouter basename={process.env.PUBLIC_URL}>
         //     <Route path="/" component={Main} exact />
