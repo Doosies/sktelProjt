@@ -1,5 +1,5 @@
 import React, {} from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, useRoutes } from 'react-router-dom';
 import { Setting} from './pages/pages';
 
 const AppRoutes = () => {
