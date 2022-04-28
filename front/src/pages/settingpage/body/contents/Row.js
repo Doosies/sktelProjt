@@ -1,7 +1,7 @@
 import { animated } from '@react-spring/web';
 import React, { forwardRef, useCallback } from 'react'
-import { useDispatch, useSelector} from 'react-redux';
-import styled, { css } from 'styled-components';
+import { useDispatch} from 'react-redux';
+import styled, {  } from 'styled-components';
 import Button from '../../../../components/Button';
 import {  phoneDataUpdate } from '../../../../modules/phoneData';
 import { columnPhoneInfo } from '../../../../utils/propertyInfo';

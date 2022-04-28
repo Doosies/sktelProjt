@@ -1,9 +1,9 @@
-import React, { useEffect, useRef } from 'react';
+import React, {  } from 'react';
 import styled from 'styled-components';
 import TabTrap from '../lib/TabTrap';
 import Button from './Button';
 import Portal from './Portal';
-import {useSpring, animated, useTransition, } from 'react-spring';
+import {animated, useTransition, } from 'react-spring';
 
 
 

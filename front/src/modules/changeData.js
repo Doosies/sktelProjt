@@ -1,4 +1,3 @@
-import produce from 'immer';
 
 const DATA_ADD_LIST_INSERT = 'changeData/DATA_ADD_LIST_INSERT';
 const DATA_DELETE_LIST_INSERT = 'changeData/DATA_DELETE_LIST_INSERT';

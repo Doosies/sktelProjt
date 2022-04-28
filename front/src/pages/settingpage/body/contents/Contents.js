@@ -1,10 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import CButton from '../../../../components/Button';
 import Modal from '../../../../components/Modal';
 import { useModal } from '../../../../hooks/useModal';
-import { phoneDataUpdate, phoneDataFetchAsync, phoneDataChangedList } from '../../../../modules/phoneData';
+import { phoneDataUpdate, phoneDataChangedList } from '../../../../modules/phoneData';
 import * as RESTAPI from '../../../../utils/api';
 import { columnPhoneInfo, requiredInputValue, commaValues } from '../../../../utils/propertyInfo';
 import * as utils from '../../../../utils/utils';

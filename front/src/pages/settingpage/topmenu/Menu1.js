@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import CButton from '../../../components/Button';
 import ClicakableDiv from '../../../components/ClicakableDiv';
 
 const StyledMenu1 = styled.div`

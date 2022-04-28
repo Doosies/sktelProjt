@@ -1,7 +1,7 @@
 import React from 'react';
 import styled, { css } from "styled-components";
 
-import {darken, lighten} from 'polished';
+import {darken} from 'polished';
 
 const StyledButton = styled.button`
     display:flex;

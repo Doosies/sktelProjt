@@ -1,5 +1,5 @@
 import React, { forwardRef, useEffect } from 'react';
-import styled, { css } from 'styled-components';
+import styled, {  } from 'styled-components';
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import Row from './Row';
 import { phoneDataFetchAsync } from '../../../../modules/phoneData';

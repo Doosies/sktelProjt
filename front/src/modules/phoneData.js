@@ -1,4 +1,3 @@
-import produce from 'immer';
 import { createPromiseThunk, handleAsyncActions } from '../lib/asyncUtils';
 import { handleListActions } from '../lib/listUtils';
 import * as restAPI from '../utils/api';
