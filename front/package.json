@@ -1,6 +1,6 @@
 {
   "name": "front",
-  "homepage": "/home/ec2-user/html/admin/sktelProjt/front/build/",
+  "homepage": ".",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
