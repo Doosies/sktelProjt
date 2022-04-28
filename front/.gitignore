@@ -26,3 +26,5 @@ application.properties
 application.yml
 
 /shared
+
+.env

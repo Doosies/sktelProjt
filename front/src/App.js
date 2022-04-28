@@ -1,5 +1,5 @@
 import React, {} from 'react';
-import {BrowserRouter, HashRouter, Route} from 'react-router-dom';
+import {BrowserRouter, Route} from 'react-router-dom';
 // import axios from 'axios';
 import {Main, Setting} from './pages/pages';
 import styled, { createGlobalStyle } from 'styled-components';
@@ -52,11 +52,11 @@ function App(){
     return(
         <>
         <GlobalStyle/>
-        <HashRouter>
+        <BrowserRouter basename={process.env.PUBLIC_URL}>
             <Route path="/" component={Main} exact />
             <Route path="/setting" component = {Setting}/>
             <Route path="/test" component = {Test}/>
-        </HashRouter>
+        </BrowserRouter>
         </>
     );
 }
