@@ -95,7 +95,7 @@
 					<forkMode>once</forkMode>
 				</configuration>
 			</plugin> 
-			<plugin>
+			<!-- <plugin>
 				<artifactId>maven-antrun-plugin</artifactId>
 				<executions>
 					<execution>
@@ -113,38 +113,27 @@
 						</goals>
 					</execution>
 				</executions>
-			</plugin>
+			</plugin> -->
 			
-			<plugin>
+			<!-- <plugin>
 				<groupId>com.github.eirslett</groupId>
 				<artifactId>frontend-maven-plugin</artifactId>
-				<version>1.11.3</version> <!-- frontend-maven-plugin Version -->
+				<version>1.11.3</version>  frontend-maven-plugin Version 
 				<configuration>
-					<workingDirectory>../front/</workingDirectory> <!-- React JS 가 설치된 디렉토리 -->
-					<installDirectory>target</installDirectory> <!-- war & jar 가 생성되는 메이븐 빌드의 타겟 디렉토리 -->
+					<workingDirectory>../front/</workingDirectory>  React JS 가 설치된 디렉토리
+					<installDirectory>target</installDirectory>  war & jar 가 생성되는 메이븐 빌드의 타겟 디렉토리 
 				</configuration>
 				<executions>
 					<execution>
 						<id>install node and yarn</id>
 						<goals>
-							<goal>install-node-and-yarn</goal> <!-- node & npm 설치 -->
+							<goal>install-node-and-yarn</goal> node & npm 설치 
 						</goals>
 						<configuration>
-							<nodeVersion>v16.10.0</nodeVersion> <!-- 설치할 nodeJs 의 버전 -->
-							<!-- <nVersion>7.6.3</nVersion> -->
+							<nodeVersion>v16.10.0</nodeVersion>  설치할 nodeJs 의 버전 
 							<yarnVersion>v1.22.13</yarnVersion>
 						</configuration>
 					</execution>
-					<!-- <execution> -->
-					<!-- <execution>
-						<id>npm install</id>
-						<goals>
-							<goal>npm</goal>
-						</goals>
-						<configuration>
-							<arguments>install</arguments>
-						</configuration>
-					</execution> -->
 					<execution>
 						<id>yarn install</id>
 						<goals>
@@ -163,17 +152,8 @@
 							<arguments>run build</arguments>
 						</configuration>
 					</execution>
-					<!-- <execution>
-						<id>npm run build</id>
-						<goals>
-							<goal>npm</goal>
-						</goals>
-						<configuration>
-							<arguments>run build</arguments>
-						</configuration>
-					</execution> -->
 				</executions>
-			</plugin>
+			</plugin> -->
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
