@@ -1,6 +1,6 @@
 {
   "name": "front",
-  "homepage": "https://songminhyung.com/home/ec2-user/html/portfolio/front/build/",
+  "homepage": "home/ec2-user/html/portfolio/front/build/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
