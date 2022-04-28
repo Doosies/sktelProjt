@@ -53,9 +53,9 @@ function App(){
         <>
         <GlobalStyle/>
         <HashRouter>
-            <Route path="/" component={Main} exact />
-            <Route path="/setting" component = {Setting}/>
-            <Route path="/test" component = {Test}/>
+            <Route path="/admin" component={Main} exact />
+            <Route path="/admin/setting" component = {Setting}/>
+            <Route path="/admin/test" component = {Test}/>
         </HashRouter>
         </>
     );
