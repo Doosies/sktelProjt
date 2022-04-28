@@ -50,7 +50,9 @@ function App(){
     fire();
 
     return(
-        <Setting />
+        // <div>
+            <Route path="/admin" component={Setting}/>
+        // </div>
         // <>
         // <GlobalStyle/>
         // <BrowserRouter basename={process.env.PUBLIC_URL}>
