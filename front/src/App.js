@@ -50,14 +50,15 @@ function App(){
     fire();
 
     return(
-        <>
-        <GlobalStyle/>
-        <BrowserRouter basename={process.env.PUBLIC_URL}>
-            <Route path="/" component={Main} exact />
-            <Route path="/setting" component = {Setting}/>
-            <Route path="/test" component = {Test}/>
-        </BrowserRouter>
-        </>
+        <Setting />
+        // <>
+        // <GlobalStyle/>
+        // <BrowserRouter basename={process.env.PUBLIC_URL}>
+        //     <Route path="/" component={Main} exact />
+        //     <Route path="/setting" component = {Setting} exact/>
+        //     <Route path="/test" component = {Test}/>
+        // </BrowserRouter>
+        // </>
     );
 }
 export default App
