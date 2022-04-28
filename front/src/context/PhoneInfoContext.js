@@ -110,6 +110,7 @@ async function getPhoneInfoData(dispatch){
     dispatch({type:'GET_PHN_INFO'});
     try{
         const res = await axios.get('api/phoneinfo');
+        console.log(res);
         const lastId = res.data[res.data.length-1].id;
         dispatch({type:'GET_PHN_INFO_SUCCESS', data:res.data, lastId:lastId});
     }catch(e){
