@@ -8,11 +8,10 @@ const StyledColumn = styled.div`
     padding-right:5px;
     font-size:12px;
     height:20px;
+    text-align:center;
 
     ${props=>css` 
         min-width: ${props.width}; 
-        /* max-width:200px; */
-        text-align:${props.textalign};
     `}
 
     /* 제일 상단에 있는 column일 경우 */
@@ -34,4 +33,6 @@ function Column({width, textalign="center",top,children}){
         </StyledColumn>
     );
 }
-export default React.memo(Column);
+export default React.memo(Column,(prev,next)=>{
+    return prev.children === next.children;
+});

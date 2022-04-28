@@ -1,0 +1,1 @@
+select * from PHONEDB.phn_info_tb;

@@ -3,11 +3,12 @@ import {BrowserRouter, Route} from 'react-router-dom';
 // import axios from 'axios';
 import {Main, Setting} from './pages/pages';
 import styled, { createGlobalStyle } from 'styled-components';
-import Footer from './Footer';
+// import Footer from './Footer';
 import Test from './test/Test';
+import {fire} from './shared/Firebase'
 
-const StyledApp = styled.div`
-`;
+// const StyledApp = styled.div`
+// `;
 // ,
 const GlobalStyle = createGlobalStyle`
     html, body{
@@ -46,6 +47,7 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 function App(){
+    fire();
 
     return(
         <>

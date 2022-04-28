@@ -5,17 +5,18 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.4.4</version>
+		<version>2.5.5</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.ppap</groupId>
 	<artifactId>sktel</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<packaging>war</packaging>
 	<name>sktel</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
 		<maven-jar-plugin.version>3.2.0</maven-jar-plugin.version>
-		<java.version>11</java.version>
+		<java.version>8</java.version>
 	</properties>
 	<dependencies>
 
@@ -87,7 +88,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.5</version>
+				<version>3.0.0-M5</version>
 				<configuration>
 					<skipTests>false</skipTests>
 					<testFailureIgnore>true</testFailureIgnore>
@@ -98,6 +99,7 @@
 				<artifactId>maven-antrun-plugin</artifactId>
 				<executions>
 					<execution>
+						<?m2e ignore?>
 						<phase>generate-resources</phase>
 						<configuration>
 							<target>
@@ -128,9 +130,9 @@
 							<goal>install-node-and-yarn</goal> <!-- node & npm 설치 -->
 						</goals>
 						<configuration>
-							<nodeVersion>v15.12.0</nodeVersion> <!-- 설치할 nodeJs 의 버전 -->
+							<nodeVersion>v16.10.0</nodeVersion> <!-- 설치할 nodeJs 의 버전 -->
 							<!-- <nVersion>7.6.3</nVersion> -->
-							<yarnVersion>v1.22.10</yarnVersion>
+							<yarnVersion>v1.22.13</yarnVersion>
 						</configuration>
 					</execution>
 					<!-- <execution> -->

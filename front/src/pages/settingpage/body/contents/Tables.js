@@ -1,12 +1,12 @@
 import React, { forwardRef, useEffect } from 'react';
-import styled, {  } from 'styled-components';
+import styled, { css } from 'styled-components';
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import Row from './Row';
 import { phoneDataFetchAsync } from '../../../../modules/phoneData';
-import { config, useSprings, useTransition } from '@react-spring/core';
-import { animated } from '@react-spring/web';
+import { useSprings } from '@react-spring/core';
 
-const Tables = forwardRef((_,ref) => {
+const Tables = forwardRef(({ inputMode },ref) => {
+    // console.log("tableRender");
     const dispatch = useDispatch();
     const { rows, error,loading} = useSelector( state =>({
         rows: state.phoneData.data.rows,
@@ -14,15 +14,13 @@ const Tables = forwardRef((_,ref) => {
         error:state.phoneData.state.error,
     }), shallowEqual);
 
-    const springs = useSprings(
+    let springs = useSprings(
         rows.length,
         rows.map(()=>({
-            opacity:1,transform:"translateX(0px)", 
-            from:{ opacity:0,transform:"translateX(40px)"},
-        }))
-    )
+            opacity:1,transform:"translateY(0px)", 
+            from:{ opacity:0,transform:"translateY(-20px)"},
+        })))
 
-    
 
     useEffect(()=>{
         //NOTE - 화면이 로딩될 때 데이터들을 받아와줌.
@@ -33,19 +31,22 @@ const Tables = forwardRef((_,ref) => {
     
     return(
         <StyledTable>
+        {(loading || error) && 
+            <BeforLoading isSuccessLoading={!!rows}>
+                {loading && <>LOADING...</>}
+                {error && <>ERROR!</>}
+            </BeforLoading>
+        }
             <TableHead>
-                {/* <Row key={`top_row_head`} top /> */}
+                <Row key={`top_row_head`} top />
             </TableHead>
-            <TableBody>
-                { loading && null}
-                { !rows && <div>서버로부터 데이터 로딩 실패!</div>}
-                { error && <div>에러 발생 자세한건 로그 참조</div>}
-                {/* {rows.map( (row,idx) =>
-                    <Row ref={ref} key={`row_body_${row.id}`} rowId={row.id}/>
-                )} */}
+            <TableBody className="scrollTable">
                 {springs.map( (style, i) =>
-                        <Row ref={ref} key={`row_body_${rows[i].id}`} rowId={rows[i].id} rowStyle={style}/>
+                    <Row ref={ref} key={`row_body_${rows[i].id}`} rowId={rows[i].id} rowIdx={i} rowStyle={style} inputMode={inputMode}/>
                 )}
+                {/* {rows.map((row,idx)=>
+                    <Row ref={ref} key={`row_body_${rows[i].id}`} rowId={rows[i].id} rowIdx={i} rowStyle={style} inputMode={inputMode}/>
+                )} */}
             </TableBody>
         </StyledTable>
     );
@@ -59,15 +60,35 @@ const StyledTable = styled.div`
     width:100%;
     height:100%;
     overflow-y:auto;
+
+    padding-right:20px;
+    /* margin-left:20px; */
 `;
 
 const TableHead = styled.div`
+    width:100%;
     display:table;
     position:sticky;
     top:0;
-    background-color:hsl(0, 0%, 100%);
+    background-color: white;
     border-bottom: solid 1px;
+    z-index:999;
 `;
 
 const TableBody = styled.div`
+    width:100%;
+    height:100%;
+`;
+
+const BeforLoading = styled.div`
+    display:table;
+    position:sticky;
+    top:0;
+    display:flex;
+    width:100%;
+    height:100%;
+    justify-content: center;
+    align-items: center;
+    /* background-color:#f9f9f9; */
+    overflow-y:hidden;
 `;

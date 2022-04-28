@@ -24,3 +24,5 @@ yarn-error.log*
 
 application.properties
 application.yml
+
+/shared

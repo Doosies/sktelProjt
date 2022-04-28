@@ -147,7 +147,8 @@ const Input = forwardRef(({colIndex, rowIdx, id, width},ref) =>{
                 ref={el=>ref.current[id] = {...ref.current[id], [colIndex]:el} }
                 textalign={textalign} 
                 width={width} 
-                value={nowVal === null ? "" : nowVal }
+                // value={nowVal === null ? "" : nowVal }
+                value={nowVal || "" }
                 required={notRequiredInputValue.every(val => val !== colName) ? true : false}
                 onChange={handleChange}
                 onFocus={handleOnFocus}

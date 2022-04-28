@@ -44,8 +44,9 @@ function Menu1(){
         <StyledMenu1>
             <TopMenuLeft>
                 {/* <ClicakableDiv onClick={onClickLogo} width="110px" color="#ffffff" font_size="16px" font_weight="bold" >Logo</ClicakableDiv> */}
+                <ClicakableDiv onClick={onClickAdminPage} width="110px" color="#ffffff" font_size="14px" font_weight="bold" >관리자 페이지</ClicakableDiv>
                 <ClicakableDiv onClick={onClickModifyData} width="110px" color="#ffffff" font_size="14px" font_weight="bold" >데이터 수정</ClicakableDiv>
-                {/* <ClicakableDiv onClick={onClickAdminPage} width="200px" color="#ffffff" font_size="22px" font_weight="bold" >관리자 페이지</ClicakableDiv> */}
+                
             </TopMenuLeft>
             <TopSubRight>
                 {/* <ClicakableDiv onClick={onClickGoMainPage} width="200px" color="#ffffff" font_size="16px" font_weight="bold" >메인페이지로 이동</ClicakableDiv> */}

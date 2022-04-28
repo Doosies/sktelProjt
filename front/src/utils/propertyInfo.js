@@ -14,7 +14,7 @@
 export const columnPhoneInfo = [
     // 기기명
     {
-        name:"기기명", width:"200px", colName:"model_name", textalign:"left",
+        name:"기기명", width:"180px", colName:"model_name", textalign:"left",
         deleteWord:/^ +/g,
         reg:/^/g,
         error:`값이 공백입니다. 다시 입력해주세요`,
@@ -30,7 +30,7 @@ export const columnPhoneInfo = [
     },
     // 출고가
     {
-        name:"출고가", width:"70px", colName:"shipping_price", textalign:"right",
+        name:"출고가", width:"80px", colName:"shipping_price", textalign:"right",
         deleteWord:/[^\d]+/g,
         reg:/^(0|[1-9][0-9]+|[1-9])$/,
         error:`
@@ -71,7 +71,7 @@ export const columnPhoneInfo = [
     },
     // 스크린 사이즈
     {
-        name:"스크린 사이즈", width:"100px", colName:"screen_size", textalign:"right",
+        name:"스크린 사이즈", width:"85px", colName:"screen_size", textalign:"right",
         deleteWord:/[^\d]+/g,
         reg:/(^[1-9]{1}[[1-9]{0,1}]+$)|(^\d{1,}\.\d{0,2}$)|^[1-9]$|\s{0,}/,
         error:`
@@ -83,7 +83,7 @@ export const columnPhoneInfo = [
     },
     // 저장용량
     {
-        name:"저장 용량", width:"100px", colName:"storage", textalign:"right",
+        name:"저장 용량", width:"85px", colName:"storage", textalign:"right",
         deleteWord:/[^\d]+/g,
         reg:/^[\d]{1,10}$|\s{0,}/g,
         error:`숫자가 아닌 값이 입력되었습니다. 확인해주세요.`,

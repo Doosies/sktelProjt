@@ -15,7 +15,6 @@ export const handleListActions = (type) =>{
 
     return (state, action) =>{
         return produce( state,draft=>{
-            // console.log(action.type);
             let dataState;
             let dataDraft;
             // 액션 타입에 따라 state, draft를 구분지음

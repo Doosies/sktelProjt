@@ -1,10 +1,9 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import CButton from '../../../../components/Button';
 import Modal from '../../../../components/Modal';
 import { useModal } from '../../../../hooks/useModal';
-import { useSendData } from '../../../../hooks/useSendData';
 import { phoneDataUpdate, phoneDataFetchAsync, phoneDataChangedList } from '../../../../modules/phoneData';
 import * as RESTAPI from '../../../../utils/api';
 import { columnPhoneInfo, requiredInputValue, commaValues } from '../../../../utils/propertyInfo';
@@ -13,8 +12,9 @@ import Tables from './Tables';
 
 
 function Contents(){
-    console.log("contents render");
+    // console.log("contents render");
     const [modalState, showModal, hideModl] = useModal();
+    const [inputMode, setInputMode] = useState(true);
 
     const {dataChangeList, rows} = useSelector( state =>({
         dataChangeList: state.phoneData.dataChangeList,
@@ -24,33 +24,14 @@ function Contents(){
 
     //focus 이동을 위한 refs
     const refs = useRef({});
-    // console.log(refs.current);
-    
-    // useEffect(()=>{
-    //     const idKeys = Object.keys(refs.current);
-    //     console.log(idKeys);
-    //     const lastId = idKeys[idKeys.length - 1];
-    //     refs.current[lastId][0].focus();
-    //     // console.log(refs.current[lastId][0]);
-    //     // refs.current[lastId][1].focus();
-    // },[Object.keys(refs.current).length]);
-
-    // useEffect(() => {
-    //     // if (refs.current) {
-    //     //     refs.current.textContent = 'whats up';
-    //     // }
-    //     console.log(refs.current);
-    //   }, [refs]);
+    // NOTE - 순서변경 버튼 클릭시
+    const handleChangeOrder = () =>{
+        setInputMode(!inputMode);
+        // console.log(inputMode);
+    }
     //NOTE - 추가버튼 클릭시
     const handleAdd = async ()=>{
         dispatch(phoneDataUpdate.Add());
-        // console.log(refs.current);
-        const idKeys = Object.keys(refs.current);
-        
-        const lastId = idKeys[idKeys.length-1];
-        // console.log(refs.current[lastId]);
-        // console.log(lastId);
-        // refs.current[lastId][0].focus();
     };
 
     //NOTE - 적용버튼 클릭시
@@ -70,7 +51,6 @@ function Contents(){
                     commaValues.some(val=>val === columnKey) 
                     ? utils.uncomma(ele[1]) 
                     : ele[1];
-
                 const isPassRegTest = columnPhoneInfo[colIdx].reg.test(columnValue);
                 // const isNullValue = !columnValue || columnValue === " ";
                 // 필수값인지 확인함. 맞을시 그 값을 포커싱해줌
@@ -88,6 +68,7 @@ function Contents(){
         });// handleApply()
         
         // 추가, 제거, 수정 중 하나의 리스트라도 차있어야 전송함.
+        console.log(canSendAddData, deleteList, updateList);
         if(
             canSendAddData || utils.isFilledList(deleteList) || utils.isFilledList(updateList)
         ){
@@ -99,7 +80,7 @@ function Contents(){
                     updateList : dataChangeList.dataUpdateList
                 });
                 console.log(response);
-                dispatch(phoneDataFetchAsync());
+                // dispatch(phoneDataFetchAsync());
                 showModal("수정완료", "성공적으로 수정했습니다");
             } catch(e){
                 console.log(e)
@@ -131,7 +112,7 @@ function Contents(){
                     </ContentsTopButtons>
                 </ContentsTop>
                 <ContentsBottom >
-                    <Tables  ref={refs}/>
+                    <Tables ref={refs} inputMode={inputMode}/>
                 </ContentsBottom>
             </ContentsPadding>
         </StyledContents>
@@ -148,6 +129,7 @@ const StyledContents = styled.div`
     height:100%;
     position:relative;
     overflow-y:hidden;
+
 `;
 
 const ContentsPadding= styled.div`
@@ -165,6 +147,10 @@ const ContentsPadding= styled.div`
 const ContentsTop = styled.div`
     position:relative;
     display:flex;
+    /* justify-content: flex-end; */
+    justify-content: space-between;
+    /* align-items: flex-end; */
+    /* padding-bottom:10px; */
     
     /* width:100%; */
     height:50px;
@@ -172,15 +158,20 @@ const ContentsTop = styled.div`
     border-bottom: solid 2px #707070;
 `;
 const ContentsTopName = styled.div`
-    height:100%;
+    /* height:100%;
+    position:absolute;
+    bottom: 1; */
+    /* justify-self: flex-start; */
+    /* align-self:flex-start; */
+    min-width:200px;
     font-size:19px;
     font-weight:bold;
 `;
 const ContentsTopButtons = styled.div`
-    height:100%;
+    /* height:100%;
     position:absolute;
     right:0;
-    bottom:1;
+    bottom:1; */
 
     display:flex;
     align-items:center;

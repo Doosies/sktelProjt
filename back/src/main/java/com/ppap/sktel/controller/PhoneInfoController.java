@@ -83,14 +83,6 @@ public class PhoneInfoController {
             if( key == "updateList"){
                 val.forEach(lists->{
                     updateList.add(lists);
-                    // System.out.println(lists.getModel_name());
-                    // System.out.println(lists.getMachine_name());
-                    // System.out.println(lists.getShipping_price());
-                    // System.out.println(lists.getMaker());
-                    // System.out.println(lists.getCreated());
-                    // System.out.println(lists.getBattery());
-                    // System.out.println(lists.getScreen_size());
-                    // System.out.println(lists.getStorage());
                 });
             }
         });
