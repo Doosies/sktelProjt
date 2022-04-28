@@ -44,9 +44,6 @@ const Tables = forwardRef(({ inputMode },ref) => {
                 {springs.map( (style, i) =>
                     <Row ref={ref} key={`row_body_${rows[i].id}`} rowId={rows[i].id} rowIdx={i} rowStyle={style} inputMode={inputMode}/>
                 )}
-                {/* {rows.map((row,idx)=>
-                    <Row ref={ref} key={`row_body_${rows[i].id}`} rowId={rows[i].id} rowIdx={i} rowStyle={style} inputMode={inputMode}/>
-                )} */}
             </TableBody>
         </StyledTable>
     );

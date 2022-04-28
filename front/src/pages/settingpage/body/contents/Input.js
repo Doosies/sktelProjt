@@ -139,7 +139,9 @@ const Input = forwardRef(({colIndex, rowIdx, id, width},ref) =>{
         // ref.current[refIdx].refs[colIndex].focus();
         // didShowAlert.current=true;
     }
+    console.log('first');
     return( 
+        
         <InputWrap>
             <Modal isVisible={modalState.isVisible} title={modalState.modalTitle} onClickYes={handleOnclickYes} noCancel>
                 {modalState.modalText}
