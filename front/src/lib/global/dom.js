@@ -51,8 +51,8 @@
  }
  
  export const applyMethodToClasses = method => (classList, classes = '') => {
-   classes.
-     split(/\s+/g)
+   classes
+     .split(/\s+/g)
      .filter(className => !!className)
      .forEach(className => classList[method](className));
  };
@@ -73,8 +73,8 @@
  export function resetRootStyleProperties(properties = {}) {
    const rootStyle = document.documentElement.style;
  
-   Object.keys(properties).
-     forEach(key => rootStyle.removeProperty(key));
+   Object.keys(properties)
+     .forEach(key => rootStyle.removeProperty(key));
  }
  
  export class Listeners {

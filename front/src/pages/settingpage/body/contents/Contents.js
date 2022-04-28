@@ -14,7 +14,7 @@ import Tables from './Tables';
 function Contents(){
     // console.log("contents render");
     const [modalState, showModal, hideModl] = useModal();
-    const [inputMode, setInputMode] = useState(true);
+    const [inputMode] = useState(true);
 
     const {dataChangeList, rows} = useSelector( state =>({
         dataChangeList: state.phoneData.dataChangeList,
@@ -25,10 +25,10 @@ function Contents(){
     //focus 이동을 위한 refs
     const refs = useRef({});
     // NOTE - 순서변경 버튼 클릭시
-    const handleChangeOrder = () =>{
-        setInputMode(!inputMode);
-        // console.log(inputMode);
-    }
+    // const handleChangeOrder = () =>{
+    //     setInputMode(!inputMode);
+    //     // console.log(inputMode);
+    // }
     //NOTE - 추가버튼 클릭시
     const handleAdd = async ()=>{
         dispatch(phoneDataUpdate.Add());

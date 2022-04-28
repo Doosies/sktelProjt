@@ -71,8 +71,8 @@ export default class TabTrap extends Component {
       return;
     }
 
-    const tabables = [...node.querySelectorAll(FOCUSABLE_ELEMENTS)].
-      filter(item => item.tabIndex >= 0);
+    const tabables = [...node.querySelectorAll(FOCUSABLE_ELEMENTS)]
+      .filter(item => item.tabIndex >= 0);
 
     const toBeFocused = first ? tabables[0] : tabables[tabables.length - 1];
 

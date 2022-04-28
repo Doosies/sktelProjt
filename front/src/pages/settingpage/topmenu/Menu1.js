@@ -22,16 +22,16 @@ const TopSubRight = styled.div`
 `;
 
 function Menu1(){
-    const onClickLogo = () =>{
-        alert("로고 click");
-    };
+    // const onClickLogo = () =>{
+    //     alert("로고 click");
+    // };
     const onClickAdminPage = () =>{
         alert("관리자 페이지 click");
     };
-    const onClickGoMainPage = () =>{
-        alert("메인페이지로 이동 click");
+    // const onClickGoMainPage = () =>{
+    //     alert("메인페이지로 이동 click");
 
-    };
+    // };
     const onClickLogOut = () =>{
         alert("로그아웃 click");
     };
