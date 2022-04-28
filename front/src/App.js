@@ -1,15 +1,7 @@
 import React, {} from 'react';
 import {BrowserRouter, Route} from 'react-router-dom';
-// import axios from 'axios';
-import {Main, Setting} from './pages/pages';
-import styled, { createGlobalStyle } from 'styled-components';
-// import Footer from './Footer';
-import Test from './test/Test';
-import {fire} from './shared/Firebase'
-
-// const StyledApp = styled.div`
-// `;
-// ,
+import { Setting} from './pages/pages';
+import { createGlobalStyle } from 'styled-components';
 const GlobalStyle = createGlobalStyle`
     html, body{
         height:100%;
@@ -47,14 +39,14 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 function App(){
-    fire();
-
     return(
-        // <div>
-            <Route path="/admin" component={Setting}/>
-        // </div>
+        <div>
+            <GlobalStyle/>
+            <BrowserRouter>
+                <Route path="/admin" component={Setting}/>
+            </BrowserRouter>
+        </div>
         // <>
-        // <GlobalStyle/>
         // <BrowserRouter basename={process.env.PUBLIC_URL}>
         //     <Route path="/" component={Main} exact />
         //     <Route path="/setting" component = {Setting} exact/>
