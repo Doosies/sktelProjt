@@ -79,8 +79,9 @@ public class PhoneInfoDao implements IPhoneInfoDao {
     @Override
     public void phoneInfoDelete(List<Integer>id) {
         System.out.println("data delete");
+        System.out.println(id);
         List<Object[]> ts = id.stream().map(i -> new Object[]{i}).collect(Collectors.toList());
-        this.jdbcTemplate.batchUpdate("delete from PHN_INFO_TB where ID in(?);", ts);
+        this.jdbcTemplate.batchUpdate("delete from phn_info_tb where ID = ?", ts);
     }
 
     @Override

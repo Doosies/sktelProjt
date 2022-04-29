@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 @RestController
 @Controller
-@CrossOrigin(origins = {"http://localhost:5000", "http://localhost:3000", "http://192.168.206.109:5000"})
+// @CrossOrigin(origins = {"http://localhost:5000", "http://localhost:3000", "http://192.168.206.109:5000"})
 public class PhoneInfoController{
  
     @Autowired
@@ -34,11 +34,19 @@ public class PhoneInfoController{
     public HashMap<String, Object>  test() {
         HashMap<String, Object> result = new HashMap<String, Object>();
         List<PhoneInfo> lists = phoneInfoService.getAllInfo();
-        int lastId =  lists.get(lists.size()-1).getId();
-
-        result.put("lastId",lastId);
-        result.put("rows",lists);
-
+        int lastId;
+        // 서버에 데이터가 있을 때 처리
+        if (lists.size() > 0) {
+            lastId =  lists.get(lists.size()-1).getId();
+    
+            result.put("lastId",lastId);
+            result.put("rows",lists);
+        // db에 데이터가 없을 때 처리
+        }else {
+            lastId = 0;
+            result.put("lastId",0);
+            result.put("rows",lists);
+        }
         return result;
     }
 
