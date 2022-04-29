@@ -3,8 +3,10 @@ import React, {createContext, useRef, useState} from 'react';
 export const MenuControllerContext = createContext();
 
 function MenuController(){
-    const [isOpen, setOpen] = useState(false);
-    const [isVisible, setVisible] = useState(()=> isOpen ? true : false );
+    const [isOpen, setOpen] = useState(null);
+    const [isVisible, setVisible] = useState(()=>{
+        return isOpen ? true : false;
+    });
 
     const MenuExit = useRef();
 

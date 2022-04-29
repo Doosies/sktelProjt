@@ -30,7 +30,7 @@ function Column({width, textalign="center",top,children}){
     return(
         <StyledColumn width={width} textalign={top?"center":textalign} top={top}>
             {children}
-        </StyledColumn>
+    </StyledColumn>
     );
 }
 export default React.memo(Column,(prev,next)=>{
