@@ -23,7 +23,7 @@ public class PhoneInfoDao implements IPhoneInfoDao {
     public void phoneInfoInsert(List<PhoneInfo> insertList) {
         System.out.println("data insert");
         System.out.println(insertList.size());
-        this.jdbcTemplate.batchUpdate("insert into PHN_INFO_TB(id, model_name, machine_name, shipping_price, maker, created, battery, screen_size, storage) values(?,?,?,?,?,?,?,?,?)",
+        this.jdbcTemplate.batchUpdate("insert into phn_info_tb(id, model_name, machine_name, shipping_price, maker, created, battery, screen_size, storage) values(?,?,?,?,?,?,?,?,?)",
             new BatchPreparedStatementSetter(){
                 @Override
                 public void setValues(PreparedStatement ps, int i) throws SQLException{
